@@ -11,7 +11,7 @@ pub struct DemoPage {
 
 impl Page for DemoPage {
     fn title(&self) -> Cow<'static, str> {
-        format!("{} - demos.tf", self.demo.name).into()
+        format!("{} - demos.tf", self.demo.server).into()
     }
 
     fn render(&self) -> Markup {
@@ -55,7 +55,9 @@ impl Page for DemoPage {
                         tr {
                             td.team.red {}
                             @if let Some(player) = player_pair.as_ref().left() {
-                                td.name.red { (player.name) }
+                                td.name.red {
+                                    a href = (player.steam_id.profile_link()) { (player.name) }
+                                }
                                 td.stat.red { (player.kills.unwrap_or_default()) }
                                 td.stat.red { (player.assists.unwrap_or_default()) }
                                 td.stat.red { (player.deaths.unwrap_or_default()) }
@@ -72,7 +74,9 @@ impl Page for DemoPage {
                                 td.stat.blue { (player.deaths.unwrap_or_default()) }
                                 td.stat.blue { (player.assists.unwrap_or_default()) }
                                 td.stat.blue { (player.kills.unwrap_or_default()) }
-                                td.name.blue { (player.name) }
+                                td.name.blue {
+                                    a href = (player.steam_id.profile_link()) { (player.name) }
+                                }
                             } @else {
                                 td.class {}
                                 td.stat.blue {}
