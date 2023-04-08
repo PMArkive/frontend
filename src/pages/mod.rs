@@ -1,6 +1,7 @@
 pub mod demo;
 pub mod index;
 
+use crate::asset::saved_asset_url;
 use maud::{html, Markup, DOCTYPE};
 use std::borrow::Cow;
 
@@ -10,17 +11,14 @@ pub trait Page {
 }
 
 pub fn render<T: Page>(page: T) -> Markup {
-    let style_url = concat!(
-        "/style.",
-        include_str!(concat!(env!("OUT_DIR"), "/style.md5")),
-        ".css",
-    );
+    let style_url = saved_asset_url!("style.css");
     html! {
         (DOCTYPE)
         html {
             head {
                 title { (page.title()) }
                 link rel="stylesheet" type="text/css" href=(style_url);
+                link rel="shortcut icon" type="image/svg+xml" href="images/logo.svg";
             }
             body {
                 header {

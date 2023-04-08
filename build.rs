@@ -1,5 +1,6 @@
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
+use const_fnv1a_hash::fnv1a_hash_str_32;
 use lightningcss::bundler::{Bundler, FileProvider};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions};
 use lightningcss::targets::Browsers;
@@ -11,20 +12,23 @@ use std::env::var;
 use std::fs::{read, write};
 use std::path::Path;
 
-fn main() {
-    let out_dir = var("OUT_DIR").unwrap();
+macro_rules! save_asset {
+    ($name:expr, $val:expr) => {
+        let val = $val;
+        let out_dir = var("OUT_DIR").unwrap();
+        write(format!("{out_dir}/{}", $name), &val).expect("failed to write asset");
+        let hash = fnv1a_hash_str_32(&val);
+        write(format!("{out_dir}/{}.hash", $name), format!("{:x}", hash))
+            .expect("failed to write asset hash");
+    };
+}
 
+fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=style");
     println!("cargo:rerun-if-changed=images");
 
-    let style = build_style();
-    write(format!("{out_dir}/style.css"), &style).expect("failed to write compiled style");
-    write(
-        format!("{out_dir}/style.md5"),
-        format!("{:x}", md5::compute(&style)),
-    )
-    .expect("failed to write compiled style hash");
+    save_asset!("style.css", build_style());
 }
 
 pub fn build_style() -> String {
