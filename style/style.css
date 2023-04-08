@@ -1,6 +1,7 @@
 @import 'header.css';
 @import 'footer.css';
 @import 'pure.css';
+@import 'section.css';
 
 @import 'pages/index.css';
 @import 'pages/demo.css';

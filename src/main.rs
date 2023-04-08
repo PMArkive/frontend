@@ -7,6 +7,7 @@ mod pages;
 pub use crate::config::Config;
 use crate::config::Listen;
 use crate::data::demo::{Demo, ListDemo};
+use crate::pages::about::AboutPage;
 use crate::pages::demo::DemoPage;
 use crate::pages::index::Index;
 use crate::pages::render;
@@ -56,6 +57,7 @@ async fn main() -> Result<()> {
         .route("/style.css", get(serve_compiled!("style.css")))
         .route("/images/logo.png", get(serve_static!("../images/logo.png")))
         .route("/images/logo.svg", get(serve_static!("../images/logo.svg")))
+        .route("/about", get(about))
         .route("/:id", get(demo))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -100,6 +102,10 @@ async fn main() -> Result<()> {
 async fn index(State(app): State<Arc<App>>) -> Result<Markup> {
     let demos = ListDemo::list(&app.connection, None).await?;
     Ok(render(Index { demos }))
+}
+
+async fn about(State(_app): State<Arc<App>>) -> Result<Markup> {
+    Ok(render(AboutPage { key: None }))
 }
 
 async fn demo(State(app): State<Arc<App>>, Path(id): Path<u32>) -> Result<Markup> {

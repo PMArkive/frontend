@@ -1,5 +1,7 @@
+pub mod about;
 pub mod demo;
 pub mod index;
+mod plugin_section;
 
 use crate::asset::saved_asset_url;
 use maud::{html, Markup, DOCTYPE};
