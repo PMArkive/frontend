@@ -14,7 +14,7 @@ use axum::http::{HeaderValue, Request};
 use axum::response::IntoResponse;
 use axum::{extract::State, routing::get, Router, Server};
 pub use error::Error;
-use hyper::header::CONTENT_TYPE;
+use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, ETAG};
 use hyperlocal::UnixServerExt;
 use maud::Markup;
 use sqlx::PgPool;
@@ -52,7 +52,7 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(index))
-        .route("/style.css", get(style))
+        .route("/style.:version.css", get(style))
         .route("/:id", get(demo))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -96,8 +96,20 @@ async fn main() -> Result<()> {
 
 async fn style() -> impl IntoResponse {
     let style = include_str!(concat!(env!("OUT_DIR"), "/style.css"));
+    let etag = concat!(
+        r#"""#,
+        include_str!(concat!(env!("OUT_DIR"), "/style.md5")),
+        r#"""#
+    );
     (
-        [(CONTENT_TYPE, HeaderValue::from_static("text/css"))],
+        [
+            (CONTENT_TYPE, HeaderValue::from_static("text/css")),
+            (ETAG, HeaderValue::from_static(etag)),
+            (
+                CACHE_CONTROL,
+                HeaderValue::from_static("public, max-age=2592000, immutable"),
+            ),
+        ],
         style,
     )
 }

@@ -18,7 +18,13 @@ fn main() {
     println!("cargo:rerun-if-changed=style");
     println!("cargo:rerun-if-changed=images");
 
-    write(format!("{out_dir}/style.css"), build_style()).expect("failed to write compiled style");
+    let style = build_style();
+    write(format!("{out_dir}/style.css"), &style).expect("failed to write compiled style");
+    write(
+        format!("{out_dir}/style.md5"),
+        format!("{:x}", md5::compute(&style)),
+    )
+    .expect("failed to write compiled style hash");
 }
 
 pub fn build_style() -> String {

@@ -10,12 +10,17 @@ pub trait Page {
 }
 
 pub fn render<T: Page>(page: T) -> Markup {
+    let style_url = concat!(
+        "/style.",
+        include_str!(concat!(env!("OUT_DIR"), "/style.md5")),
+        ".css",
+    );
     html! {
         (DOCTYPE)
         html {
             head {
                 title { (page.title()) }
-                link rel="stylesheet" type="text/css" href="/style.css";
+                link rel="stylesheet" type="text/css" href=(style_url);
             }
             body {
                 header {
