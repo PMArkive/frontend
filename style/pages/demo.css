@@ -216,3 +216,40 @@ table.players {
         background-color: #5b818f66;
     }
 }
+
+table.chat {
+    & td {
+        padding: 0 6px;
+    }
+
+    & td.user {
+        white-space: nowrap;
+        vertical-align: top;
+        width: 20%;
+        color: var(--text-secondary);
+        text-align: right;
+        border-right: 1px solid #ccc;
+    }
+
+    & td.message {
+        word-break: break-all;
+    }
+
+    & td.duration {
+        width: 80px;
+        text-align: right;
+        color: var(--text-secondary);
+    }
+}
+
+details.chat {
+    margin-top: -55px;
+
+    & > summary {
+        float: right;
+    }
+
+    & > div {
+        padding-top: 45px;
+    }
+}

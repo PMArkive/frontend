@@ -89,6 +89,28 @@ impl Page for DemoPage {
                     }
                 }
             }
+            p.demo-info {
+                span { (self.demo.map) }
+                span.time { (self.demo.duration()) }
+            }
+            p.demo-download {
+                a.button.button-primary href = (self.demo.url) download = (self.demo.name) { "Download" }
+                a.button href = (self.demo.viewer_url()) { "View" }
+                details.chat {
+                    summary.button.button-tertiary { "Toggle Chat" }
+                    div {
+                        table.chat {
+                            @for chat in &self.demo.chat {
+                                tr {
+                                    td.user { (chat.from) }
+                                    td.message { (chat.text) }
+                                    td.duration { (chat.time()) }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

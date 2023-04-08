@@ -1,3 +1,4 @@
+use crate::data::chat::Chat;
 use crate::data::player::Player;
 use crate::data::steam_id::SteamId;
 use crate::Result;
@@ -27,6 +28,7 @@ pub struct Demo {
     pub nick: String,
     pub player_count: i32,
     pub players: Vec<Player>,
+    pub chat: Vec<Chat>,
 }
 
 impl Demo {
@@ -76,6 +78,7 @@ impl Demo {
         };
 
         let players = Player::for_demo(connection, id).await?;
+        let chat = Chat::for_demo(connection, id).await?;
 
         Ok(Some(Demo {
             id: raw.id,
@@ -96,6 +99,7 @@ impl Demo {
             nick: raw.nick,
             player_count: raw.player_count,
             players,
+            chat,
         }))
     }
 
@@ -116,6 +120,22 @@ impl Demo {
             .as_deref()
             .or(self.uploader_name.as_deref())
             .unwrap_or("unknown")
+    }
+
+    pub fn duration(&self) -> Duration {
+        Duration(self.duration)
+    }
+
+    pub fn viewer_url(&self) -> ViewerUrl {
+        ViewerUrl(self.id)
+    }
+}
+
+pub struct ViewerUrl(i32);
+
+impl Render for ViewerUrl {
+    fn render_to(&self, buffer: &mut String) {
+        write!(buffer, "/viewer/{}", self.0).unwrap()
     }
 }
 
@@ -232,7 +252,7 @@ impl Render for DemoFormat {
     }
 }
 
-pub struct Duration(i32);
+pub struct Duration(pub i32);
 
 impl Render for Duration {
     fn render_to(&self, buffer: &mut String) {
