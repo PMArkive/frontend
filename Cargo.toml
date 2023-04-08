@@ -3,6 +3,25 @@ name = "frontend"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+serde = { version = "1.0.159", features = ["derive"] }
+toml = "0.7.3"
+sqlx = { version = "0.6.3", features = ["postgres", "time", "runtime-tokio-rustls"] }
+thiserror = "1.0.40"
+tokio = { version = "1.27.0", features = ["full"] }
+config = { version = "0.13.3", features = ["toml"] }
+time = "0.3.20"
+maud = { version = "0.24.0", git = "https://github.com/lambda-fairy/maud", rev = "7233cda35eed7bba91c9c55564d65498067c3822", features = ["axum"] }
+axum = "0.6.12"
+hyper = "0.14.25"
+hyperlocal = "0.8.0"
+tower-http = { version = "0.4.0", features = ["trace"] }
+steamid-ng = "1.0.0"
+itertools = "0.10.5"
+
+[build-dependencies]
+lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visitor"] }
+base64 = "0.21.0"
+urlencoding = "2.1.2"

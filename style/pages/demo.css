@@ -1,0 +1,218 @@
+@import 'class-icons.css';
+
+table.chat, table.players {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.players {
+    & td, & th {
+        padding: 5px 9px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    & tr:nth-child(odd) {
+        background-color: var(--primary-color-accent);
+    }
+
+    & tr:nth-child(even) {
+        background-color: var(--primary-color);
+    }
+
+    & th {
+        padding: 7px 9px;
+    }
+}
+
+p.demo-info .time {
+    float: right;
+    font-weight: bold;
+}
+
+p.demo-download {
+    margin-top: 40px;
+}
+
+p.demo-download button, p.demo-download a {
+    margin-right: 40px;
+}
+
+@media (max-width: 450px) {
+    p.demo-download button, p.demo-download a {
+        margin-right: 0;
+    }
+
+    p.demo-download button {
+        float: right;
+    }
+}
+
+div.teams {
+    margin: 0 -30px;
+    padding: 10px 0 0;
+    height: 72px;
+    color: white;
+
+    & div {
+        display: inline-block;
+        padding: 10px 30px;
+        width: 50%;
+    }
+
+    & span {
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 45px;
+    }
+
+    & > div {
+        height: 72px;
+    }
+
+    & .red {
+        padding-right: 15px;
+        float: left;
+        background: #a75d50;
+    }
+
+    & .red span.name,
+    & .blue span.name {
+        display: inline-block;
+        overflow: hidden;
+        max-width: calc(100% - 30px);
+    }
+
+    & .red .score {
+        float: right;
+    }
+
+    & .blue {
+        padding-left: 15px;
+        float: right;
+        background: #5b818f;
+    }
+
+    & .blue .name {
+        float: right;
+        color: '#fff';
+    }
+}
+
+.playerTable {
+    width: 100%;
+}
+
+.playerTable th {
+    text-align: left;
+}
+
+table.players {
+    width: 100%;
+
+    & .name {
+        vertical-align: top;
+    }
+
+    & .name a {
+        text-decoration: none;
+        color: var(--text-primary);
+        white-space: nowrap;
+    }
+
+    & .name a:hover {
+        text-decoration: underline;
+    }
+
+    & .team {
+        width: 20px;
+    }
+
+    & .team.red {
+        background: #a75d50;
+    }
+
+    & .team.blue {
+        background: #5b818f;
+    }
+
+    & .stat {
+        text-align: right;
+    }
+
+    & .stat {
+        width: 40px;
+        vertical-align: top;
+    }
+    & .class {
+        width: 10px;
+        padding: 7px 0;
+        vertical-align: top;
+    }
+    & .red.class {
+        padding-right: 0;
+    }
+    & .blue.class {
+        padding-left: 0;
+    }
+
+    & .blue.name {
+        text-align: right;
+        padding-right: 15px;
+    }
+
+    & .red.name {
+        text-align: left;
+        padding-left: 15px;
+    }
+
+    & th {
+        border-bottom: solid 1px var(--secondary-color-accent);
+    }
+
+    & th.team {
+        border-bottom: none;
+    }
+
+    & tr:last-child td.red {
+        border-bottom: 1px solid #a75d50;
+    }
+
+    & tr:last-child td.blue {
+        border-bottom: 1px solid #5b818f;
+    }
+
+    & tr:last-child td.class {
+        border-bottom: 1px solid #666;
+    }
+
+    & td.pov {
+        background-color: var(--secondary-color-accent);
+    }
+
+    & .demo-info {
+        margin: 20px 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    & .demo-info .time {
+        float: right;
+    }
+
+    @media (max-width: 650px) {
+        .stat {
+            display: none;
+        }
+    }
+
+
+    & .highlight-red .red:not(.team) {
+        background-color: #a75d5066;
+    }
+
+    & .highlight-blue .blue:not(.team) {
+        background-color: #5b818f66;
+    }
+}

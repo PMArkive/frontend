@@ -1,0 +1,85 @@
+table.players {
+    & .red.class, & .blue.class {
+        background-origin: content-box;
+        background-clip: content-box;
+        background-repeat: no-repeat;
+        background-image: url('inline://images/classes.png');
+    }
+
+    & .red.class {
+        &.spy {
+            background-position: -0px -0px;
+        }
+
+        &.demoman {
+            background-position: -20px -0px;
+        }
+
+        &.soldier {
+            background-position: -40px -0px;
+        }
+
+        &.medic {
+            background-position: -0px -20px;
+        }
+
+        &.pyro {
+            background-position: -20px -20px;
+        }
+
+        &.sniper {
+            background-position: -40px -20px;
+        }
+
+        &.engineer {
+            background-position: -0px -40px;
+        }
+
+        &.heavyweapons {
+            background-position: -20px -40px;
+        }
+
+        &.scout {
+            background-position: -40px -40px;
+        }
+    }
+
+
+    & .blue.class {
+        &.spy {
+            background-position: -10px -0px;
+        }
+
+        &.demoman {
+            background-position: -30px -0px;
+        }
+
+        &.soldier {
+            background-position: -50px -0px;
+        }
+
+        &.medic {
+            background-position: -10px -20px;
+        }
+
+        &.pyro {
+            background-position: -30px -20px;
+        }
+
+        &.sniper {
+            background-position: -50px -20px;
+        }
+
+        &.engineer {
+            background-position: -10px -40px;
+        }
+
+        &.heavyweapons {
+            background-position: -30px -40px;
+        }
+
+        &.scout {
+            background-position: -50px -40px;
+        }
+    }
+}

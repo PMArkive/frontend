@@ -1,0 +1,95 @@
+.demolist {
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-collapse: collapse;
+
+    & tbody {
+        width: 100%;
+    }
+
+    & th {
+        font-weight: bold;
+    }
+
+    & td, & th {
+        display: table-cell;
+        padding: 9px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+    }
+
+    & td.title {
+        max-width: 0px;
+    }
+
+    & td.date {
+        width: 120px;
+    }
+
+    & td.duration {
+        width: 90px;
+        max-width: 90px;
+        text-align: right;
+    }
+
+    & td.format {
+        width: 75px;
+        text-align: right;
+    }
+
+    & td.map {
+        width: 180px;
+    }
+
+    & tr:nth-child(even) {
+        background-color: var(--primary-color-accent);
+    }
+}
+
+.search {
+    padding-bottom: 10px;
+}
+
+.listType {
+    line-height: 62px;
+
+    & > span {
+        vertical-align: top;
+    }
+}
+
+.deleted-demo {
+    background-color: rgba(255, 0, 0, 0.5);
+    text-align: center;
+    margin: -10px -30px 0;
+    padding: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+@media (max-width: 950px) {
+    .demolist .format {
+        display: none;
+    }
+}
+
+@media (max-width: 850px) {
+    .demolist .duration {
+        display: none;
+    }
+}
+
+@media (max-width: 750px) {
+    .demolist .date {
+        display: none;
+    }
+}
+
+@media (max-width: 550px) {
+    .demolist .map {
+        display: none;
+    }
+}
