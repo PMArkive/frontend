@@ -22,7 +22,7 @@
         OPENSSL_NO_VENDOR = 1;
 
         nativeBuildInputs = with pkgs; [
-          cargo
+          rust-bin.nightly."2023-03-31".default
           bacon
           cargo-edit
           cargo-outdated

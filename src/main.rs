@@ -73,6 +73,7 @@ async fn main() -> Result<()> {
     let app = Router::new()
         .route("/", get(index))
         .route("/style.css", get(serve_compiled!("style.css")))
+        .route("/upload.js", get(serve_compiled!("upload.js")))
         .route("/images/logo.png", get(serve_static!("../images/logo.png")))
         .route("/images/logo.svg", get(serve_static!("../images/logo.svg")))
         .route("/about", get(about))
@@ -137,9 +138,10 @@ async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Mar
 
 async fn demo(
     State(app): State<Arc<App>>,
-    Path(id): Path<u32>,
+    Path(id): Path<String>,
     session: SessionData,
 ) -> Result<Markup> {
+    let id = id.parse().map_err(|_| Error::NotFound)?;
     let demo = Demo::by_id(&app.connection, id)
         .await?
         .ok_or(Error::NotFound)?;

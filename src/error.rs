@@ -1,3 +1,4 @@
+use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use config::ConfigError;
 
@@ -25,7 +26,9 @@ pub enum Error {
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        dbg!(self);
-        todo!()
+        match self {
+            Error::NotFound => (StatusCode::NOT_FOUND, "not found").into_response(),
+            _ => todo!(),
+        }
     }
 }

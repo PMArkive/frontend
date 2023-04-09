@@ -8,3 +8,5 @@ lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visito
 base64 = "0.21.0"
 urlencoding = "2.1.2"
 const-fnv1a-hash = "1.1.0"
+swc = "0.259.6"
+swc_common = { version = "0.30.5", features = ["tty-emitter"] }

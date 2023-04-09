@@ -1,3 +1,4 @@
+use crate::asset::saved_asset_url;
 use crate::pages::plugin_section::PluginSection;
 use crate::pages::Page;
 use maud::{html, Markup};
@@ -21,6 +22,7 @@ impl Page for UploadPage {
     }
 
     fn render(&self) -> Markup {
+        let script = saved_asset_url!("upload.js");
         html! {
             .upload-page {
                 section.upload {
@@ -50,6 +52,7 @@ impl Page for UploadPage {
                 }
                 (self.plugin_section())
             }
+            script src = (script);
         }
     }
 }

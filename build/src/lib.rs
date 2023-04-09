@@ -1,6 +1,8 @@
+mod script;
 mod style;
 
 use const_fnv1a_hash::fnv1a_hash_str_32;
+pub use script::bundle_script;
 pub use style::bundle_style;
 
 #[macro_export]
@@ -9,8 +11,8 @@ macro_rules! save_asset {
         let val = $val;
         let out_dir = std::env::var("OUT_DIR").unwrap();
         std::fs::write(format!("{out_dir}/{}", $name), &val).expect("failed to write asset");
-        let hash = fnv1a_hash_str_32(&val);
-        std::fs::write(format!("{out_dir}/{}.hash", $name), format!("{:x}", hash))
+        let hash = demostf_build::hash(&val);
+        std::fs::write(format!("{out_dir}/{}.hash", $name), hash)
             .expect("failed to write asset hash");
     };
 }
