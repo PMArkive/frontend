@@ -52,7 +52,7 @@ impl Page for UploadPage {
                 }
                 (self.plugin_section())
             }
-            script src = (script);
+            script src = (script) type = "text/javascript" {}
         }
     }
 }

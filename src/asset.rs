@@ -47,6 +47,8 @@ pub const fn guess_mime(path: &'static str) -> &'static str {
         return "image/png";
     } else if ends_with!(path, "css") {
         return "text/css";
+    } else if ends_with!(path, "js") {
+        return "text/javascript";
     }
     return "text/plain";
 }
