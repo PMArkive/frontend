@@ -221,9 +221,16 @@ async fn logout(
     )
 }
 
-async fn upload(State(_app): State<Arc<App>>, session: SessionData) -> impl IntoResponse {
+async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoResponse {
     if let Some(token) = session.token() {
-        render(UploadPage { key: token }, session).into_response()
+        render(
+            UploadPage {
+                key: token.as_str(),
+                api: app.api.as_str(),
+            },
+            session,
+        )
+        .into_response()
     } else {
         (
             StatusCode::FOUND,

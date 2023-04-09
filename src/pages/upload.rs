@@ -4,19 +4,20 @@ use crate::pages::Page;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
-pub struct UploadPage {
-    pub key: String,
+pub struct UploadPage<'a> {
+    pub key: &'a str,
+    pub api: &'a str,
 }
 
-impl UploadPage {
-    pub fn plugin_section(&self) -> PluginSection {
+impl<'a> UploadPage<'a> {
+    pub fn plugin_section(&self) -> PluginSection<'a> {
         PluginSection {
-            key: Some(self.key.as_str()),
+            key: Some(self.key),
         }
     }
 }
 
-impl Page for UploadPage {
+impl Page for UploadPage<'_> {
     fn title(&self) -> Cow<'static, str> {
         "Upload - demos.tf".into()
     }
@@ -39,20 +40,26 @@ impl Page for UploadPage {
                         noscript {
                             "Javascript is required for demo upload."
                         }
-                        "Drop files or click to upload"
+                        span.text { "Drop files or click to upload" }
+                        input type = "file" {}
                     }
+                    .demo-info {
+                        span.map {}
+                        span.time {}
+                    }
+                    input type = "hidden" name = "api" value = (self.api) {}
                     button.button.button-primary disabled { "Upload" }
                 }
                 section {
                     .title {
                         h3 { "API Key" }
                     }
-                    pre { (self.key) }
+                    pre.key { (self.key) }
                     p { "This key is used by the plugin to authenticate you as the uploader and link the uploaded demo to your account." }
                 }
                 (self.plugin_section())
             }
-            script src = (script) type = "text/javascript" {}
+            script defer src = (script) type = "text/javascript" {}
         }
     }
 }
