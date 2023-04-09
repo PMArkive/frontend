@@ -62,6 +62,9 @@ impl Render for PluginSection<'_> {
                             }
                         }
                     }
+                    li {
+                        "Restart the server."
+                    }
                 }
                 a.button.button-primary href = "https://github.com/demostf/plugin/raw/master/demostf.smx" { "Download" }
                 a.button href = "https://github.com/demostf/plugin/raw/master/demostf.sp" { "Source" }

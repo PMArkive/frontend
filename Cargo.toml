@@ -30,7 +30,4 @@ reqwest = "0.11.16"
 rand = "0.8.5"
 
 [build-dependencies]
-lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visitor"] }
-base64 = "0.21.0"
-urlencoding = "2.1.2"
-const-fnv1a-hash = "1.1.0"
+demostf-build = { path = "./build", version = "*" }

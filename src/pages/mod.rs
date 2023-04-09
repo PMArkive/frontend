@@ -2,6 +2,7 @@ pub mod about;
 pub mod demo;
 pub mod index;
 mod plugin_section;
+pub mod upload;
 
 use crate::asset::saved_asset_url;
 use crate::session::SessionData;

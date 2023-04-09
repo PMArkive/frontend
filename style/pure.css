@@ -16,6 +16,11 @@
     color: var(--text-primary);
     background-color: #E6E6E6;
     text-decoration: none;
+
+    &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 .button:hover {

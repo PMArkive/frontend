@@ -14,6 +14,7 @@ use crate::pages::about::AboutPage;
 use crate::pages::demo::DemoPage;
 use crate::pages::index::Index;
 use crate::pages::render;
+use crate::pages::upload::UploadPage;
 use crate::session::{SessionData, COOKIE_NAME};
 use asset::{serve_compiled, serve_static};
 use async_session::{MemoryStore, Session, SessionStore};
@@ -78,6 +79,7 @@ async fn main() -> Result<()> {
         .route("/login/callback", get(login_callback))
         .route("/login", get(login))
         .route("/logout", get(logout))
+        .route("/upload", get(upload))
         .route("/:id", get(demo))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -213,6 +215,18 @@ async fn logout(
             (LOCATION, HeaderValue::from_str("/").unwrap()),
         ],
     )
+}
+
+async fn upload(State(_app): State<Arc<App>>, session: SessionData) -> impl IntoResponse {
+    if let Some(token) = session.token() {
+        render(UploadPage { key: token }, session).into_response()
+    } else {
+        (
+            StatusCode::FOUND,
+            [(LOCATION, HeaderValue::from_str("/").unwrap())],
+        )
+            .into_response()
+    }
 }
 
 async fn handler_404() -> impl IntoResponse {

@@ -628,6 +628,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "demostf-build"
+version = "0.1.0"
+dependencies = [
+ "base64 0.21.0",
+ "const-fnv1a-hash",
+ "lightningcss",
+ "urlencoding",
+]
+
+[[package]]
 name = "digest"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -790,15 +800,14 @@ version = "0.1.0"
 dependencies = [
  "async-session",
  "axum",
- "base64 0.21.0",
  "config",
  "const-fnv1a-hash",
  "const-str 0.5.4",
  "const_base",
+ "demostf-build",
  "hyper",
  "hyperlocal",
  "itertools",
- "lightningcss",
  "maud",
  "quick-xml",
  "rand 0.8.5",
@@ -814,7 +823,6 @@ dependencies = [
  "tower-http",
  "tracing",
  "tracing-subscriber",
- "urlencoding",
 ]
 
 [[package]]

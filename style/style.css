@@ -2,9 +2,11 @@
 @import 'footer.css';
 @import 'pure.css';
 @import 'section.css';
+@import 'dropzone.css';
 
 @import 'pages/index.css';
 @import 'pages/demo.css';
+@import 'pages/upload.css';
 
 :root {
     --primary-color: white;
@@ -143,8 +145,6 @@ pre {
     display: block;
     padding: 10px 10px 10px 19px;
     margin: 20px 0 20px;
-    font-size: 13px;
-    line-height: 1.42857143;
     color: var(--text-primary);
     word-break: break-all;
     word-wrap: break-word;
@@ -177,8 +177,8 @@ pre {
 }
 
 kbd, pre, samp {
-    font-family: monospace, monospace;
-    font-size: 1em;
+    font-family: monospace;
+    font-size: 16px;
 }
 
 .noscript {
