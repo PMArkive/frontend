@@ -1,4 +1,3 @@
-use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::{App, Result};
 use async_session::SessionStore as _;
@@ -43,12 +42,7 @@ where
 
         // return the new created session cookie for client
         if session_cookie.is_none() {
-            return Ok(Self::Authenticated(User {
-                token: "token".into(),
-                steam_id: SteamId::Id(76561198024494988),
-                name: "Icewind".into(),
-            }));
-            // return Ok(Self::UnAuthenticated);
+            return Ok(Self::UnAuthenticated);
         }
 
         debug!(
@@ -60,12 +54,7 @@ where
         let Ok(Some(session)) = store
             .load_session(session_cookie.unwrap().to_owned())
             .await else {
-                return Ok(Self::Authenticated(User {
-                token: "token".into(),
-                steam_id: SteamId::Id(76561198024494988),
-                name: "Icewind".into(),
-            }));
-            // return Ok(Self::UnAuthenticated);
+            return Ok(Self::UnAuthenticated);
         };
         let Some(user) = session.get::<User>("user") else {
             return Ok(Self::UnAuthenticated);
