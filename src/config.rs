@@ -10,6 +10,7 @@ use std::path::PathBuf;
 pub struct Config {
     pub listen: Listen,
     pub database: DbConfig,
+    pub site: SiteConfig,
 }
 
 impl Config {
@@ -45,4 +46,9 @@ impl DbConfig {
 pub enum Listen {
     Socket { path: PathBuf },
     Tcp { address: IpAddr, port: u16 },
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SiteConfig {
+    pub url: String,
 }

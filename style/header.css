@@ -16,6 +16,7 @@ header {
         padding: .5em 1em;
         text-decoration: none;
         display: block;
+        line-height: 24px;
     }
 
     .main a {
@@ -68,6 +69,10 @@ header {
             display: none;
         }
     }
+
+    & .right {
+        text-transform: none;
+    }
 }
 
 a.steam-login:before {
@@ -84,8 +89,7 @@ a.steam-login:before {
     top: 0;
 }
 
-a.steam-login {
-    text-transform: none;
+a.steam-login, a.steam-login:visited {
     display: inline-block;
     height: 41px;
     margin: -1px 0;

@@ -1,14 +1,14 @@
 use maud::Render;
-use serde::{Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 use sqlx::database::HasValueRef;
 use sqlx::error::BoxDynError;
 use sqlx::{Database, Decode, Type};
 use std::borrow::Cow;
-use std::fmt::Write;
 use std::fmt::{Debug, Formatter};
+use std::fmt::{Display, Write};
 use steamid_ng::SteamID;
 
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SteamId {
     Id(u64),
     Raw(Cow<'static, str>),
@@ -51,25 +51,20 @@ impl SteamId {
         let id = SteamID::from_steam3(s)?;
         Ok(SteamId::Id(id.into()))
     }
+
+    pub fn steamid64(&self) -> String {
+        match self {
+            SteamId::Id(id) => format!("{}", id),
+            SteamId::Raw(raw) => raw.to_string(),
+        }
+    }
 }
 
 impl Debug for SteamId {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            SteamId::Id(id) => SteamID::from(*id).fmt(f),
-            SteamId::Raw(raw) => raw.fmt(f),
-        }
-    }
-}
-
-impl Serialize for SteamId {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        match self {
-            SteamId::Id(id) => serializer.collect_str(&SteamID::from(*id).steam3()),
-            SteamId::Raw(raw) => serializer.collect_str(raw),
+            SteamId::Id(id) => Debug::fmt(&SteamID::from(*id), f),
+            SteamId::Raw(raw) => Debug::fmt(raw, f),
         }
     }
 }
@@ -107,12 +102,18 @@ where
     }
 }
 
+impl Display for SteamId {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            SteamId::Id(id) => write!(f, "{id}"),
+            SteamId::Raw(raw) => write!(f, "{raw}"),
+        }
+    }
+}
+
 impl Render for SteamId {
     fn render_to(&self, buffer: &mut String) {
-        match self {
-            SteamId::Id(id) => write!(buffer, "{id}").unwrap(),
-            SteamId::Raw(raw) => buffer.push_str(raw),
-        }
+        write!(buffer, "{self}").unwrap()
     }
 }
 

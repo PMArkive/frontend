@@ -14,7 +14,7 @@ tokio = { version = "1.27.0", features = ["full"] }
 config = { version = "0.13.3", features = ["toml"] }
 time = "0.3.20"
 maud = { version = "0.24.0", git = "https://github.com/lambda-fairy/maud", rev = "7233cda35eed7bba91c9c55564d65498067c3822", features = ["axum"] }
-axum = "0.6.12"
+axum = { version = "0.6.12", features = ["headers"] }
 hyper = "0.14.25"
 hyperlocal = "0.8.0"
 tower-http = { version = "0.4.0", features = ["trace"] }
@@ -23,6 +23,11 @@ itertools = "0.10.5"
 const-fnv1a-hash = "1.1.0"
 const_base = "0.2.0"
 const-str = "0.5.4"
+steam-openid = "0.2.0"
+async-session = "3.0.0"
+quick-xml = { version = "0.28.1", features = ["serialize"] }
+reqwest = "0.11.16"
+rand = "0.8.5"
 
 [build-dependencies]
 lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visitor"] }

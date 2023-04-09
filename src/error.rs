@@ -13,6 +13,14 @@ pub enum Error {
     Io(#[from] std::io::Error),
     #[error("page not found")]
     NotFound,
+    #[error("Failed to validate steam auth")]
+    SteamAuth,
+    #[error(transparent)]
+    Request(#[from] reqwest::Error),
+    #[error(transparent)]
+    Xml(#[from] quick_xml::de::DeError),
+    #[error(transparent)]
+    Session(#[from] async_session::Error),
 }
 
 impl IntoResponse for Error {

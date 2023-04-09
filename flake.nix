@@ -19,6 +19,8 @@
     in rec {
       # `nix develop`
       devShell = pkgs.mkShell {
+        OPENSSL_NO_VENDOR = 1;
+
         nativeBuildInputs = with pkgs; [
           cargo
           bacon
@@ -27,6 +29,8 @@
           clippy
           cargo-audit
           cargo-watch
+          pkg-config
+          openssl
         ];
       };
     });
