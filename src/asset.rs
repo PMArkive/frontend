@@ -14,11 +14,7 @@ macro_rules! saved_asset_url {
 
 macro_rules! saved_asset_hash {
     ($name:expr) => {
-        concat!(
-            r#"""#,
-            include_str!(concat!(env!("OUT_DIR"), "/", $name, ".hash")),
-            r#"""#
-        )
+        include_str!(concat!(env!("OUT_DIR"), "/", $name, ".hash"))
     };
     ($name:expr, quoted) => {
         concat!(r#"""#, crate::asset::saved_asset_hash!($name), r#"""#)

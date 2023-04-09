@@ -45,6 +45,7 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 struct App {
     connection: PgPool,
     openid: SteamOpenId,
+    api: String,
     pub session_store: MemoryStore,
 }
 
@@ -67,6 +68,7 @@ async fn main() -> Result<()> {
         connection,
         openid: SteamOpenId::new(&config.site.url, "/login/callback")
             .expect("invalid steam login url"),
+        api: config.site.api,
         session_store: session_store.clone(),
     });
 

@@ -51,4 +51,5 @@ pub enum Listen {
 #[derive(Debug, Deserialize)]
 pub struct SiteConfig {
     pub url: String,
+    pub api: String,
 }
