@@ -1,4 +1,4 @@
-export function formatDuration(input) {
+export function formatDuration(input: number): string {
     if (!input) {
         return '0:00';
     }

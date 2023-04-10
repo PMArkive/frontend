@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@thisbeyond/solid-select": "^0.13.0",
+    "solid-js": "^1.7.3"
+  }
+}

@@ -3,3 +3,4 @@ result
 .direnv
 config.toml
 .env
+node_modules

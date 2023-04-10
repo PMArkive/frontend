@@ -1,4 +1,14 @@
-DataView.prototype.getString = function(offset, length){
+export interface DemoHead {
+    type: string;
+    server: string;
+    nick: string;
+    map: string;
+    game: string;
+    duration: number;
+    ticks: number;
+}
+
+DataView.prototype["getString"] = function(offset: number, length: number): String{
     let end = typeof length == 'number' ? offset + length : this.byteLength;
     let text = '';
     let val = -1;
@@ -12,9 +22,13 @@ DataView.prototype.getString = function(offset, length){
     return text;
 };
 
-export async function parseHeader(file, cb) {
+export interface GetStringDataView extends DataView {
+    getString: (offset: number, length: number) => string;
+}
+
+export async function parseHeader(file): Promise<DemoHead> {
     const data = await readFile(file);
-    const view = new DataView(data);
+    const view = new DataView(data) as GetStringDataView;
     return {
         'type': view.getString(0, 8),
         'server': view.getString(16, 260),
@@ -26,7 +40,7 @@ export async function parseHeader(file, cb) {
     };
 }
 
-async function readFile(file) {
+async function readFile(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
 

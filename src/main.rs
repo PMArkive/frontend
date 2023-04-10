@@ -76,6 +76,7 @@ async fn main() -> Result<()> {
         .route("/", get(index))
         .route("/style.css", get(serve_compiled!("style.css")))
         .route("/upload.js", get(serve_compiled!("upload.js")))
+        .route("/demo_list.js", get(serve_compiled!("demo_list.js")))
         .route("/images/logo.png", get(serve_static!("../images/logo.png")))
         .route("/images/logo.svg", get(serve_static!("../images/logo.svg")))
         .route("/about", get(about))

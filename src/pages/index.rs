@@ -1,3 +1,4 @@
+use crate::asset::saved_asset_url;
 use crate::data::demo::ListDemo;
 use crate::pages::Page;
 use maud::{html, Markup};
@@ -13,8 +14,10 @@ impl Page for Index {
     }
 
     fn render(&self) -> Markup {
+        let script = saved_asset_url!("demo_list.js");
         html! {
             h1 { "Demos" }
+            .filter-bar {}
             table.demolist {
                 thead {
                     tr {
@@ -39,6 +42,7 @@ impl Page for Index {
                     }
                 }
             }
+            script defer src = (script) type = "text/javascript" {}
         }
     }
 }

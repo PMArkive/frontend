@@ -31,6 +31,7 @@
           cargo-watch
           pkg-config
           openssl
+          nodejs
         ];
       };
     });
