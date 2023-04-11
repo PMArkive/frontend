@@ -8,6 +8,7 @@ mod session;
 pub use crate::config::Config;
 use crate::config::Listen;
 use crate::data::demo::{Demo, ListDemo};
+use crate::data::maps::map_list;
 use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::pages::about::AboutPage;
@@ -127,7 +128,15 @@ async fn main() -> Result<()> {
 
 async fn index(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     let demos = ListDemo::list(&app.connection, None).await?;
-    Ok(render(Index { demos }, session))
+    let maps = map_list(&app.connection).await?.collect();
+    Ok(render(
+        Index {
+            demos,
+            maps,
+            api: &app.api,
+        },
+        session,
+    ))
 }
 
 async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Markup> {

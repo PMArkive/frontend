@@ -1,14 +1,16 @@
 use crate::asset::saved_asset_url;
 use crate::data::demo::ListDemo;
 use crate::pages::Page;
-use maud::{html, Markup};
+use maud::{html, Markup, Render};
 use std::borrow::Cow;
 
-pub struct Index {
+pub struct Index<'a> {
     pub demos: Vec<ListDemo>,
+    pub maps: Vec<String>,
+    pub api: &'a str,
 }
 
-impl Page for Index {
+impl Page for Index<'_> {
     fn title(&self) -> Cow<'static, str> {
         "Demos - demos.tf".into()
     }
@@ -17,7 +19,7 @@ impl Page for Index {
         let script = saved_asset_url!("demo_list.js");
         html! {
             h1 { "Demos" }
-            .filter-bar {}
+            #filter-bar data-maps = (MapList(&self.maps)) data-api-base = (self.api) {}
             table.demolist {
                 thead {
                     tr {
@@ -43,6 +45,21 @@ impl Page for Index {
                 }
             }
             script defer src = (script) type = "text/javascript" {}
+        }
+    }
+}
+
+struct MapList<'a>(&'a [String]);
+
+impl Render for MapList<'_> {
+    fn render_to(&self, buffer: &mut String) {
+        let mut first = true;
+        for map in self.0 {
+            if !first {
+                buffer.push_str(",");
+            }
+            buffer.push_str(&map);
+            first = false;
         }
     }
 }

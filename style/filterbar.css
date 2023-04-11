@@ -1,0 +1,77 @@
+@import '../node_modules/@thisbeyond/solid-select/dist/esm/style.css';
+
+.filter-bar {
+    display: flex;
+    flex-direction: row;
+
+    & .solid-select-container {
+        color: var(--text-primary);
+    }
+
+    & .solid-select-control {
+        outline-color: var(--highlight-primary);
+        border: var(--text-secondary) 1px solid;
+    }
+
+    & .solid-select-placeholder {
+        color: var(--text-secondary);
+    }
+
+    & .solid-select-option {
+        color: var(--text-primary);
+
+        &:hover {
+            background-color: var(--primary-color-accent);
+        }
+
+        &[data-focused=true] {
+            background-color: var(--highlight-primary);
+        }
+    }
+
+    & .solid-select-list {
+        background-color: var(--primary-color);
+        border: var(--text-secondary) 1px solid;
+    }
+
+    & .solid-select-multi-value {
+        padding-right: 0;
+    }
+
+    & .solid-select-multi-value-remove {
+        margin-left: 5px;
+    }
+
+    & > div {
+        display: inline-block;
+        flex-grow: 0;
+    }
+
+    & > .mode {
+        width: 150px;
+
+        & .solid-select-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
+
+    & > .maps {
+        width: 200px;
+
+        & .solid-select-control {
+            border-right: none;
+            border-left: none;
+            border-radius: 0;
+        }
+    }
+
+    & > .players {
+        flex-grow: 1;
+
+        & .solid-select-control {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}

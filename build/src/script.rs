@@ -156,7 +156,7 @@ impl Load for Loader {
             .fold_with(&mut strip(top_level_mark))
             .fold_with(&mut as_folder(TransformVisitor::new(
                 jsx_dom_expressions::config::Config {
-                    module_name: "solid-js/web/dist/web.js".to_string(),
+                    module_name: "solid-js/web".to_string(),
                     builtins: vec![
                         "For".into(),
                         "Show".into(),
