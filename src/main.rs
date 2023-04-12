@@ -5,6 +5,7 @@ mod error;
 mod pages;
 mod session;
 
+use crate::asset::serve_asset;
 pub use crate::config::Config;
 use crate::config::Listen;
 use crate::data::demo::{Demo, ListDemo};
@@ -13,11 +14,10 @@ use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::pages::about::AboutPage;
 use crate::pages::demo::DemoPage;
-use crate::pages::index::Index;
-use crate::pages::render;
-use crate::pages::upload::UploadPage;
+use crate::pages::index::{DemoListScript, Index};
+use crate::pages::upload::{UploadPage, UploadScript};
+use crate::pages::{render, GlobalStyle};
 use crate::session::{SessionData, COOKIE_NAME};
-use asset::{serve_compiled, serve_static};
 use async_session::{MemoryStore, Session, SessionStore};
 use axum::extract::{MatchedPath, Path, RawQuery};
 use axum::headers::Cookie;
@@ -25,6 +25,7 @@ use axum::http::header::{LOCATION, SET_COOKIE};
 use axum::http::{HeaderValue, Request, StatusCode};
 use axum::response::IntoResponse;
 use axum::{extract::State, routing::get, Router, Server, TypedHeader};
+use demostf_build::Asset;
 pub use error::Error;
 use hyperlocal::UnixServerExt;
 use maud::Markup;
@@ -49,6 +50,13 @@ struct App {
     api: String,
     pub session_store: MemoryStore,
 }
+
+#[derive(Asset)]
+#[asset(source = "images/logo.png", url = "/images/logo.png")]
+struct LogoPng;
+#[derive(Asset)]
+#[asset(source = "images/logo.svg", url = "/images/logo.svg")]
+struct LogoSvg;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -75,11 +83,11 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(index))
-        .route("/style.css", get(serve_compiled!("style.css")))
-        .route("/upload.js", get(serve_compiled!("upload.js")))
-        .route("/demo_list.js", get(serve_compiled!("demo_list.js")))
-        .route("/images/logo.png", get(serve_static!("../images/logo.png")))
-        .route("/images/logo.svg", get(serve_static!("../images/logo.svg")))
+        .route(GlobalStyle::route(), get(serve_asset::<GlobalStyle>))
+        .route(UploadScript::route(), get(serve_asset::<UploadScript>))
+        .route(DemoListScript::route(), get(serve_asset::<DemoListScript>))
+        .route(LogoPng::route(), get(serve_asset::<LogoPng>))
+        .route(LogoSvg::route(), get(serve_asset::<LogoSvg>))
         .route("/about", get(about))
         .route("/login/callback", get(login_callback))
         .route("/login", get(login))

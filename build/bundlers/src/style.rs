@@ -1,4 +1,4 @@
-use crate::guess_mime;
+use crate::guess_embed;
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
 use lightningcss::bundler::{Bundler, FileProvider};
@@ -11,7 +11,7 @@ use std::convert::Infallible;
 use std::fs::read;
 use std::path::Path;
 
-pub fn bundle_style(style: &str) -> String {
+pub fn bundle_style(style: &str) -> Vec<u8> {
     // todo build time?
     let fs = FileProvider::new();
     let mut bundler = Bundler::new(
@@ -49,6 +49,7 @@ pub fn bundle_style(style: &str) -> String {
         })
         .expect("failed to output css")
         .code
+        .into_bytes()
 }
 
 struct InlineUrlVisitor;
@@ -64,7 +65,7 @@ impl<'i> Visitor<'i> for InlineUrlVisitor {
                 eprintln!("Failed to write inline file {path}: {e}");
                 panic!("Failed to inline");
             });
-            let (mime, encode) = guess_mime(path);
+            let (mime, encode) = guess_embed(path);
 
             if encode {
                 let encoded = STANDARD.encode(content);

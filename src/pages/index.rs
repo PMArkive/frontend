@@ -1,6 +1,6 @@
-use crate::asset::saved_asset_url;
 use crate::data::demo::ListDemo;
 use crate::pages::Page;
+use demostf_build::Asset;
 use maud::{html, Markup, Render};
 use std::borrow::Cow;
 
@@ -10,13 +10,17 @@ pub struct Index<'a> {
     pub api: &'a str,
 }
 
+#[derive(Asset)]
+#[asset(source = "script/demo_list.js", url = "/demo_list.js")]
+pub struct DemoListScript;
+
 impl Page for Index<'_> {
     fn title(&self) -> Cow<'static, str> {
         "Demos - demos.tf".into()
     }
 
     fn render(&self) -> Markup {
-        let script = saved_asset_url!("demo_list.js");
+        let script = DemoListScript::url();
         html! {
             h1 { "Demos" }
             #filter-bar data-maps = (MapList(&self.maps)) data-api-base = (self.api) {}

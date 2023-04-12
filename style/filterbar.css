@@ -1,5 +1,9 @@
 @import '../node_modules/@thisbeyond/solid-select/dist/esm/style.css';
 
+#filter-bar {
+    height: 35px;
+}
+
 .filter-bar {
     display: flex;
     flex-direction: row;

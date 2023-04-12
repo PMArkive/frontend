@@ -4,8 +4,8 @@ pub mod index;
 mod plugin_section;
 pub mod upload;
 
-use crate::asset::saved_asset_url;
 use crate::session::SessionData;
+use demostf_build::Asset;
 use maud::{html, Markup, DOCTYPE};
 use std::borrow::Cow;
 
@@ -14,8 +14,12 @@ pub trait Page {
     fn render(&self) -> Markup;
 }
 
+#[derive(Asset)]
+#[asset(source = "style/style.css", url = "/style.css")]
+pub struct GlobalStyle;
+
 pub fn render<T: Page>(page: T, session: SessionData) -> Markup {
-    let style_url = saved_asset_url!("style.css");
+    let style_url = GlobalStyle::url();
     html! {
         (DOCTYPE)
         html {

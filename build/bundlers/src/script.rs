@@ -23,13 +23,13 @@ use swc_ecma_transforms_base::hygiene::hygiene;
 use swc_ecma_transforms_typescript::strip;
 use swc_ecma_visit::{as_folder, FoldWith};
 
-pub fn bundle_script(script: &str) -> String {
+pub fn bundle_script(script: &str) -> Vec<u8> {
     #[cfg(debug_assertions)]
     let minify = false;
     #[cfg(not(debug_assertions))]
     let minify = true;
 
-    let output = GLOBALS.set(&Default::default(), || {
+    GLOBALS.set(&Default::default(), || {
         let cm = Arc::<SourceMap>::default();
 
         let globals = &Box::default();
@@ -62,8 +62,7 @@ pub fn bundle_script(script: &str) -> String {
             write(minify, cm.clone(), &module.module, &mut buf);
         }
         buf
-    });
-    String::from_utf8(output).expect("invalid utf8 bundle")
+    })
 }
 
 fn write<W: Write>(minify: bool, cm: Arc<SourceMap>, module: &Module, out: W) {

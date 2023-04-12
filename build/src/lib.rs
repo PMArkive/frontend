@@ -1,30 +1,23 @@
-mod script;
-mod style;
+pub use demostf_build_bundlers::bundle_raw;
+pub use demostf_build_bundlers::bundle_script;
+pub use demostf_build_bundlers::bundle_style;
+pub use demostf_build_derive::Asset;
+use rand::{distributions::Alphanumeric, Rng};
+use std::borrow::Cow;
 
-use const_fnv1a_hash::fnv1a_hash_str_32;
-pub use script::bundle_script;
-pub use style::bundle_style;
-
-#[macro_export]
-macro_rules! save_asset {
-    ($name:expr, $val:expr) => {
-        let val = $val;
-        let out_dir = std::env::var("OUT_DIR").unwrap();
-        std::fs::write(format!("{out_dir}/{}", $name), &val).expect("failed to write asset");
-        let hash = demostf_build::hash(&val);
-        std::fs::write(format!("{out_dir}/{}.hash", $name), hash)
-            .expect("failed to write asset hash");
-    };
+pub trait Asset {
+    fn mime() -> &'static str;
+    fn cache_buster() -> Cow<'static, str>;
+    fn etag() -> &'static str;
+    fn content() -> Cow<'static, [u8]>;
+    fn url() -> Cow<'static, str>;
+    fn route() -> &'static str;
 }
 
-pub fn hash(data: &str) -> String {
-    format!("{:x}", fnv1a_hash_str_32(data))
-}
-
-fn guess_mime(path: &str) -> (&'static str, bool) {
-    match path.split('.').last().unwrap() {
-        "svg" => ("image/svg+xml", false),
-        "png" => ("image/png", true),
-        ext => panic!("no mimetype known for {ext}"),
-    }
+pub fn random_cache_buster() -> String {
+    rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(8)
+        .map(char::from)
+        .collect()
 }

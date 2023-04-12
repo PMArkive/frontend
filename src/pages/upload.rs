@@ -1,6 +1,6 @@
-use crate::asset::saved_asset_url;
 use crate::pages::plugin_section::PluginSection;
 use crate::pages::Page;
+use demostf_build::Asset;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
@@ -17,13 +17,17 @@ impl<'a> UploadPage<'a> {
     }
 }
 
+#[derive(Asset)]
+#[asset(source = "script/upload.ts", url = "/upload.js")]
+pub struct UploadScript;
+
 impl Page for UploadPage<'_> {
     fn title(&self) -> Cow<'static, str> {
         "Upload - demos.tf".into()
     }
 
     fn render(&self) -> Markup {
-        let script = saved_asset_url!("upload.js");
+        let script = UploadScript::url();
         html! {
             .upload-page {
                 section.upload {
