@@ -2,16 +2,18 @@ mod asset;
 mod config;
 mod data;
 mod error;
+mod fragments;
 mod pages;
 mod session;
 
 use crate::asset::serve_asset;
 pub use crate::config::Config;
 use crate::config::Listen;
-use crate::data::demo::{Demo, ListDemo};
+use crate::data::demo::{Demo, Filter, ListDemo};
 use crate::data::maps::map_list;
 use crate::data::steam_id::SteamId;
 use crate::data::user::User;
+use crate::fragments::demo_list::DemoList;
 use crate::pages::about::AboutPage;
 use crate::pages::demo::DemoPage;
 use crate::pages::index::{DemoListScript, Index};
@@ -19,7 +21,7 @@ use crate::pages::upload::{UploadPage, UploadScript};
 use crate::pages::{render, GlobalStyle};
 use crate::session::{SessionData, COOKIE_NAME};
 use async_session::{MemoryStore, Session, SessionStore};
-use axum::extract::{MatchedPath, Path, RawQuery};
+use axum::extract::{MatchedPath, Path, Query, RawQuery};
 use axum::headers::Cookie;
 use axum::http::header::{LOCATION, SET_COOKIE};
 use axum::http::{HeaderValue, Request, StatusCode};
@@ -28,7 +30,7 @@ use axum::{extract::State, routing::get, Router, Server, TypedHeader};
 use demostf_build::Asset;
 pub use error::Error;
 use hyperlocal::UnixServerExt;
-use maud::Markup;
+use maud::{Markup, Render};
 use sqlx::PgPool;
 use std::env::{args, var};
 use std::fs::{remove_file, set_permissions, Permissions};
@@ -88,6 +90,7 @@ async fn main() -> Result<()> {
         .route(DemoListScript::route(), get(serve_asset::<DemoListScript>))
         .route(LogoPng::route(), get(serve_asset::<LogoPng>))
         .route(LogoSvg::route(), get(serve_asset::<LogoSvg>))
+        .route("/fragments/demo-list", get(demo_list))
         .route("/about", get(about))
         .route("/login/callback", get(login_callback))
         .route("/login", get(login))
@@ -134,8 +137,14 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-async fn index(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
-    let demos = ListDemo::list(&app.connection, None).await?;
+#[axum::debug_handler]
+async fn index(
+    State(app): State<Arc<App>>,
+    session: SessionData,
+    filter: Option<Query<Filter>>,
+) -> Result<Markup> {
+    let filter = filter.map(|filter| filter.0).unwrap_or_default();
+    let demos = ListDemo::list(&app.connection, filter).await?;
     let maps = map_list(&app.connection).await?.collect();
     Ok(render(
         Index {
@@ -256,6 +265,13 @@ async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoR
         )
             .into_response()
     }
+}
+
+#[axum::debug_handler]
+async fn demo_list(State(app): State<Arc<App>>, filter: Option<Query<Filter>>) -> Result<Markup> {
+    let filter = filter.map(|filter| filter.0).unwrap_or_default();
+    let demos = ListDemo::list(&app.connection, filter).await?;
+    Ok(DemoList { demos }.render())
 }
 
 async fn handler_404() -> impl IntoResponse {

@@ -4,8 +4,10 @@ use sqlx::database::HasValueRef;
 use sqlx::error::BoxDynError;
 use sqlx::{Database, Decode, Type};
 use std::borrow::Cow;
+use std::convert::Infallible;
 use std::fmt::{Debug, Formatter};
 use std::fmt::{Display, Write};
+use std::str::FromStr;
 use steamid_ng::SteamID;
 
 #[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -90,15 +92,7 @@ where
 {
     fn decode(value: <DB as HasValueRef<'r>>::ValueRef) -> Result<Self, BoxDynError> {
         let str = <&str as Decode<DB>>::decode(value)?;
-        if let Ok(id) = str.parse() {
-            Ok(Self::Id(id))
-        } else if str == "serveme.tf" {
-            Ok(Self::Raw("serveme.tf".into()))
-        } else if str == "essentialstf" {
-            Ok(Self::Raw("essentialstf".into()))
-        } else {
-            Ok(Self::Raw(str.to_string().into()))
-        }
+        Ok(str.parse().unwrap())
     }
 }
 
@@ -142,5 +136,21 @@ impl SteamId {
 
     pub fn profile_link(&self) -> ProfileLink {
         ProfileLink(self)
+    }
+}
+
+impl FromStr for SteamId {
+    type Err = Infallible;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let Ok(id) = s.parse() {
+            Ok(Self::Id(id))
+        } else if s == "serveme.tf" {
+            Ok(Self::Raw("serveme.tf".into()))
+        } else if s == "essentialstf" {
+            Ok(Self::Raw("essentialstf".into()))
+        } else {
+            Ok(Self::Raw(s.to_string().into()))
+        }
     }
 }

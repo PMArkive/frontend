@@ -1,4 +1,7 @@
+import {FilterSet} from "./filterbar";
+
 export type SteamId = string;
+
 export interface SteamUser {
     id: number;
     steamid: SteamId;

@@ -1,10 +1,20 @@
 use crate::data::chat::Chat;
 use crate::data::player::Player;
+use crate::data::schema::{ArrayAgg, CleanMapName, Demos, Players};
 use crate::data::steam_id::SteamId;
 use crate::Result;
 use maud::Render;
+use sea_query::extension::postgres::PgExpr;
+use sea_query::{
+    Alias, Expr, Func, Order, PostgresQueryBuilder, Query, SelectStatement, SimpleExpr,
+};
+use sea_query_binder::SqlxBinder;
+use serde::{Deserialize, Deserializer};
 use sqlx::{query_as, Executor, FromRow, Postgres};
+use std::borrow::Cow;
 use std::fmt::Write;
+use std::ops::Range;
+use std::str::FromStr;
 use time::format_description::well_known::Iso8601;
 use time::{OffsetDateTime, PrimitiveDateTime, UtcOffset};
 use tracing::instrument;
@@ -156,25 +166,40 @@ impl ListDemo {
     #[instrument(skip(connection))]
     pub async fn list(
         connection: impl Executor<'_, Database = Postgres>,
-        before: Option<u32>,
+        filter: Filter,
     ) -> Result<Vec<Self>> {
-        if let Some(before) = before {
-            Ok(query_as!(
-                ListDemo,
-                r#"SELECT
-                    id, name, map, red, blu, duration, created_at, server, "playerCount" as player_count
-                FROM demos WHERE deleted_at IS NULL and id < $1 ORDER BY id DESC LIMIT 50"#,
-                before as i32
-            )
-                .fetch_all(connection)
-                .await?)
-        } else {
+        if filter.is_empty() {
             Ok(query_as!(
                 ListDemo,
                 r#"SELECT
                     id, name, map, red, blu, duration, created_at, server, "playerCount" as player_count
                 FROM demos WHERE deleted_at IS NULL ORDER BY id DESC LIMIT 50"#
             )
+                .fetch_all(connection)
+                .await?)
+        } else {
+            let mut query = Query::select();
+            query
+                .column((Demos::Table, Demos::Id))
+                .column((Demos::Table, Demos::Name))
+                .columns([
+                    Demos::Map,
+                    Demos::Red,
+                    Demos::Blu,
+                    Demos::Duration,
+                    Demos::Server,
+                    Demos::CreatedAt,
+                ])
+                .expr_as(Expr::col(Demos::PlayerCount), Alias::new("player_count"))
+                .from(Demos::Table)
+                .and_where(Expr::col(Demos::DeletedAt).is_null())
+                .order_by(Demos::Id, Order::Desc)
+                .limit(50);
+            filter.apply(&mut query);
+
+            let (sql, values) = query.build_sqlx(PostgresQueryBuilder);
+
+            Ok(sqlx::query_as_with::<_, ListDemo, _>(&sql, values)
                 .fetch_all(connection)
                 .await?)
         }
@@ -311,6 +336,104 @@ impl Render for RelativeDate {
             }
         } else {
             write!(buffer, "now").unwrap();
+        }
+    }
+}
+
+#[derive(Debug, Default, Deserialize, Eq, PartialEq)]
+pub enum GameMode {
+    #[serde(rename = "4v4")]
+    Fours,
+    #[serde(rename = "6v6")]
+    Sixes,
+    #[serde(rename = "prolander")]
+    Prolander,
+    #[serde(rename = "highlander")]
+    HighLander,
+    #[default]
+    #[serde(other)]
+    Any,
+}
+
+impl GameMode {
+    fn player_count(&self) -> Option<Range<i32>> {
+        match self {
+            GameMode::Fours => Some(7..9),
+            GameMode::Sixes => Some(11..13),
+            GameMode::Prolander => Some(14..15),
+            GameMode::HighLander => Some(17..19),
+            GameMode::Any => None,
+        }
+    }
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Filter {
+    #[serde(default)]
+    mode: GameMode,
+    #[serde(default)]
+    map: String,
+    #[serde(default)]
+    #[serde(deserialize_with = "deserialize_array")]
+    players: Vec<i32>,
+    #[serde(default)]
+    before: Option<i32>,
+}
+
+fn deserialize_array<'de, D, T>(deserializer: D) -> Result<Vec<T>, D::Error>
+where
+    D: Deserializer<'de>,
+    T: Deserialize<'de> + FromStr,
+{
+    let s = <Cow<str>>::deserialize(deserializer)?;
+    Ok(s.split(",").map(T::from_str).flatten().collect())
+}
+
+impl Filter {
+    fn is_empty(&self) -> bool {
+        self.mode != GameMode::default()
+            && self.map.is_empty()
+            && self.before.is_none()
+            && self.players.is_empty()
+    }
+
+    fn apply(&self, query: &mut SelectStatement) {
+        if let Some(count) = self.mode.player_count() {
+            query.and_where(Expr::col(Demos::PlayerCount).between(count.start, count.end));
+        }
+        if !self.map.is_empty() {
+            let val = Expr::value(&self.map);
+            query.and_where(
+                Expr::col(Demos::Map).eq(val.clone()).or(SimpleExpr::from(
+                    Func::cust(CleanMapName).arg(Expr::col(Demos::Map)),
+                )
+                .eq(val)),
+            );
+        }
+        if let Some(before) = &self.before {
+            query.and_where(Expr::col(Demos::Id).lt(*before));
+        }
+        if !self.players.is_empty() && self.players.len() < 19 {
+            let mut player_iter = self.players.iter();
+            let mut players = format!("array[{}", player_iter.next().unwrap());
+            for player in player_iter {
+                write!(&mut players, ",{}", player).unwrap();
+            }
+            players.push_str("]");
+            // query.and_where(Expr::cust(&players).contained(sub_array));
+
+            query
+                .inner_join(
+                    Players::Table,
+                    Expr::col((Demos::Table, Demos::Id)).equals((Players::Table, Players::DemoId)),
+                )
+                .and_where(Expr::col(Players::UserId).is_in(self.players.clone()));
+            query.group_by_col((Demos::Table, Players::Id));
+            query.and_having(
+                Expr::cust(&players).contained(
+                    Func::cust(ArrayAgg).arg(Expr::col((Players::Table, Players::UserId))),
+                ),
+            );
         }
     }
 }

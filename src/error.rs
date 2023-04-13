@@ -28,7 +28,7 @@ impl IntoResponse for Error {
     fn into_response(self) -> Response {
         match self {
             Error::NotFound => (StatusCode::NOT_FOUND, "not found").into_response(),
-            _ => todo!(),
+            e => format!("{:#}", e).into_response(),
         }
     }
 }
