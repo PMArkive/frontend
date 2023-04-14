@@ -146,25 +146,17 @@ table.players {
         vertical-align: top;
     }
     & .class {
-        width: 10px;
-        padding: 7px 0;
-        vertical-align: top;
-    }
-    & .red.class {
-        padding-right: 0;
-    }
-    & .blue.class {
-        padding-left: 0;
+        width: 40px;
     }
 
     & .blue.name {
         text-align: right;
-        padding-right: 15px;
+        padding-right: 0;
     }
 
     & .red.name {
         text-align: left;
-        padding-left: 15px;
+        padding-left: 0;
     }
 
     & th {

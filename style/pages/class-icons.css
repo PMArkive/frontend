@@ -1,85 +1,54 @@
-table.players {
-    & .red.class, & .blue.class {
-        background-origin: content-box;
-        background-clip: content-box;
-        background-repeat: no-repeat;
-        background-image: url('inline://images/classes.png');
-    }
-
-    & .red.class {
-        &.spy {
-            background-position: -0px -0px;
-        }
-
-        &.demoman {
-            background-position: -20px -0px;
-        }
-
-        &.soldier {
-            background-position: -40px -0px;
-        }
-
-        &.medic {
-            background-position: -0px -20px;
-        }
-
-        &.pyro {
-            background-position: -20px -20px;
-        }
-
-        &.sniper {
-            background-position: -40px -20px;
-        }
-
-        &.engineer {
-            background-position: -0px -40px;
-        }
-
-        &.heavyweapons {
-            background-position: -20px -40px;
-        }
-
-        &.scout {
-            background-position: -40px -40px;
-        }
-    }
-
-
-    & .blue.class {
-        &.spy {
-            background-position: -10px -0px;
-        }
-
-        &.demoman {
-            background-position: -30px -0px;
-        }
-
-        &.soldier {
-            background-position: -50px -0px;
-        }
-
-        &.medic {
-            background-position: -10px -20px;
-        }
-
-        &.pyro {
-            background-position: -30px -20px;
-        }
-
-        &.sniper {
-            background-position: -50px -20px;
-        }
-
-        &.engineer {
-            background-position: -10px -40px;
-        }
-
-        &.heavyweapons {
-            background-position: -30px -40px;
-        }
-
-        &.scout {
-            background-position: -50px -40px;
-        }
-    }
+:root {
+    --icon-scout: url('inline://images/scout.svg');
+    --icon-soldier: url('inline://images/soldier.svg');
+    --icon-pyro: url('inline://images/pyro.svg');
+    --icon-demo: url('inline://images/demo.svg');
+    --icon-heavy: url('inline://images/heavy.svg');
+    --icon-engineer: url('inline://images/engineer.svg');
+    --icon-medic: url('inline://images/medic.svg');
+    --icon-sniper: url('inline://images/sniper.svg');
+    --icon-spy: url('inline://images/spy.svg');
 }
+
+.class.scout {
+    mask-image: var(--icon-scout);
+}
+.class.soldier {
+    mask-image: var(--icon-soldier);
+}
+.class.pyro {
+    mask-image: var(--icon-pyro);
+}
+.class.demoman {
+    mask-image: var(--icon-demo);
+}
+.class.heavyweapons {
+    mask-image: var(--icon-heavy);
+}
+.class.engineer {
+    mask-image: var(--icon-engineer);
+}
+.class.medic {
+    mask-image: var(--icon-medic);
+}
+.class.sniper {
+    mask-image: var(--icon-sniper);
+}
+.class.spy {
+    mask-image: var(--icon-spy);
+}
+
+.red.class {
+    background: #a75d50;
+}
+.blue.class {
+    background: #5b818f;
+}
+.class {
+    mask-origin: content-box;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    filter: brightness(60%);
+}
+

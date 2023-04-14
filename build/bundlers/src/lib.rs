@@ -13,7 +13,7 @@ pub fn bundle_raw(input: &str) -> Vec<u8> {
 
 fn guess_embed(path: &str) -> (&'static str, bool) {
     match path.split('.').last().unwrap() {
-        "svg" => ("image/svg+xml", false),
+        "svg" => ("image/svg+xml", true),
         "png" => ("image/png", true),
         ext => panic!("no mimetype known for {ext}"),
     }

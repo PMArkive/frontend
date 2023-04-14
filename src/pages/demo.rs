@@ -38,16 +38,16 @@ impl Page for DemoPage {
             table.players {
                 thead {
                     th.team.red {}
+                    th.class {}
                     th.name.red { "Name" }
                     th.stat.red { "K" }
                     th.stat.red { "A" }
                     th.stat.red { "D" }
-                    th.class {}
-                    th.class {}
                     th.stat.blue { "D" }
                     th.stat.blue { "A" }
                     th.stat.blue { "K" }
                     th.name.blue { "Name" }
+                    th.class {}
                     th.team.blue {}
                 }
                 tbody {
@@ -55,34 +55,34 @@ impl Page for DemoPage {
                         tr {
                             td.team.red {}
                             @if let Some(player) = player_pair.as_ref().left() {
+                                td.class.red.(player.class) {}
                                 td.name.red {
                                     a href = (player.steam_id.profile_link()) { (player.name) }
                                 }
                                 td.stat.red { (player.kills.unwrap_or_default()) }
                                 td.stat.red { (player.assists.unwrap_or_default()) }
                                 td.stat.red { (player.deaths.unwrap_or_default()) }
-                                td.class.red.(player.class) {}
                             } @else {
+                                td.class {}
                                 td.name.red {}
                                 td.stat.red {}
                                 td.stat.red {}
                                 td.stat.red {}
-                                td.class {}
                             }
                             @if let Some(player) = player_pair.as_ref().right() {
-                                td.class.blue.(player.class) {}
                                 td.stat.blue { (player.deaths.unwrap_or_default()) }
                                 td.stat.blue { (player.assists.unwrap_or_default()) }
                                 td.stat.blue { (player.kills.unwrap_or_default()) }
                                 td.name.blue {
                                     a href = (player.steam_id.profile_link()) { (player.name) }
                                 }
+                                td.class.blue.(player.class) {}
                             } @else {
-                                td.class {}
                                 td.stat.blue {}
                                 td.stat.blue {}
                                 td.stat.blue {}
                                 td.name.blue {}
+                                td.class {}
                             }
                             td.team.blue {}
                         }
