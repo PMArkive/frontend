@@ -6,6 +6,7 @@
 
 @import 'pages/index.css';
 @import 'pages/demo.css';
+@import 'pages/about.css';
 @import 'pages/upload.css';
 
 :root {
