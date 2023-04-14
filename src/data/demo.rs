@@ -330,7 +330,7 @@ impl Render for RelativeDate {
             } else if elapsed.whole_days() < 32 {
                 write!(buffer, "{} days ago", elapsed.whole_days()).unwrap();
             } else if elapsed.whole_days() < 365 {
-                write!(buffer, "{} days ago", elapsed.whole_days() / 30).unwrap();
+                write!(buffer, "{} months ago", elapsed.whole_days() / 30).unwrap();
             } else {
                 write!(buffer, "{} years go", elapsed.whole_days() / 365).unwrap();
             }
@@ -378,6 +378,8 @@ pub struct Filter {
     players: Vec<i32>,
     #[serde(default)]
     before: Option<i32>,
+    #[serde(default)]
+    uploader: Option<i32>,
 }
 
 fn deserialize_array<'de, D, T>(deserializer: D) -> Result<Vec<T>, D::Error>
@@ -395,6 +397,7 @@ impl Filter {
             && self.map.is_empty()
             && self.before.is_none()
             && self.players.is_empty()
+            && self.uploader.is_none()
     }
 
     fn apply(&self, query: &mut SelectStatement) {
@@ -413,14 +416,16 @@ impl Filter {
         if let Some(before) = &self.before {
             query.and_where(Expr::col(Demos::Id).lt(*before));
         }
+        if let Some(uploader) = &self.uploader {
+            query.and_where(Expr::col(Demos::Uploader).eq(*uploader));
+        }
         if !self.players.is_empty() && self.players.len() < 19 {
-            let mut player_iter = self.players.iter();
-            let mut players = format!("array[{}", player_iter.next().unwrap());
-            for player in player_iter {
-                write!(&mut players, ",{}", player).unwrap();
+            let mut player = self.players.iter();
+            let mut players_arr = format!("array[{}", player.next().unwrap());
+            for player in player {
+                write!(&mut players_arr, ",{}", player).unwrap();
             }
-            players.push_str("]");
-            // query.and_where(Expr::cust(&players).contained(sub_array));
+            players_arr.push_str("]");
 
             query
                 .inner_join(
@@ -430,7 +435,7 @@ impl Filter {
                 .and_where(Expr::col(Players::UserId).is_in(self.players.clone()));
             query.group_by_col((Demos::Table, Players::Id));
             query.and_having(
-                Expr::cust(&players).contained(
+                Expr::cust(&players_arr).contained(
                     Func::cust(ArrayAgg).arg(Expr::col((Players::Table, Players::UserId))),
                 ),
             );

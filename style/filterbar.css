@@ -13,6 +13,7 @@
     }
 
     & .solid-select-control {
+        line-height: 26px;
         outline-color: var(--highlight-primary);
         border: var(--text-secondary) 1px solid;
     }
