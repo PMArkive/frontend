@@ -7,22 +7,20 @@ edition = "2021"
 lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visitor"] }
 base64 = "0.21.0"
 urlencoding = "2.1.2"
-swc = "0.259.6"
-swc_common = { version = "0.30.5", features = ["tty-emitter", "concurrent"], git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_core = { version = "0.74.6", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-#swc_bundler = "0.212.5"
-swc_bundler = { version = "0.212.5", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-#swc_ecma_loader = "0.42.5"
-swc_ecma_loader = { version = "0.42.5", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old", features = ["node", "cache"] }
-swc_ecma_ast = { version = "0.102.5", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_atoms = { version = "0.4.43", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_ecma_parser = { version = "0.132.6", features = ["typescript"], git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_ecma_codegen = { version = "0.137.6", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_ecma_transforms_base = { version = "0.125.1", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_ecma_transforms_typescript = { version = "0.175.4", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
-swc_ecma_visit = { version = "0.88.5", git = "https://github.com/icewind1991/swc", branch = "loader-browser-overwrite-old" }
+swc = "0.260.20"
+swc_common = { version = "0.31.4", features = ["tty-emitter", "concurrent"] }
+swc_core = { version = "0.75.20" }
+swc_bundler = { version = "0.213.14" }
+swc_ecma_loader = { version = "0.43.5", features = ["node", "cache"] }
+swc_ecma_ast = { version = "0.103.4" }
+swc_atoms = { version = "0.5.3" }
+swc_ecma_parser = { version = "0.133.8", features = ["typescript"] }
+swc_ecma_codegen = { version = "0.138.9" }
+swc_ecma_transforms_base = { version = "0.126.10" }
+swc_ecma_transforms_typescript = { version = "0.176.12" }
+swc_ecma_visit = { version = "0.89.4" }
 anyhow = "1.0.70"
-jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "loader-browser-overwrite-old" }
+jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "main" }
 #jsx-dom-expressions = { version = "0.1", path = "../../../../rust/swc-plugin-jsx-dom-expressions" }
 rand = "0.8.5"
 fnv = "1.0.7"
