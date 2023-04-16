@@ -147,11 +147,11 @@ async fn index(
 ) -> Result<Markup> {
     let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
-    let maps = map_list(&app.connection).await?.collect();
+    let maps: Vec<_> = map_list(&app.connection).await?.collect();
     Ok(render(
         Index {
-            demos,
-            maps,
+            demos: &demos,
+            maps: &maps,
             api: &app.api,
         },
         session,
@@ -283,7 +283,7 @@ async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoR
 async fn demo_list(State(app): State<Arc<App>>, filter: Option<Query<Filter>>) -> Result<Markup> {
     let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
-    Ok(DemoList { demos }.render())
+    Ok(DemoList { demos: &demos }.render())
 }
 
 async fn handler_404() -> impl IntoResponse {

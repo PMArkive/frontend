@@ -1,18 +1,28 @@
 use crate::data::demo::ListDemo;
+use crate::fragments::demo_list::DemoList;
 use crate::pages::Page;
 use demostf_build::Asset;
 use maud::{html, Markup, Render};
 use std::borrow::Cow;
 
 pub struct Index<'a> {
-    pub demos: Vec<ListDemo>,
-    pub maps: Vec<String>,
+    pub demos: &'a [ListDemo],
+    pub maps: &'a [String],
     pub api: &'a str,
 }
 
 #[derive(Asset)]
 #[asset(source = "script/demo_list.js", url = "/demo_list.js")]
 pub struct DemoListScript;
+
+impl<'a> Index<'a> {
+    fn map_list(&self) -> impl Render + 'a {
+        MapList(&self.maps)
+    }
+    fn demo_list(&self) -> impl Render + 'a {
+        DemoList { demos: self.demos }
+    }
+}
 
 impl Page for Index<'_> {
     fn title(&self) -> Cow<'static, str> {
@@ -23,7 +33,7 @@ impl Page for Index<'_> {
         let script = DemoListScript::url();
         html! {
             h1 { "Demos" }
-            #filter-bar data-maps = (MapList(&self.maps)) data-api-base = (self.api) {}
+            #filter-bar data-maps = (self.map_list()) data-api-base = (self.api) {}
             table.demolist {
                 thead {
                     tr {
@@ -35,17 +45,7 @@ impl Page for Index<'_> {
                     }
                 }
                 tbody {
-                    @for demo in &self.demos {
-                        tr {
-                            td .title {
-                                a href = (demo.url()) { (demo.server) " - " (demo.red) " vs " (demo.blu) }
-                            }
-                            td .format { (demo.format()) }
-                            td .map { (demo.map) }
-                            td .duration { (demo.duration()) }
-                            td .date title = (demo.date()) { (demo.relative_date()) }
-                        }
-                    }
+                    (self.demo_list())
                 }
             }
             script defer src = (script) type = "text/javascript" {}

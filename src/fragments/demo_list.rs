@@ -1,14 +1,14 @@
 use crate::data::demo::ListDemo;
 use maud::{html, Markup, Render};
 
-pub struct DemoList {
-    pub demos: Vec<ListDemo>,
+pub struct DemoList<'a> {
+    pub demos: &'a [ListDemo],
 }
 
-impl Render for DemoList {
+impl Render for DemoList<'_> {
     fn render(&self) -> Markup {
         html! {
-            @for demo in &self.demos {
+            @for demo in self.demos {
                 tr {
                     td .title {
                         a href = (demo.url()) { (demo.server) " - " (demo.red) " vs " (demo.blu) }
