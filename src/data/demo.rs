@@ -178,6 +178,14 @@ impl ListDemo {
                 .fetch_all(connection)
                 .await?)
         } else {
+            let is_fake_user = filter
+                .players
+                .iter()
+                .any(|player| matches!(player, SteamId::Raw(_)));
+            if is_fake_user {
+                return Ok(Vec::new());
+            }
+
             let mut query = Query::select();
             query
                 .columns([
