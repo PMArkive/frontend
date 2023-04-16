@@ -1,5 +1,5 @@
 use crate::data::steam_id::SteamId;
-use crate::Result;
+use crate::{Error, Result};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use reqwest::get;
@@ -60,6 +60,9 @@ impl User {
     }
 
     async fn fetch(steam_id: &SteamId) -> Result<Profile> {
+        let SteamId::Id(steam_id) = steam_id else {
+            return Err(Error::NotFound);
+        };
         let response = get(format!(
             "https://steamcommunity.com/profiles/{steam_id}?xml=1"
         ))

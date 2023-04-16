@@ -16,9 +16,11 @@ use crate::data::user::User;
 use crate::fragments::demo_list::DemoList;
 use crate::pages::about::AboutPage;
 use crate::pages::api::ApiPage;
-use crate::pages::demo::DemoPage;
+use crate::pages::demo::{ClassIconsStyle, DemoPage};
 use crate::pages::index::{DemoListScript, Index};
+use crate::pages::profile::Profile;
 use crate::pages::upload::{UploadPage, UploadScript};
+use crate::pages::uploads::Uploads;
 use crate::pages::{render, GlobalStyle};
 use crate::session::{SessionData, COOKIE_NAME};
 use async_session::{MemoryStore, Session, SessionStore};
@@ -86,7 +88,13 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(index))
+        .route("/uploads/:uploader", get(uploads))
+        .route("/profiles/:uploader", get(profiles))
         .route(GlobalStyle::route(), get(serve_asset::<GlobalStyle>))
+        .route(
+            ClassIconsStyle::route(),
+            get(serve_asset::<ClassIconsStyle>),
+        )
         .route(UploadScript::route(), get(serve_asset::<UploadScript>))
         .route(DemoListScript::route(), get(serve_asset::<DemoListScript>))
         .route(LogoPng::route(), get(serve_asset::<LogoPng>))
@@ -284,6 +292,58 @@ async fn demo_list(State(app): State<Arc<App>>, filter: Option<Query<Filter>>) -
     let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
     Ok(DemoList { demos: &demos }.render())
+}
+
+#[axum::debug_handler]
+async fn uploads(
+    State(app): State<Arc<App>>,
+    session: SessionData,
+    filter: Option<Query<Filter>>,
+    Path(uploader): Path<SteamId>,
+) -> Result<Markup> {
+    let mut filter = filter.map(|filter| filter.0).unwrap_or_default();
+    filter.uploader = Some(uploader.clone());
+
+    let demos = ListDemo::list(&app.connection, filter).await?;
+    let maps: Vec<_> = map_list(&app.connection).await?.collect();
+    let user = User::get(&app.connection, uploader)
+        .await
+        .map_err(|_| Error::NotFound)?;
+    Ok(render(
+        Uploads {
+            user,
+            demos: &demos,
+            maps: &maps,
+            api: &app.api,
+        },
+        session,
+    ))
+}
+
+#[axum::debug_handler]
+async fn profiles(
+    State(app): State<Arc<App>>,
+    session: SessionData,
+    filter: Option<Query<Filter>>,
+    Path(profile): Path<SteamId>,
+) -> Result<Markup> {
+    let mut filter = filter.map(|filter| filter.0).unwrap_or_default();
+    filter.players.push(profile.clone());
+
+    let demos = ListDemo::list(&app.connection, filter).await?;
+    let maps: Vec<_> = map_list(&app.connection).await?.collect();
+    let user = User::get(&app.connection, profile)
+        .await
+        .map_err(|_| Error::NotFound)?;
+    Ok(render(
+        Profile {
+            user,
+            demos: &demos,
+            maps: &maps,
+            api: &app.api,
+        },
+        session,
+    ))
 }
 
 async fn handler_404() -> impl IntoResponse {

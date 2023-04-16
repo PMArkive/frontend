@@ -6,7 +6,8 @@ import {Api, SteamId} from "./api";
 let lastFilter = {
     mode: "",
     map: "",
-    players: []
+    uploader: "",
+    players: [],
 };
 
 ready(async () => {
@@ -19,16 +20,25 @@ ready(async () => {
     const steamIds = (searchParams.get("players") || "").split(",").filter(id => id);
     let players = [];
 
+    if (window.location.href.includes("profiles/")) {
+        const [, profile] = window.location.href.split("profiles/");
+        steamIds.push(profile);
+    }
+
     if (steamIds.length) {
         players = await Promise.all(steamIds.map(steamId => api.getPlayer(steamId)));
-        console.log(players);
     }
 
     lastFilter = {
         mode: searchParams.get("mode") || "",
         map: searchParams.get("map") || "",
+        uploader: "",
         players,
     };
+
+    if (window.location.href.includes("uploads/")) {
+        [, lastFilter.uploader] = window.location.href.split("uploads/");
+    }
 
     render(() => <FilterBar maps={maps} api={api} initialFilter={lastFilter}
                             onChange={onFilter.bind(null, api, demoListBody)}/>, filterBar);
@@ -37,6 +47,7 @@ ready(async () => {
 const filterEq = (a, b) => {
     return (a.mode || "") === (b.mode || "")
         && (a.map || "") === (b.map || "")
+        && (a.uploader || "") === (b.uploader || "")
         && a.players.length === b.players.length && b.players.every(player => a.players.includes(player))
 }
 
@@ -51,6 +62,9 @@ const onFilter = async (api, demoListBody, filter) => {
         mode: (filter.mode || "").toLowerCase(),
         map: filter.map || "",
     });
+    if (filter.uploader) {
+        queryParams.set("uploader", filter.uploader);
+    }
     const response = await fetch("/fragments/demo-list?" + queryParams);
     document.querySelector('.demolist tbody').innerHTML = await response.text();
 }

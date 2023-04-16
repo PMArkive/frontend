@@ -65,4 +65,5 @@ export interface FilterSet {
     mode: string,
     map: string,
     players: SteamUser[],
+    uploader: string,
 }

@@ -1,3 +1,8 @@
+:root {
+    --icon-demos-tf: url('inline://images/logo.svg');
+    --icon-steam: url('inline://images/steam_login.svg');
+}
+
 header {
     width: 100%;
     white-space: nowrap;
@@ -11,7 +16,7 @@ header {
     text-transform: uppercase;
 
     & a, & a:visited {
-        color: var(--text-header);
+        color: var(--text-secondary);
         cursor: pointer;
         padding: .5em 1em;
         text-decoration: none;
@@ -20,7 +25,7 @@ header {
     }
 
     .main a {
-        background: url('inline://images/logo.svg') no-repeat 0;
+        background: var(--icon-demos-tf) no-repeat 0;
         background-size: 30px;
         padding-left: 35px;
         margin-left: 5px;
@@ -81,7 +86,7 @@ a.steam-login:before {
     height: inherit;
     width: 41px;
     background-size: 30px 30px;
-    background: rgba(255, 255, 255, 0.08) url('inline://images/steam_login.svg') no-repeat 0;
+    background: rgba(255, 255, 255, 0.08) var(--icon-steam) no-repeat 0;
     bottom: 0;
     left: 0;
     padding: 0;

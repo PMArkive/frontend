@@ -370,16 +370,16 @@ impl GameMode {
 #[derive(Default, Debug, Deserialize)]
 pub struct Filter {
     #[serde(default)]
-    mode: GameMode,
+    pub mode: GameMode,
     #[serde(default)]
-    map: String,
+    pub map: String,
     #[serde(default)]
     #[serde(deserialize_with = "deserialize_array")]
-    players: Vec<SteamId>,
+    pub players: Vec<SteamId>,
     #[serde(default)]
-    before: Option<i32>,
+    pub before: Option<i32>,
     #[serde(default)]
-    uploader: Option<i32>,
+    pub uploader: Option<SteamId>,
 }
 
 fn deserialize_array<'de, D, T>(deserializer: D) -> Result<Vec<T>, D::Error>
@@ -420,7 +420,12 @@ impl Filter {
             query.and_where(Expr::col(Demos::Id).lt(*before));
         }
         if let Some(uploader) = &self.uploader {
-            query.and_where(Expr::col(Demos::Uploader).eq(*uploader));
+            query
+                .inner_join(
+                    Users::Table,
+                    Expr::col((Users::Table, Users::Id)).equals((Demos::Table, Demos::Uploader)),
+                )
+                .and_where(Expr::col(Users::SteamId).eq(uploader));
         }
         if !self.players.is_empty() && self.players.len() < 19 {
             let mut player = self.players.iter();

@@ -1,9 +1,14 @@
 use crate::data::demo::Demo;
 use crate::data::player::{Player, Team};
 use crate::pages::Page;
+use demostf_build::Asset;
 use itertools::{EitherOrBoth, Itertools};
 use maud::{html, Markup};
 use std::borrow::Cow;
+
+#[derive(Asset)]
+#[asset(source = "style/pages/class-icons.css", url = "/class-icons.css")]
+pub struct ClassIconsStyle;
 
 pub struct DemoPage {
     pub demo: Demo,
@@ -15,6 +20,7 @@ impl Page for DemoPage {
     }
 
     fn render(&self) -> Markup {
+        let style_url = ClassIconsStyle::url();
         html! {
             h2 { (self.demo.server) " - " (self.demo.red) " vs " (self.demo.blu) }
             h3 { (self.demo.name) }
@@ -111,6 +117,7 @@ impl Page for DemoPage {
                     }
                 }
             }
+             link rel="stylesheet" type="text/css" href=(style_url);
         }
     }
 }

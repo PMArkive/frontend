@@ -12,6 +12,7 @@ use std::str::FromStr;
 use steamid_ng::SteamID;
 
 #[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum SteamId {
     Id(u64),
     Raw(Cow<'static, str>),
@@ -158,6 +159,12 @@ impl FromStr for SteamId {
 
 impl From<SteamId> for Value {
     fn from(value: SteamId) -> Self {
+        Value::String(Some(Box::new(value.steamid64())))
+    }
+}
+
+impl From<&SteamId> for Value {
+    fn from(value: &SteamId) -> Self {
         Value::String(Some(Box::new(value.steamid64())))
     }
 }

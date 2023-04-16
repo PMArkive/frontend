@@ -3,7 +3,9 @@ pub mod api;
 pub mod demo;
 pub mod index;
 mod plugin_section;
+pub mod profile;
 pub mod upload;
+pub mod uploads;
 
 use crate::session::SessionData;
 use demostf_build::Asset;
@@ -23,11 +25,12 @@ pub fn render<T: Page>(page: T, session: SessionData) -> Markup {
     let style_url = GlobalStyle::url();
     html! {
         (DOCTYPE)
-        html {
+        html lang = "en" {
             head {
+                meta name = "viewport" content = "initial-scale=1,width=device-width";
                 title { (page.title()) }
                 link rel="stylesheet" type="text/css" href=(style_url);
-                link rel="shortcut icon" type="image/svg+xml" href="images/logo.svg";
+                link rel="shortcut icon" type="image/svg+xml" href="/images/logo.svg";
             }
             body {
                 header {

@@ -20,6 +20,8 @@
 
     & .solid-select-placeholder {
         color: var(--text-secondary);
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     & .solid-select-option {
@@ -54,6 +56,7 @@
 
     & > .mode {
         width: 150px;
+        max-width: 20%;
 
         & .solid-select-control {
             border-right: none;
@@ -64,6 +67,7 @@
 
     & > .maps {
         width: 200px;
+        max-width: 20%;
 
         & .solid-select-control {
             border-right: none;
@@ -88,5 +92,35 @@
         padding: 0 10px;
         outline: none;
         background: transparent;
+    }
+}
+
+@media (max-width: 450px) {
+    #filter-bar {
+        height: 105px;
+    }
+
+    .filter-bar {
+        flex-wrap: wrap;
+
+        & > .maps, & > .mode {
+            width: calc(100% - 30px);
+            max-width: calc(100% - 30px);
+        }
+
+        & > .maps, & > .mode {
+            .solid-select-control {
+                border-bottom: none;
+            }
+        }
+
+        & .reset {
+            border-right: var(--text-secondary) 1px solid;
+            border-bottom: none;
+        }
+
+        & .solid-select-control {
+            border-radius: 0;
+        }
     }
 }

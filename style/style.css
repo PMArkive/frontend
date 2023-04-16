@@ -16,13 +16,12 @@
     --secondary-color: #444;
     --secondary-color-accent: #333;
     --text-primary: black;
-    --text-secondary: grey;
+    --text-secondary: #5d5d5d;
     --highlight-primary: #3e95e6;
     --highlight-secondary: #daecfa;
     --button-primary: #0078e7;
     --button-secondary: #e6e6e6;
     --button-critical: rgb(202, 60, 60);
-    --text-header: grey;
     --link-color: #0071b8;
     --link-color-visited: #004c8b;
 }
@@ -39,7 +38,6 @@
         --highlight-secondary: #448fbe;
         --button-primary: #2568ae;
         --button-secondary: #626262;
-        --text-header: #efefef;
         --link-color: #0093ed;
         --link-color-visited: #0063ff;
     }
@@ -60,11 +58,17 @@ body, html {
 .page {
     background-color: var(--primary-color);
     width: 100%;
-    min-height: 100%;
+    min-height: calc(100% - 60px);
     max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
     padding: 40px 30px 100px;
+}
+
+@media (max-width: 700px) {
+    .page {
+        padding-top: 80px;
+    }
 }
 
 body {
