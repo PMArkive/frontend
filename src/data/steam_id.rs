@@ -1,4 +1,5 @@
 use maud::Render;
+use sea_query::Value;
 use serde::{Deserialize, Serialize};
 use sqlx::database::HasValueRef;
 use sqlx::error::BoxDynError;
@@ -152,5 +153,11 @@ impl FromStr for SteamId {
         } else {
             Ok(Self::Raw(s.to_string().into()))
         }
+    }
+}
+
+impl From<SteamId> for Value {
+    fn from(value: SteamId) -> Self {
+        Value::String(Some(Box::new(value.steamid64())))
     }
 }

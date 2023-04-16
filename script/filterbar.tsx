@@ -5,10 +5,11 @@ import {createEffect, createSignal} from "solid-js";
 export interface FilterBarProps {
     maps: string[],
     api: Api,
+    initialFilter: FilterSet,
     onChange: (FilterSet) => void,
 }
 
-export const FilterBar = ({maps, api, onChange}: FilterBarProps) => {
+export const FilterBar = ({maps, api, onChange, initialFilter}: FilterBarProps) => {
     const modes = createOptions(["4v4", "6v6", "Highlander"]);
     const mapOptions = createOptions(maps, {
         createable: true
@@ -16,14 +17,10 @@ export const FilterBar = ({maps, api, onChange}: FilterBarProps) => {
     const playerOptions = createAsyncOptions(search => api.searchPlayer(search));
     const playerFormat = player => player.name;
 
-    const [initialMode, setInitialMode] = createSignal("", {equals: false});
-    const [initialMap, setInitialMap] = createSignal("", {equals: false});
+    const [initialMode, setInitialMode] = createSignal(initialFilter.mode, {equals: false});
+    const [initialMap, setInitialMap] = createSignal(initialFilter.map, {equals: false});
 
-    const [filterSet, setFilterSet] = createSignal({
-        mode: "",
-        map: "",
-        players: []
-    });
+    const [filterSet, setFilterSet] = createSignal(initialFilter);
     createEffect(() => onChange(filterSet()));
 
     return <div class="filter-bar">

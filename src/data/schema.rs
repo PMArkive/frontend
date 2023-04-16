@@ -92,3 +92,19 @@ pub enum Players {
     #[iden = "deaths"]
     Deaths,
 }
+
+#[allow(dead_code)]
+#[derive(Iden)]
+pub enum Users {
+    Table,
+    #[iden = "id"]
+    Id,
+    #[iden = "steamid"]
+    SteamId,
+    #[iden = "name"]
+    Name,
+    #[iden = "avatar"]
+    Avatar,
+    #[iden = "token"]
+    Token,
+}

@@ -1,6 +1,6 @@
 use crate::data::chat::Chat;
 use crate::data::player::Player;
-use crate::data::schema::{ArrayAgg, CleanMapName, Demos, Players};
+use crate::data::schema::{ArrayAgg, CleanMapName, Demos, Players, Users};
 use crate::data::steam_id::SteamId;
 use crate::Result;
 use maud::Render;
@@ -180,15 +180,15 @@ impl ListDemo {
         } else {
             let mut query = Query::select();
             query
-                .column((Demos::Table, Demos::Id))
-                .column((Demos::Table, Demos::Name))
                 .columns([
-                    Demos::Map,
-                    Demos::Red,
-                    Demos::Blu,
-                    Demos::Duration,
-                    Demos::Server,
-                    Demos::CreatedAt,
+                    (Demos::Table, Demos::Id),
+                    (Demos::Table, Demos::Name),
+                    (Demos::Table, Demos::Map),
+                    (Demos::Table, Demos::Red),
+                    (Demos::Table, Demos::Blu),
+                    (Demos::Table, Demos::Duration),
+                    (Demos::Table, Demos::Server),
+                    (Demos::Table, Demos::CreatedAt),
                 ])
                 .expr_as(Expr::col(Demos::PlayerCount), Alias::new("player_count"))
                 .from(Demos::Table)
@@ -375,7 +375,7 @@ pub struct Filter {
     map: String,
     #[serde(default)]
     #[serde(deserialize_with = "deserialize_array")]
-    players: Vec<i32>,
+    players: Vec<SteamId>,
     #[serde(default)]
     before: Option<i32>,
     #[serde(default)]
@@ -388,6 +388,9 @@ where
     T: Deserialize<'de> + FromStr,
 {
     let s = <Cow<str>>::deserialize(deserializer)?;
+    if s.is_empty() {
+        return Ok(Vec::new());
+    }
     Ok(s.split(",").map(T::from_str).flatten().collect())
 }
 
@@ -423,7 +426,7 @@ impl Filter {
             let mut player = self.players.iter();
             let mut players_arr = format!("array[{}", player.next().unwrap());
             for player in player {
-                write!(&mut players_arr, ",{}", player).unwrap();
+                write!(&mut players_arr, r#","{}""#, player).unwrap();
             }
             players_arr.push_str("]");
 
@@ -432,12 +435,16 @@ impl Filter {
                     Players::Table,
                     Expr::col((Demos::Table, Demos::Id)).equals((Players::Table, Players::DemoId)),
                 )
-                .and_where(Expr::col(Players::UserId).is_in(self.players.clone()));
+                .inner_join(
+                    Users::Table,
+                    Expr::col((Users::Table, Users::Id)).equals((Players::Table, Players::UserId)),
+                )
+                .and_where(Expr::col(Users::SteamId).is_in(self.players.clone()));
             query.group_by_col((Demos::Table, Players::Id));
             query.and_having(
-                Expr::cust(&players_arr).contained(
-                    Func::cust(ArrayAgg).arg(Expr::col((Players::Table, Players::UserId))),
-                ),
+                Expr::cust(&players_arr)
+                    .cast_as(Alias::new("varchar[]"))
+                    .contained(Func::cust(ArrayAgg).arg(Expr::col((Users::Table, Users::SteamId)))),
             );
         }
     }
