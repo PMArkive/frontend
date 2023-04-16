@@ -4,7 +4,7 @@ use rand::distributions::Alphanumeric;
 use rand::Rng;
 use reqwest::get;
 use serde::{Deserialize, Serialize};
-use sqlx::{query, Executor, Postgres};
+use sqlx::{query, query_as, Executor, Postgres};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
@@ -13,12 +13,18 @@ pub struct User {
     pub token: String,
 }
 
+struct UserResult {
+    name: String,
+    token: String,
+}
+
 impl User {
     pub async fn get(
         connection: impl Executor<'_, Database = Postgres> + Copy,
         steam_id: SteamId,
     ) -> Result<Self> {
-        let user = query!(
+        let mut user = query_as!(
+            UserResult,
             r#"SELECT
                 token as "token!", name as "name!"
             FROM users_named WHERE steamid = $1"#,
@@ -26,6 +32,18 @@ impl User {
         )
         .fetch_optional(connection)
         .await?;
+
+        if user.is_none() {
+            user = query_as!(
+                UserResult,
+                r#"SELECT
+                    token as "token!", name as "name!"
+                FROM users WHERE steamid = $1"#,
+                steam_id.steamid64()
+            )
+            .fetch_optional(connection)
+            .await?;
+        }
 
         if let Some(user) = user {
             Ok(User {
