@@ -17,7 +17,6 @@ ready(async () => {
     const demoListBody = document.querySelector('.demolist tbody');
     const searchParams = new URLSearchParams(window.location.search);
     const steamIds = (searchParams.get("players") || "").split(",").filter(id => id);
-    console.log(steamIds);
     let players = [];
 
     if (steamIds.length) {

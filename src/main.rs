@@ -15,6 +15,7 @@ use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::fragments::demo_list::DemoList;
 use crate::pages::about::AboutPage;
+use crate::pages::api::ApiPage;
 use crate::pages::demo::DemoPage;
 use crate::pages::index::{DemoListScript, Index};
 use crate::pages::upload::{UploadPage, UploadScript};
@@ -92,6 +93,7 @@ async fn main() -> Result<()> {
         .route(LogoSvg::route(), get(serve_asset::<LogoSvg>))
         .route("/fragments/demo-list", get(demo_list))
         .route("/about", get(about))
+        .route("/api", get(api))
         .route("/login/callback", get(login_callback))
         .route("/login", get(login))
         .route("/logout", get(logout))
@@ -160,6 +162,16 @@ async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Mar
     Ok(render(
         AboutPage {
             key: session.token(),
+        },
+        session,
+    ))
+}
+
+async fn api(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
+    Ok(render(
+        ApiPage {
+            steam_id: session.steam_id().unwrap_or(SteamId::Id(76561198024494988)),
+            api_base: &app.api,
         },
         session,
     ))

@@ -1,3 +1,4 @@
+use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::{App, Result};
 use async_session::SessionStore as _;
@@ -19,6 +20,12 @@ impl SessionData {
     pub fn token(&self) -> Option<String> {
         match self {
             SessionData::Authenticated(user) => Some(user.token.clone()),
+            SessionData::UnAuthenticated => None,
+        }
+    }
+    pub fn steam_id(&self) -> Option<SteamId> {
+        match self {
+            SessionData::Authenticated(user) => Some(user.steam_id.clone()),
             SessionData::UnAuthenticated => None,
         }
     }

@@ -1,0 +1,8 @@
+li > a:first-child > code, li > code:first-child {
+    font-weight: bold;
+}
+
+pre {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -13,6 +13,7 @@ section > div > h3 {
     margin-left: 20px;
     margin-bottom: 0;
     min-width: 50px;
+    line-height: 24px;
 }
 
 section > div > h3:before,
@@ -22,7 +23,7 @@ section > div > h3:after {
     display: block;
     height: 2px;
     position: absolute;
-    top: 45%;
+    top: calc(50% - 1px);
 }
 
 section > div > h3:before {

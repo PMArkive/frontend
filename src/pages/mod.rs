@@ -1,4 +1,5 @@
 pub mod about;
+pub mod api;
 pub mod demo;
 pub mod index;
 mod plugin_section;
