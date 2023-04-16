@@ -1,7 +1,7 @@
 import {render} from "solid-js/web";
 import {ready} from "./ready";
 import {FilterBar} from "./filterbar"
-import {Api} from "./api";
+import {Api, SteamId} from "./api";
 
 let lastFilter = {
     mode: "",
@@ -9,21 +9,30 @@ let lastFilter = {
     players: []
 };
 
-ready(() => {
+ready(async () => {
     const filterBar = document.getElementById('filter-bar');
     const maps = filterBar.dataset.maps.split(",");
     const apiBase = filterBar.dataset.apiBase;
     const api = new Api(apiBase);
     const demoListBody = document.querySelector('.demolist tbody');
     const searchParams = new URLSearchParams(window.location.search);
+    const steamIds = (searchParams.get("players") || "").split(",").filter(id => id);
+    console.log(steamIds);
+    let players = [];
+
+    if (steamIds.length) {
+        players = await Promise.all(steamIds.map(steamId => api.getPlayer(steamId)));
+        console.log(players);
+    }
 
     lastFilter = {
         mode: searchParams.get("mode") || "",
         map: searchParams.get("map") || "",
-        players: (searchParams.get("players") || "").split(",")
+        players,
     };
 
-    render(() => <FilterBar maps={maps} api={api} initialFilter={lastFilter} onChange={onFilter.bind(null, api, demoListBody)}/>, filterBar);
+    render(() => <FilterBar maps={maps} api={api} initialFilter={lastFilter}
+                            onChange={onFilter.bind(null, api, demoListBody)}/>, filterBar);
 });
 
 const filterEq = (a, b) => {

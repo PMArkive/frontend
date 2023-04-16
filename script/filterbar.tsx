@@ -50,7 +50,7 @@ export const FilterBar = ({maps, api, onChange, initialFilter}: FilterBarProps) 
                 map: "",
             });
         }}/>
-        <Select class="players" onChange={players => setFilterSet({
+        <Select class="players" initialValue={initialFilter.players} onChange={players => setFilterSet({
             ...filterSet(),
             players
         })} multiple placeholder="All Players" format={playerFormat} {...playerOptions} />
