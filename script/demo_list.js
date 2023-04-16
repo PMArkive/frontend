@@ -13,17 +13,29 @@ ready(() => {
     render(() => <FilterBar maps={maps} api={api} onChange={onFilter.bind(null, api, demoListBody)}/>, filterBar);
 });
 
+let lastFilter = {
+    mode: "",
+    map: "",
+    players: []
+};
+
+const filterEq = (a, b) => {
+    return (a.mode || "") === (b.mode || "")
+        && (a.map || "") === (b.map || "")
+        && a.players.length === b.players.length && b.players.every(player => a.players.includes(player))
+}
+
 const onFilter = async (api, demoListBody, filter) => {
-    if (!(filter.mode || filter.map || filter.players.length)) {
+    if (filterEq(lastFilter, filter)) {
         return;
     }
+    lastFilter = filter;
 
     let queryParams = new URLSearchParams({
         players: filter.players.map(player => player.id).join(','),
-        mode: filter.mode.toLowerCase(),
-        map: filter.map,
+        mode: (filter.mode || "").toLowerCase(),
+        map: filter.map || "",
     });
-    console.log(queryParams);
     const response = await fetch("/fragments/demo-list?" + queryParams);
     document.querySelector('.demolist tbody').innerHTML = await response.text();
 }

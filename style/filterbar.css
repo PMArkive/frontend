@@ -56,6 +56,7 @@
         width: 150px;
 
         & .solid-select-control {
+            border-right: none;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
         }
@@ -66,7 +67,6 @@
 
         & .solid-select-control {
             border-right: none;
-            border-left: none;
             border-radius: 0;
         }
     }
@@ -78,5 +78,15 @@
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
         }
+    }
+
+    & .reset {
+        border-left: none;
+        border-right: none;
+        border-bottom: var(--text-secondary) 1px solid;
+        border-top: var(--text-secondary) 1px solid;
+        padding: 0 10px;
+        outline: none;
+        background: transparent;
     }
 }

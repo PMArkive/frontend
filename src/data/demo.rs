@@ -393,7 +393,7 @@ where
 
 impl Filter {
     fn is_empty(&self) -> bool {
-        self.mode != GameMode::default()
+        self.mode == GameMode::default()
             && self.map.is_empty()
             && self.before.is_none()
             && self.players.is_empty()

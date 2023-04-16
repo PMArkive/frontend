@@ -16,6 +16,8 @@ export const FilterBar = ({maps, api, onChange}: FilterBarProps) => {
     const playerOptions = createAsyncOptions(search => api.searchPlayer(search));
     const playerFormat = player => player.name;
 
+    const [initialMode, setInitialMode] = createSignal("", {equals: false});
+    const [initialMap, setInitialMap] = createSignal("", {equals: false});
 
     const [filterSet, setFilterSet] = createSignal({
         mode: "",
@@ -28,16 +30,38 @@ export const FilterBar = ({maps, api, onChange}: FilterBarProps) => {
         <Select class="mode" onChange={mode => setFilterSet({
             ...filterSet(),
             mode
-        })} placeholder="All Types" {...modes} />
+        })} initialValue={initialMode()} placeholder="All Types" {...modes} />
+        <Reset reset={() => {
+            setInitialMode("");
+            onChange({
+                ...filterSet(),
+                mode: "",
+            });
+        }}/>
         <Select class="maps" onChange={map => setFilterSet({
             ...filterSet(),
             map
-        })}  placeholder="All Maps" {...mapOptions} />
+        })} initialValue={initialMap()} placeholder="All Maps" {...mapOptions} />
+        <Reset reset={() => {
+            setInitialMap("");
+            console.log({
+                ...filterSet(),
+                map: "",
+            });
+            onChange({
+                ...filterSet(),
+                map: "",
+            });
+        }}/>
         <Select class="players" onChange={players => setFilterSet({
             ...filterSet(),
             players
-        })}  multiple placeholder="All Players" format={playerFormat} {...playerOptions} />
+        })} multiple placeholder="All Players" format={playerFormat} {...playerOptions} />
     </div>;
+}
+
+export const Reset = ({reset}) => {
+    return <button onMouseDown={reset} class="reset">X</button>;
 }
 
 export interface FilterSet {
