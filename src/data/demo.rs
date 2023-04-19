@@ -437,9 +437,9 @@ impl Filter {
         }
         if !self.players.is_empty() && self.players.len() < 19 {
             let mut player = self.players.iter();
-            let mut players_arr = format!("array[{}", player.next().unwrap());
+            let mut players_arr = format!("array['{}'", player.next().unwrap());
             for player in player {
-                write!(&mut players_arr, r#","{}""#, player).unwrap();
+                write!(&mut players_arr, r#",'{}'"#, player).unwrap();
             }
             players_arr.push_str("]");
 
