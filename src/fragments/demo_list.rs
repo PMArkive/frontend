@@ -9,7 +9,7 @@ impl Render for DemoList<'_> {
     fn render(&self) -> Markup {
         html! {
             @for demo in self.demos {
-                tr {
+                tr data-id = (demo.id) {
                     td .title {
                         a href = (demo.url()) { (demo.server) " - " (demo.red) " vs " (demo.blu) }
                     }

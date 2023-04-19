@@ -46,7 +46,7 @@
         width: 180px;
     }
 
-    & tr:nth-child(even) {
+    & tr:nth-child(odd) {
         background-color: var(--primary-color-accent);
     }
 }
@@ -70,6 +70,18 @@
     padding: 20px;
     font-size: 1.1em;
     font-weight: bold;
+}
+
+#load-more {
+    background-color: var(--primary-color-accent);
+    display: block;
+    width: 100%;
+    line-height: 30px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 @media (max-width: 950px) {

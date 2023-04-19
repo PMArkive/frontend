@@ -67,3 +67,15 @@ export interface FilterSet {
     players: SteamUser[],
     uploader: string,
 }
+
+export function queryForFilter(filter: FilterSet): URLSearchParams {
+    let queryParams = new URLSearchParams({
+        players: filter.players.map(player => player.steamid).join(','),
+        mode: (filter.mode || "").toLowerCase(),
+        map: filter.map || "",
+    });
+    if (filter.uploader) {
+        queryParams.set("uploader", filter.uploader);
+    }
+    return queryParams;
+}

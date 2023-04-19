@@ -50,6 +50,7 @@ impl Page for Uploads<'_> {
                     (self.demo_list())
                 }
             }
+            button #load-more { "Load more.." }
             script defer src = (script) type = "text/javascript" {}
         }
     }

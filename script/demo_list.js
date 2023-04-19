@@ -1,6 +1,6 @@
 import {render} from "solid-js/web";
 import {ready} from "./ready";
-import {FilterBar} from "./filterbar"
+import {FilterBar, queryForFilter} from "./filterbar"
 import {Api, SteamId} from "./api";
 
 let lastFilter = {
@@ -12,6 +12,7 @@ let lastFilter = {
 
 ready(async () => {
     const filterBar = document.getElementById('filter-bar');
+    const moreButton = document.getElementById('load-more');
     const maps = filterBar.dataset.maps.split(",");
     const apiBase = filterBar.dataset.apiBase;
     const api = new Api(apiBase);
@@ -36,9 +37,15 @@ ready(async () => {
         players,
     };
 
+    moreButton.addEventListener('click', () => {
+       more(api, demoListBody, lastFilter);
+    });
+
     if (window.location.href.includes("uploads/")) {
         [, lastFilter.uploader] = window.location.href.split("uploads/");
     }
+
+
 
     render(() => <FilterBar maps={maps} api={api} initialFilter={lastFilter}
                             onChange={onFilter.bind(null, api, demoListBody)}/>, filterBar);
@@ -56,15 +63,23 @@ const onFilter = async (api, demoListBody, filter) => {
         return;
     }
     lastFilter = filter;
-
-    let queryParams = new URLSearchParams({
-        players: filter.players.map(player => player.steamid).join(','),
-        mode: (filter.mode || "").toLowerCase(),
-        map: filter.map || "",
-    });
-    if (filter.uploader) {
-        queryParams.set("uploader", filter.uploader);
-    }
-    const response = await fetch("/fragments/demo-list?" + queryParams);
+    const response = await fetch("/fragments/demo-list?" + queryForFilter(filter));
     document.querySelector('.demolist tbody').innerHTML = await response.text();
+}
+
+const more = async (api, demoListBody, filter) => {
+    const rows = demoListBody.querySelectorAll('tr');
+    const lastId = rows[rows.length-1].dataset.id;
+
+    const query = queryForFilter(filter);
+    query.set("before", lastId)
+    const response = await fetch("/fragments/demo-list?" + query);
+    const appendBody = document.createElement('tbody');
+    appendBody.innerHTML = await response.text();
+    const fragment = document.createDocumentFragment();
+    while (appendBody.children.length > 0) {
+        fragment.appendChild(appendBody.children[0]);
+    }
+
+    demoListBody.appendChild(fragment);
 }
