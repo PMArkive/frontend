@@ -425,7 +425,7 @@ impl Filter {
             );
         }
         if let Some(before) = &self.before {
-            query.and_where(Expr::col(Demos::Id).lt(*before));
+            query.and_where(Expr::col((Demos::Table, Demos::Id)).lt(*before));
         }
         if let Some(uploader) = &self.uploader {
             query

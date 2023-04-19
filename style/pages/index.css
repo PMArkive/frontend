@@ -46,7 +46,7 @@
         width: 180px;
     }
 
-    & tr:nth-child(odd) {
+    & tbody tr:nth-child(odd) {
         background-color: var(--primary-color-accent);
     }
 }

@@ -1,6 +1,6 @@
 use maud::Render;
 use sea_query::Value;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use sqlx::database::HasValueRef;
 use sqlx::error::BoxDynError;
 use sqlx::{Database, Decode, Type};
@@ -11,7 +11,7 @@ use std::fmt::{Display, Write};
 use std::str::FromStr;
 use steamid_ng::SteamID;
 
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 #[serde(untagged)]
 pub enum SteamId {
     Id(u64),
@@ -64,15 +64,6 @@ impl SteamId {
     }
 }
 
-impl Debug for SteamId {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            SteamId::Id(id) => Debug::fmt(&SteamID::from(*id), f),
-            SteamId::Raw(raw) => Debug::fmt(raw, f),
-        }
-    }
-}
-
 impl<DB: Database> Type<DB> for SteamId
 where
     i64: Type<DB>,
@@ -94,6 +85,16 @@ where
 {
     fn decode(value: <DB as HasValueRef<'r>>::ValueRef) -> Result<Self, BoxDynError> {
         let str = <&str as Decode<DB>>::decode(value)?;
+        Ok(str.parse().unwrap())
+    }
+}
+
+impl<'de> Deserialize<'de> for SteamId {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let str = <&str as Deserialize>::deserialize(deserializer)?;
         Ok(str.parse().unwrap())
     }
 }

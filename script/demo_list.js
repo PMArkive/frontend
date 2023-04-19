@@ -69,6 +69,9 @@ const onFilter = async (api, demoListBody, filter) => {
 
 const more = async (api, demoListBody, filter) => {
     const rows = demoListBody.querySelectorAll('tr');
+    if (rows.length === 0) {
+        return;
+    }
     const lastId = rows[rows.length-1].dataset.id;
 
     const query = queryForFilter(filter);
