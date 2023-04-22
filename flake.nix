@@ -33,6 +33,7 @@
           openssl
           nodejs
           nodePackages.svgo
+          typescript
         ];
       };
     });

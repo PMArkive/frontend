@@ -45,7 +45,7 @@ async function readFile(file: File): Promise<ArrayBuffer> {
         const reader = new FileReader();
 
         reader.onload = function () {
-            resolve(reader.result)
+            resolve(reader.result as ArrayBuffer)
         };
         reader.onerror = reject;
 

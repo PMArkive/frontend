@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "noEmit": true,
+    "lib": ["es2020", "dom"],
+    "module": "ES2020",
+  }
+}

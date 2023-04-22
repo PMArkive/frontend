@@ -1,6 +1,14 @@
 {
   "dependencies": {
+    "@demostf/parser-worker": "^0.1.1",
     "@thisbeyond/solid-select": "^0.13.0",
-    "solid-js": "^1.7.3"
+    "@types/throttle-debounce": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "solid-js": "^1.7.3",
+    "throttle-debounce": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.35"
   }
 }

@@ -16,7 +16,7 @@ ready(() => {
     console.log(key);
 
     file.addEventListener("change", async (event: InputEvent) => {
-        let file = event.target.files[0];
+        let file = (event.target as HTMLInputElement).files[0];
         drop_text.textContent = file.name;
         const header = await parseHeader(file)
 

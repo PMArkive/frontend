@@ -1,0 +1,75 @@
+.map-holder {
+  position: fixed;
+  top: 32px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 32px - 100px);
+}
+
+.time-control {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: var(--primary-color-accent);
+
+  .timeline {
+    position: absolute;
+    bottom: 0;
+    left: 64px;
+    width: calc(100% - 64px);
+  }
+
+  .play-pause-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100px;
+    width: 64px;
+    background-color: transparent;
+    color: black;
+    font-size: 200%;
+    border: none;
+
+    &:focus, &:active {
+      outline: none;
+    }
+  }
+}
+
+.error-holder {
+  .error-image {
+    text-align: center;
+    padding: 20px;
+    font-size: 250%;
+
+    &::after {
+      display: block;
+      content: '';
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-image: url('../images/teleporter.png');
+      width: 100%;
+      height: 500px;
+      margin: 50px 0;
+    }
+  }
+
+  .error {
+    background-color: #FF9494;
+    line-height: 32px;
+    margin: 0 -30px;
+    padding: 32px;
+    padding-left: 74px;
+    background-image: url('../images/error.png');
+    background-size: 32px;
+    background-repeat: no-repeat;
+    background-position: 32px 32px;
+
+    .error-hint {
+      margin-top: 32px;
+    }
+  }
+}
