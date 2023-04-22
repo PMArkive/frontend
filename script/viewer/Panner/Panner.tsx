@@ -1,5 +1,5 @@
 import {CenteredPanZoom} from './CenteredPanZoom';
-import {createSignal} from "solid-js";
+import {createSignal, ParentProps} from "solid-js";
 
 export interface PannerProps {
 	width: number;
@@ -10,10 +10,9 @@ export interface PannerProps {
 		height: number;
 	};
 	onScale?: (scale: number) => any;
-	children: Element;
 }
 
-export const Panner = (props: PannerProps) => {
+export const Panner = (props: ParentProps<PannerProps>) => {
 	const [scale, setScale] = createSignal(0);
 	const [translateX, setTranslateX] = createSignal(0);
 	const [translateY, setTranslateY] = createSignal(0);

@@ -1,5 +1,5 @@
 import {Panner} from "../Panner/Panner";
-import {createEffect, createSignal} from "solid-js";
+import {createEffect, createSignal, ParentProps} from "solid-js";
 
 export class MapContainerProps {
     contentSize: {
@@ -7,10 +7,9 @@ export class MapContainerProps {
         height: number;
     };
     onScale?: (scale: number) => any;
-    children: Element;
 }
 
-export const MapContainer = ({children, contentSize, onScale}: MapContainerProps) => {
+export const MapContainer = ({children, contentSize, onScale}: ParentProps<MapContainerProps>) => {
     const [container, setContainer] = createSignal<Element>();
     const scale = () => Math.min(
         container().clientWidth / contentSize.width,

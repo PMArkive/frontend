@@ -17,20 +17,6 @@ export interface AnalyseProps {
 	parser: AsyncParser;
 }
 
-export interface AnalyseState {
-	worldSize: {
-		width: number;
-		height: number;
-	}
-	backgroundBoundaries: WorldBoundaries;
-	tick: number;
-	playing: boolean;
-	scale: number;
-	error?: string;
-	isShared: boolean;
-}
-
-
 export const Analyser = (props: AnalyseProps) => {
 	const parser = props.parser;
 	const intervalPerTick = props.header.interval_per_tick;
