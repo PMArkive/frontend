@@ -8,12 +8,13 @@ export interface TimelineProps {
 }
 
 export const Timeline = ({parser, tick, onSetTick, disabled}) => {
+	const background = <TimeLineBackground parser={parser}/>;
 	return <div class="timeline">
 		<input max={parser.demo.tickCount} value={tick} class="timeline-progress" type="range" min={0}
 			   onChange={(event) => {onSetTick(parseInt(event.target.value, 10))}}
 			   disabled={disabled}
 		/>
-		<TimeLineBackground parser={parser}/>
+		{background}
 	</div>;
 }
 

@@ -4,22 +4,22 @@ import {throttle, debounce} from 'throttle-debounce';
 import {Timeline} from './Render/Timeline';
 import {SpecHUD} from './Render/SpecHUD';
 import {AnalyseMenu} from './AnalyseMenu'
-import {Header, WorldBoundaries} from "./Data/Parser";
 
 import {AsyncParser} from "./Data/AsyncParser";
 import {getMapBoundaries} from "./MapBoundries";
-import {createEffect, createSignal} from "solid-js";
+import {createSignal} from "solid-js";
 import {Session, StateUpdate} from "./Session";
+import {DemoHead} from "../../header";
 
 export interface AnalyseProps {
-	header: Header;
+	header: DemoHead;
 	isStored: boolean;
 	parser: AsyncParser;
 }
 
 export const Analyser = (props: AnalyseProps) => {
 	const parser = props.parser;
-	const intervalPerTick = props.header.interval_per_tick;
+	const intervalPerTick = props.header.duration / props.header.ticks;
 
 	const [tick, setTick] = createSignal<number>(0);
 	const [scale, setScale] = createSignal<number>(1);
@@ -136,6 +136,10 @@ export const Analyser = (props: AnalyseProps) => {
 	const disabled = session && !session.isOwner();
 	const isShared = () => sessionName() !== '';
 
+	console.log(intervalPerTick);
+
+	const timeTitle = () => `${tickToTime(tick(), intervalPerTick)} (tick ${tick()})`;
+
 	return (
 		<div>
 			<div class="map-holder">
@@ -163,7 +167,7 @@ export const Analyser = (props: AnalyseProps) => {
 						 players={players()} kills={kills}/>
 			</div>
 			<div class="time-control"
-				 title={`${tickToTime(tick(), intervalPerTick)} (tick ${tick()})`}>
+				 title={timeTitle()}>
 				<input class="play-pause-button" type="button"
 					   value={playButtonText()}
 					   disabled={disabled}

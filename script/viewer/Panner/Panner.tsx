@@ -84,7 +84,6 @@ export const Panner = (props: ParentProps<PannerProps>) => {
 	});
 
 	const pannerStyle = () => {
-		console.log(props.width, props.height, props.scale);
 		return {width: `${props.width}px`, height: `${props.height}px`}
 	};
 

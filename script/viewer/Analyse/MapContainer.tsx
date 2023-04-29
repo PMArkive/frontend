@@ -22,7 +22,6 @@ export const MapContainer = (props: ParentProps<MapContainerProps>) => {
     }
     createEffect(() => {
         const s = scale();
-        console.log(s)
         if (isFinite(s)) {
             props.onScale && props.onScale(s);
         }
