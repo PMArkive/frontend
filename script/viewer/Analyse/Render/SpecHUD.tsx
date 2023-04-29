@@ -10,10 +10,10 @@ export interface SpecHUDProps {
 	kills: Kill[]
 }
 
-export function SpecHUD({tick, parser, players, kills}: SpecHUDProps) {
+export function SpecHUD(props: SpecHUDProps) {
 	return (<div class="spechud">
-		<KillFeed tick={tick} kills={kills} players={players}/>
-		<PlayersSpec players={players}/>
+		<KillFeed tick={props.tick} kills={props.kills} players={props.players}/>
+		<PlayersSpec players={props.players}/>
 	</div>)
 }
 

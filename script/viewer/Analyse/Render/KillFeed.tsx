@@ -7,11 +7,14 @@ export interface KillFeedProps {
 	players: PlayerState[];
 }
 
-export function KillFeed({kills, tick, players}: KillFeedProps) {
-	let relevantKills: Kill[] = kills.filter(kill => kill.tick <= tick && kill.tick >= (tick - 30 * 10));
+export function KillFeed(props: KillFeedProps) {
+	const {kills} = props;
+	const relevantKills = () => kills.filter(kill => kill.tick <= props.tick && kill.tick >= (props.tick - 30 * 10));
 
 	return <div class="killfeed">
-		{relevantKills.map((kill, i) => <KillFeedItem kill={kill} players={players}/>)}
+		<For each={relevantKills()}>{(kill) =>
+			<KillFeedItem kill={kill} players={props.players}/>
+		}</For>
 	</div>
 }
 

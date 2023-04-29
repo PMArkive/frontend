@@ -1,4 +1,5 @@
 import {PlayerState} from "../Data/Parser";
+import {KillFeedItem} from "./KillFeed";
 
 export interface PlayerSpecProps {
 	player: PlayerState;
@@ -52,42 +53,49 @@ export interface PlayersSpecProps {
 	players: PlayerState[];
 }
 
-export function PlayersSpec({players}: PlayersSpecProps) {
-	const redPlayers = players
-		.filter((player) => player.team === 2);
-	const bluePlayers = players
-		.filter((player) => player.team === 3);
-	redPlayers.sort((a, b) => classSort[a.playerClass] - classSort[b.playerClass]);
-	bluePlayers.sort((a, b) => classSort[a.playerClass] - classSort[b.playerClass]);
+function sortPlayer(a, b) {
+	return classSort[a.playerClass] - classSort[b.playerClass];
+}
+function filterPlayers(players: PlayerState[], team: number): PlayerState[] {
+	const filtered = players.filter((player) => player.team === 2);
+	filtered.sort(sortPlayer);
+	return filtered;
+}
+function medics(players: PlayerState[]): PlayerState[] {
+	return players.filter(player => player.playerClass === 5);
+}
 
-	const redPlayerSpecs = redPlayers
-		.map((player, i) => <PlayerSpec player={player}/>)
-		.concat(
-			redPlayers
-				.filter(player => player.playerClass === 5)
-				.map((player, i) => <UberSpec
+export function PlayersSpec(props: PlayersSpecProps) {
+	const redPlayers = () => filterPlayers(props.players, 2);
+	const bluePlayers = () => filterPlayers(props.players, 3);
+	const redMedics = () => medics(redPlayers());
+	const blueMedics = () => medics(bluePlayers());
+
+	return (<div>
+		<div class="redSpecHolder">
+			<For each={redPlayers()}>{(player) =>
+				<PlayerSpec player={player}/>
+			}</For>
+			<For each={redMedics()}>{(player) =>
+				<UberSpec
 					team={teamMap[player.team]}
 					chargeLevel={player.charge}
 					isDeath={player.health < 1}
-				/>)
-		);
-	const bluePlayerSpecs = bluePlayers
-		.map((player, i) => <PlayerSpec player={player}/>).concat(
-			bluePlayers
-				.filter(player => player.playerClass === 5)
-				.map((player, i) => {
-					// console.log(player);
-					return (<UberSpec
-						team={teamMap[player.team]}
-						chargeLevel={player.charge}
-						isDeath={player.health < 1}
-					/>)
-				})
-		);
-
-	return (<div>
-		<div class="redSpecHolder">{redPlayerSpecs}</div>
-		<div class="blueSpecHolder">{bluePlayerSpecs}</div>
+				/>
+			}</For>
+		</div>
+		<div class="blueSpecHolder">
+			<For each={bluePlayers()}>{(player) =>
+				<PlayerSpec player={player}/>
+			}</For>
+			<For each={blueMedics()}>{(player) =>
+				<UberSpec
+					team={teamMap[player.team]}
+					chargeLevel={player.charge}
+					isDeath={player.health < 1}
+				/>
+			}</For>
+		</div>
 	</div>);
 }
 
