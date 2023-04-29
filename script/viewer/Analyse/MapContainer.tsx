@@ -21,8 +21,10 @@ export const MapContainer = (props: ParentProps<MapContainerProps>) => {
         }
     }
     createEffect(() => {
-        if (isFinite(scale())) {
-            props.onScale && props.onScale(scale());
+        const s = scale();
+        console.log(s)
+        if (isFinite(s)) {
+            props.onScale && props.onScale(s);
         }
     });
 

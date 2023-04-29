@@ -19,7 +19,7 @@ maud = { version = "0.25.0", features = ["axum"] }
 axum = { version = "0.6.12", features = ["headers", "macros"] }
 hyper = "0.14.25"
 hyperlocal = "0.8.0"
-tower-http = { version = "0.4.0", features = ["trace"] }
+tower-http = { version = "0.4.0", features = ["trace", "fs"] }
 steamid-ng = "1.0.0"
 itertools = "0.10.5"
 const-fnv1a-hash = "1.1.0"

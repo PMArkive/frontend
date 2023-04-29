@@ -40,29 +40,32 @@ function getIcon(building: BuildingState) {
 	return `/images/building_icons/${icon}_${team}.png`;
 }
 
-export function Building({building, mapBoundary, targetSize, scale}: BuildingProp) {
-	const worldWidth = mapBoundary.boundary_max.x - mapBoundary.boundary_min.x;
-	const worldHeight = mapBoundary.boundary_max.y - mapBoundary.boundary_min.y;
-	const x = building.position.x - mapBoundary.boundary_min.x;
-	const y = building.position.y - mapBoundary.boundary_min.y;
-	const scaledX = x / worldWidth * targetSize.width;
-	const scaledY = (worldHeight - y) / worldHeight * targetSize.height;
-	const maxHealth = healthMap[building.level];
+export function Building(props: BuildingProp) {
+	const worldWidth = props.mapBoundary.boundary_max.x - props.mapBoundary.boundary_min.x;
+	const worldHeight = props.mapBoundary.boundary_max.y - props.mapBoundary.boundary_min.y;
+	const x = () => props.building.position.x - props.mapBoundary.boundary_min.x;
+	const y = () => props.building.position.y - props.mapBoundary.boundary_min.y;
+	const scaledX = () => x() / worldWidth * props.targetSize.width;
+	const scaledY = () => (worldHeight - y()) / worldHeight * props.targetSize.height;
+	const maxHealth = () => healthMap[props.building.level];
 	if (!maxHealth) {
 		return null;
 	}
 
-	const alpha = building.health / maxHealth;
+	const transform = () => `translate(${scaledX()} ${scaledY()}) scale(${1 / props.scale})`;
+	const rotate = () => `rotate(${270 - props.building.angle})`;
+
+	const alpha = () => props.building.health / maxHealth;
 	try {
-		const image = getIcon(building);
-		return <g transform={`translate(${scaledX} ${scaledY}) scale(${1 / scale})`}
-				  opacity={alpha}>
+		const image = getIcon(props.building);
+		return <g transform={transform()}
+				  opacity={alpha()}>
 			<image href={image} className={"player-icon"} height={32}
 				   width={32}
 				   transform={`translate(-16 -16)`}/>
-			<Show when={building.angle}>
+			<Show when={props.building.angle}>
 				<polygon points="-6,14 0, 16 6,14 0,24" fill="white"
-						 transform={`rotate(${270 - building.angle})`}/>
+						 transform={rotate()}/>
 			</Show>
 		</g>
 	} catch (e) {

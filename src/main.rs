@@ -42,6 +42,7 @@ use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use steam_openid::SteamOpenId;
+use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span};
 use tracing_subscriber::{
@@ -117,6 +118,7 @@ async fn main() -> Result<()> {
         .route("/viewer", get(viewer))
         .route("/viewer/:id", get(viewer))
         .route("/:id", get(demo))
+        .nest_service("/images", ServeDir::new("images"))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request
@@ -373,7 +375,6 @@ async fn viewer(
     };
     Ok(render(ViewerPage { demo }, session))
 }
-
 async fn handler_404() -> impl IntoResponse {
     Error::NotFound
 }

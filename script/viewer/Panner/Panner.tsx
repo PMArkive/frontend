@@ -42,8 +42,8 @@ export const Panner = (props: ParentProps<PannerProps>) => {
 		startX = event.pageX;
 		startY = event.pageY;
 
-		setTranslateX(panner.viewport.x);
-		setTranslateY(panner.viewport.y);
+		setTranslateX(Math.floor(panner.viewport.x));
+		setTranslateY(Math.floor(panner.viewport.y));
 		setScale(panner.scale);
 	}
 
@@ -66,9 +66,7 @@ export const Panner = (props: ParentProps<PannerProps>) => {
 		setTranslateY(panner.viewport.y);
 		setScale(panner.scale);
 
-		if (props.onScale) {
-			props.onScale(panner.scale);
-		}
+		props.onScale(panner.scale);
 	}
 
 	const mouseWheel = (event) => {

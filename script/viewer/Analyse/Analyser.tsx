@@ -8,7 +8,7 @@ import {Header, WorldBoundaries} from "./Data/Parser";
 
 import {AsyncParser} from "./Data/AsyncParser";
 import {getMapBoundaries} from "./MapBoundries";
-import {createSignal} from "solid-js";
+import {createEffect, createSignal} from "solid-js";
 import {Session, StateUpdate} from "./Session";
 
 export interface AnalyseProps {
