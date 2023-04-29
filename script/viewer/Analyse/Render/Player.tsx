@@ -1,4 +1,4 @@
-import {PlayerState, WorldBoundaries, Team} from "@demostf/parser-worker";
+import {PlayerState, WorldBoundaries, Team} from "../Data/Parser";
 
 export interface PlayerProp {
 	player: PlayerState;

@@ -20,7 +20,7 @@ swc_ecma_transforms_base = { version = "0.126.10" }
 swc_ecma_transforms_typescript = { version = "0.176.12" }
 swc_ecma_visit = { version = "0.89.4" }
 anyhow = "1.0.70"
-jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "event" }
+jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "mixed-svg" }
 #jsx-dom-expressions = { version = "0.1", path = "../../../../rust/swc-plugin-jsx-dom-expressions" }
 rand = "0.8.5"
 fnv = "1.0.7"

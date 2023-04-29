@@ -58,7 +58,7 @@ export const FilterBar = ({maps, api, onChange, initialFilter}: FilterBarProps) 
 }
 
 export const Reset = ({reset}) => {
-    return <button onMouseDown={reset} class="reset">X</button>;
+    return <button onClick={reset} class="reset">X</button>;
 }
 
 export interface FilterSet {

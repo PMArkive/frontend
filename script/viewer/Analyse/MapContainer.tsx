@@ -1,7 +1,8 @@
 import {Panner} from "../Panner/Panner";
-import {createEffect, createSignal, ParentProps} from "solid-js";
+import {createEffect, createSignal, ParentProps, Show} from "solid-js";
+import { createElementSize } from "@solid-primitives/resize-observer";
 
-export class MapContainerProps {
+export interface MapContainerProps {
     contentSize: {
         width: number;
         height: number;
@@ -9,25 +10,31 @@ export class MapContainerProps {
     onScale?: (scale: number) => any;
 }
 
-export const MapContainer = ({children, contentSize, onScale}: ParentProps<MapContainerProps>) => {
+export const MapContainer = (props: ParentProps<MapContainerProps>) => {
     const [container, setContainer] = createSignal<Element>();
-    const scale = () => Math.min(
-        container().clientWidth / contentSize.width,
-        container().clientHeight / contentSize.height
-    );
+    const size = createElementSize(container);
+    const scale = () => {
+        if (size.width && size.height) {
+            return Math.min(size.width / props.contentSize.width, size.height / props.contentSize.height);
+        } else {
+            return 1;
+        }
+    }
     createEffect(() => {
         if (isFinite(scale())) {
-            onScale && onScale(scale());
+            props.onScale && props.onScale(scale());
         }
     });
 
     return (
         <div class="map-container" ref={setContainer}>
-            <Panner width={container().clientWidth} height={container().clientHeight}
-                    scale={scale()} contentSize={contentSize}
-                    onScale={onScale}>
-                {children}
-            </Panner>
+            <Show when={size.width}>
+                <Panner width={size.width} height={size.height}
+                        scale={scale()} contentSize={props.contentSize}
+                        onScale={props.onScale}>
+                    {props.children}
+                </Panner>
+            </Show>
         </div>
     )
 }

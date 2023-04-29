@@ -26,8 +26,12 @@ export interface GetStringDataView extends DataView {
     getString: (offset: number, length: number) => string;
 }
 
-export async function parseHeader(file): Promise<DemoHead> {
+export async function parseHeader(file: File): Promise<DemoHead> {
     const data = await readFile(file);
+    return parseHeaderFromBuffer(data);
+}
+
+export function parseHeaderFromBuffer(data: ArrayBuffer): DemoHead {
     const view = new DataView(data) as GetStringDataView;
     return {
         'type': view.getString(0, 8),
@@ -40,7 +44,7 @@ export async function parseHeader(file): Promise<DemoHead> {
     };
 }
 
-async function readFile(file: File): Promise<ArrayBuffer> {
+export async function readFile(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
 

@@ -1,7 +1,8 @@
 import {Player as PlayerDot} from './Render/Player';
 import {Building as BuildingDot} from './Render/Building';
 import {findMapAlias} from './MapBoundries';
-import {PlayerState, Header, WorldBoundaries, BuildingState} from "@demostf/parser-worker";
+import {PlayerState, Header, WorldBoundaries, BuildingState} from "./Data/Parser";
+import {splitProps} from "solid-js";
 
 export interface MapRenderProps {
 	header: Header;
@@ -15,37 +16,31 @@ export interface MapRenderProps {
 	scale: number;
 }
 
-declare const require: {
-	<T>(path: string): T;
-	(paths: string[], callback: (...modules: any[]) => void): void;
-	ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
-};
-
-export function MapRender({header, players, size, world, scale, buildings}: MapRenderProps) {
-	const mapAlias = findMapAlias(header.map);
+export function MapRender(props: MapRenderProps) {
+	const mapAlias = findMapAlias(props.header.map);
 	const image = `images/leveloverview/dist/${mapAlias}.webp`;
 	const background = `url(${image})`;
 
-	const playerDots = players
+	const playerDots = () => props.players
 		.filter((player: PlayerState) => player.health)
 		.map((player: PlayerState) => {
-			return <PlayerDot player={player} mapBoundary={world}
-			                  targetSize={size} scale={scale} />
+			return <PlayerDot player={player} mapBoundary={props.world}
+			                  targetSize={props.size} scale={props.scale} />
 		});
 
-	const buildingDots = buildings
+	const buildingDots = () => props.buildings
 		.filter((building: PlayerState) => building.position.x)
 		.map((building: PlayerState) => {
 			return <BuildingDot building={building}
-			                    mapBoundary={world}
-			                    targetSize={size} scale={scale}/>
+			                    mapBoundary={props.world}
+			                    targetSize={props.size} scale={props.scale}/>
 		});
 
 	return (
-		<svg class="map-background" width={size.width} height={size.height}
+		<svg class="map-background" width={props.size.width} height={props.size.height}
 		     style={{"background-image": background}}>
-			{playerDots}
-			{buildingDots}
+			{playerDots()}
+			{buildingDots()}
 		</svg>
 	);
 }

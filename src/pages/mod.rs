@@ -6,6 +6,7 @@ mod plugin_section;
 pub mod profile;
 pub mod upload;
 pub mod uploads;
+pub mod viewer;
 
 use crate::session::SessionData;
 use demostf_build::Asset;

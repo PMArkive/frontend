@@ -4,7 +4,7 @@ import {throttle, debounce} from 'throttle-debounce';
 import {Timeline} from './Render/Timeline';
 import {SpecHUD} from './Render/SpecHUD';
 import {AnalyseMenu} from './AnalyseMenu'
-import {Header, WorldBoundaries} from "@demostf/parser-worker";
+import {Header, WorldBoundaries} from "./Data/Parser";
 
 import {AsyncParser} from "./Data/AsyncParser";
 import {getMapBoundaries} from "./MapBoundries";
@@ -21,10 +21,10 @@ export const Analyser = (props: AnalyseProps) => {
 	const parser = props.parser;
 	const intervalPerTick = props.header.interval_per_tick;
 
-	const [tick, setTick] = createSignal<number>();
-	const [scale, setScale] = createSignal<number>();
-	const [playing, setPlaying] = createSignal<boolean>();
-	const [sessionName, setSessionName] = createSignal<string>();
+	const [tick, setTick] = createSignal<number>(0);
+	const [scale, setScale] = createSignal<number>(1);
+	const [playing, setPlaying] = createSignal<boolean>(false);
+	const [sessionName, setSessionName] = createSignal<string>("");
 
 	let lastFrameTime = 0;
 	let playStartTick = 0;
@@ -165,9 +165,9 @@ export const Analyser = (props: AnalyseProps) => {
 			<div class="time-control"
 				 title={`${tickToTime(tick(), intervalPerTick)} (tick ${tick()})`}>
 				<input class="play-pause-button" type="button"
-					   onClick={togglePlay}
 					   value={playButtonText()}
 					   disabled={disabled}
+					   onClick={togglePlay}
 				/>
 				<Timeline parser={parser} tick={tick()}
 						  onSetTick={throttle(50, (tick) => {

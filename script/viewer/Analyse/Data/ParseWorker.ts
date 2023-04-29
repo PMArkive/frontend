@@ -1,4 +1,4 @@
-import {parseDemo} from "@demostf/parser-worker";
+import {parseDemo} from "./Parser";
 
 declare function postMessage(message: any, transfer?: any[]): void;
 
@@ -23,5 +23,4 @@ onmessage = (event: MessageEvent) => {
 			error: e.message
 		});
 	});
-
 };

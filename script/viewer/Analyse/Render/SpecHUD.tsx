@@ -1,7 +1,7 @@
 import {PlayersSpec} from './PlayerSpec';
 import {KillFeed} from './KillFeed';
 import {AsyncParser} from "../Data/AsyncParser";
-import {PlayerState, Kill} from "@demostf/parser-worker";
+import {PlayerState, Kill} from "../Data/Parser";
 
 export interface SpecHUDProps {
 	tick: number;

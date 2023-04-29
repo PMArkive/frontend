@@ -1,0 +1,14 @@
+@import 'viewer/AnalyseMenu.css';
+@import 'viewer/Analyser.css';
+@import 'viewer/KillFeed.css';
+@import 'viewer/MapContainer.css';
+@import 'viewer/MapRender.css';
+@import 'viewer/Panner.css';
+@import 'viewer/Player.css';
+@import 'viewer/PlayerSpec.css';
+@import 'viewer/Timeline.css';
+
+progress {
+    width: 100%;
+    display: block;
+}

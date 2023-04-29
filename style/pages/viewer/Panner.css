@@ -4,14 +4,14 @@
   overflow: hidden;
   cursor: default;
 
-  .content-container {
+  & .content-container {
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
   }
-  .noselect {
+  & .noselect {
     user-select: none;
   }
 }
@@ -35,7 +35,7 @@
   background-color: #f8f8f8;
   border-radius: 5px;
 
-  div {
+  & div {
     transition: all 0.5s;
     width: 32px;
     text-align: center;
@@ -47,7 +47,7 @@
     }
   }
 
-  div:first-child {
+  & div:first-child {
     border-bottom: 1px solid #ddd;
     margin: 0;
   }

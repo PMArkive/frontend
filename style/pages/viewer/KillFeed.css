@@ -5,11 +5,11 @@
   padding: 15px;
   user-select: none;
 
-  .kill {
-    .red {
+  & .kill {
+    & .red {
       color: #a75d50;
     }
-    .blue {
+    & .blue {
       color: #5b818f;
     }
 
@@ -30,7 +30,7 @@
     float: right;
     clear: both;
 
-    .player {
+    & .player {
       padding: 0 5px;
     }
   }

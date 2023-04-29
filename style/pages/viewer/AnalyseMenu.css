@@ -9,7 +9,7 @@
     opacity: 1;
   }
 
-  .share-session {
+  & .share-session {
 
     background: transparent;
     color: var(--primary-color);
@@ -19,7 +19,7 @@
     margin: 10px;
     border: none;
     cursor: pointer;
-    background-image: url("../images/link_white.svg");
+    background-image: url("images/link_white.svg");
     background-size: contain;
 
     &:active, &:focus {
@@ -27,7 +27,7 @@
     }
   }
 
-  .share-text {
+  & .share-text {
     color: var(--primary-color);
     background-color: var(--text-secondary);
     padding: 5px;

@@ -21,6 +21,7 @@ use crate::pages::index::{DemoListScript, Index};
 use crate::pages::profile::Profile;
 use crate::pages::upload::{UploadPage, UploadScript};
 use crate::pages::uploads::Uploads;
+use crate::pages::viewer::{ParseWorkerScript, ParserWasm, ViewerPage, ViewerScript, ViewerStyle};
 use crate::pages::{render, GlobalStyle};
 use crate::session::{SessionData, COOKIE_NAME};
 use async_session::{MemoryStore, Session, SessionStore};
@@ -97,6 +98,13 @@ async fn main() -> Result<()> {
         )
         .route(UploadScript::route(), get(serve_asset::<UploadScript>))
         .route(DemoListScript::route(), get(serve_asset::<DemoListScript>))
+        .route(ViewerScript::route(), get(serve_asset::<ViewerScript>))
+        .route(ViewerStyle::route(), get(serve_asset::<ViewerStyle>))
+        .route(
+            ParseWorkerScript::route(),
+            get(serve_asset::<ParseWorkerScript>),
+        )
+        .route(ParserWasm::route(), get(serve_asset::<ParserWasm>))
         .route(LogoPng::route(), get(serve_asset::<LogoPng>))
         .route(LogoSvg::route(), get(serve_asset::<LogoSvg>))
         .route("/fragments/demo-list", get(demo_list))
@@ -106,6 +114,8 @@ async fn main() -> Result<()> {
         .route("/login", get(login))
         .route("/logout", get(logout))
         .route("/upload", get(upload))
+        .route("/viewer", get(viewer))
+        .route("/viewer/:id", get(viewer))
         .route("/:id", get(demo))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -344,6 +354,24 @@ async fn profiles(
         },
         session,
     ))
+}
+
+async fn viewer(
+    State(app): State<Arc<App>>,
+    id: Option<Path<String>>,
+    session: SessionData,
+) -> Result<Markup> {
+    let demo = if let Some(Path(id)) = id {
+        let id = id.parse().map_err(|_| Error::NotFound)?;
+        Some(
+            Demo::by_id(&app.connection, id)
+                .await?
+                .ok_or(Error::NotFound)?,
+        )
+    } else {
+        None
+    };
+    Ok(render(ViewerPage { demo }, session))
 }
 
 async fn handler_404() -> impl IntoResponse {

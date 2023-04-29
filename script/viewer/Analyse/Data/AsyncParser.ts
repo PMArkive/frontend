@@ -1,5 +1,9 @@
-import {ParsedDemo, PlayerState, WorldBoundaries, Header, Kill, BuildingState} from "@demostf/parser-worker";
-import {getMapBoundaries} from "../MapBoundries";
+import {ParsedDemo, PlayerState, WorldBoundaries, Kill, BuildingState} from "./Parser";
+
+function getCacheBuster(): string {
+	const url = document.querySelector('script[src*="viewer"]').attributes.src.value;
+	return url.substring("/viewer.js".length);
+}
 
 export class AsyncParser {
 	buffer: ArrayBuffer;
@@ -14,7 +18,7 @@ export class AsyncParser {
 
 	cache(): Promise<ParsedDemo> {
 		return new Promise((resolve, reject) => {
-			const worker = new Worker(new URL('./ParseWorker.ts', import.meta.url));
+			const worker = new Worker(`/parse-worker.js${getCacheBuster()}`);
 			worker.postMessage({
 				buffer: this.buffer
 			}, [this.buffer]);

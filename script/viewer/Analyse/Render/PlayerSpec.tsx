@@ -1,4 +1,4 @@
-import {PlayerState} from "@demostf/parser-worker";
+import {PlayerState} from "../Data/Parser";
 
 export interface PlayerSpecProps {
 	player: PlayerState;

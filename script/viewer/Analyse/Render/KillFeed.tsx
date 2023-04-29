@@ -1,4 +1,4 @@
-import {Kill, PlayerState} from "@demostf/parser-worker";
+import {Kill, PlayerState} from "../Data/Parser";
 import {killAlias} from "./killAlias";
 
 export interface KillFeedProps {

@@ -1,4 +1,4 @@
-import {ParsedDemo, PlayerState, Header, WorldBoundaries, Team} from "@demostf/parser-worker";
+import {ParsedDemo, PlayerState, Header, WorldBoundaries, Team} from "../Data/Parser";
 
 export interface TimelineProps {
 	parser: AsyncParser;
@@ -8,16 +8,13 @@ export interface TimelineProps {
 }
 
 export const Timeline = ({parser, tick, onSetTick, disabled}) => {
-	const background = <TimeLineBackground parser={parser}/>;
-
-	return (<div class="timeline">
-		{background}
-		<input class="timeline-progress" type="range" min={0}
-			   max={parser.demo.tickCount} value={tick}
-			   disabled={disabled}
+	return <div class="timeline">
+		<input max={parser.demo.tickCount} value={tick} class="timeline-progress" type="range" min={0}
 			   onChange={(event) => {onSetTick(parseInt(event.target.value, 10))}}
+			   disabled={disabled}
 		/>
-	</div>);
+		<TimeLineBackground parser={parser}/>
+	</div>;
 }
 
 import {AsyncParser} from "../Data/AsyncParser";

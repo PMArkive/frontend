@@ -85,9 +85,14 @@ export const Panner = (props: ParentProps<PannerProps>) => {
 		y: Math.floor(panner.screen.height / 2)
 	});
 
+	const pannerStyle = () => {
+		console.log(props.width, props.height, props.scale);
+		return {width: `${props.width}px`, height: `${props.height}px`}
+	};
+
 	return (
 		<div class="pan-zoom-element"
-			 style={{width: `${props.width}px`, height: `${props.height}px`}}
+			 style={pannerStyle()}
 			 onMouseDown={mouseDown}
 			 onWheel={mouseWheel}>
 			<div class="content-container noselect"
