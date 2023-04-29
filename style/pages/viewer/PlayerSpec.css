@@ -87,34 +87,34 @@
     }
 
     & .class-icon.scout {
-      background-image: url('../../images/class_portraits/Icon_scout.jpg');
+      background-image: url('/images/class_portraits/Icon_scout.jpg');
     }
     & .class-icon.soldier {
-      background-image: url('../../images/class_portraits/Icon_soldier.jpg');
+      background-image: url('/images/class_portraits/Icon_soldier.jpg');
     }
     & .class-icon.pyro {
-      background-image: url('../../images/class_portraits/Icon_pyro.jpg');
+      background-image: url('/images/class_portraits/Icon_pyro.jpg');
     }
     & .class-icon.demoman {
-      background-image: url('../../images/class_portraits/Icon_demoman.jpg');
+      background-image: url('/images/class_portraits/Icon_demoman.jpg');
     }
     & .class-icon.engineer {
-      background-image: url('../../images/class_portraits/Icon_engineer.jpg');
+      background-image: url('/images/class_portraits/Icon_engineer.jpg');
     }
     & .class-icon.heavy {
-      background-image: url('../../images/class_portraits/Icon_heavy.jpg');
+      background-image: url('/images/class_portraits/Icon_heavy.jpg');
     }
     & .class-icon.medic {
-      background-image: url('../../images/class_portraits/Icon_medic.jpg');
+      background-image: url('/images/class_portraits/Icon_medic.jpg');
     }
     & .class-icon.sniper {
-      background-image: url('../../images/class_portraits/Icon_sniper.jpg');
+      background-image: url('/images/class_portraits/Icon_sniper.jpg');
     }
     & .class-icon.spy{
-      background-image: url('../../images/class_portraits/Icon_spy.jpg');
+      background-image: url('/images/class_portraits/Icon_spy.jpg');
     }
     & .class-icon.uber {
-      background-image: url('images/charge_red.svg');
+      background-image: url('inline://images/charge_red.svg');
     }
 
     & .class-icon, & .steam-avatar {
@@ -148,34 +148,34 @@
     }
 
     & .class-icon.scout {
-      background-image: url('../../images/class_portraits/Icon_scout_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_scout_blue.jpg');
     }
     & .class-icon.soldier {
-      background-image: url('../../images/class_portraits/Icon_soldier_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_soldier_blue.jpg');
     }
     & .class-icon.pyro {
-      background-image: url('../../images/class_portraits/Icon_pyro_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_pyro_blue.jpg');
     }
     & .class-icon.demoman {
-      background-image: url('../../images/class_portraits/Icon_demoman_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_demoman_blue.jpg');
     }
     & .class-icon.engineer {
-      background-image: url('../../images/class_portraits/Icon_engineer_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_engineer_blue.jpg');
     }
     & .class-icon.heavy {
-      background-image: url('../../images/class_portraits/Icon_heavy_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_heavy_blue.jpg');
     }
     & .class-icon.medic {
-      background-image: url('../../images/class_portraits/Icon_medic_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_medic_blue.jpg');
     }
     & .class-icon.sniper {
-      background-image: url('../../images/class_portraits/Icon_sniper_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_sniper_blue.jpg');
     }
     & .class-icon.spy {
-      background-image: url('../../images/class_portraits/Icon_spy_blue.jpg');
+      background-image: url('/images/class_portraits/Icon_spy_blue.jpg');
     }
     & .class-icon.uber {
-      background-image: url('images/charge_blue.svg');
+      background-image: url('inline://images/charge_blue.svg');
     }
   }
 

@@ -1,6 +1,4 @@
-use crate::guess_embed;
-use base64::engine::general_purpose::STANDARD;
-use base64::Engine;
+use crate::inline_url;
 use lightningcss::bundler::{Bundler, FileProvider};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions};
 use lightningcss::targets::Browsers;
@@ -8,7 +6,6 @@ use lightningcss::values::url::Url;
 use lightningcss::visit_types;
 use lightningcss::visitor::{Visit, VisitTypes, Visitor};
 use std::convert::Infallible;
-use std::fs::read;
 use std::path::Path;
 
 pub fn bundle_style(style: &str) -> Vec<u8> {
@@ -61,20 +58,7 @@ impl<'i> Visitor<'i> for InlineUrlVisitor {
 
     fn visit_url(&mut self, url: &mut Url<'i>) -> Result<(), Self::Error> {
         if let Some(path) = url.url.strip_prefix("inline://") {
-            let content = read(path).unwrap_or_else(|e| {
-                eprintln!("Failed to write inline file {path}: {e}");
-                panic!("Failed to inline");
-            });
-            let (mime, encode) = guess_embed(path);
-
-            if encode {
-                let encoded = STANDARD.encode(content);
-                url.url = format!("data:{mime};base64,{encoded}").into();
-            } else {
-                let content = String::from_utf8(content).expect("invalid utf8");
-                let encoded = urlencoding::encode(&content);
-                url.url = format!("data:{mime},{encoded}").into();
-            }
+            url.url = inline_url(path).into();
         }
         Ok(())
     }

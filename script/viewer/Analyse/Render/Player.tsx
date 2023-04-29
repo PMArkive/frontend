@@ -1,5 +1,4 @@
 import {PlayerState, WorldBoundaries, Team} from "../Data/Parser";
-import {createEffect} from "solid-js";
 
 export interface PlayerProp {
     player: PlayerState;
@@ -24,17 +23,17 @@ const healthMap = {
     9: 125,//engineer
 };
 
-const classMap = {
-    0: "empty",
-    1: "scout",
-    2: "sniper",
-    3: "soldier",
-    4: "demoman",
-    5: "medic",
-    6: "heavy",
-    7: "pyro",
-    8: "spy",
-    9: "engineer"
+const imageMap = {
+    0: require("inline://images/class_icons/empty.svg"),
+    1: require("inline://images/class_icons/scout.svg"),
+    2: require("inline://images/class_icons/sniper.svg"),
+    3: require("inline://images/class_icons/soldier.svg"),
+    4: require("inline://images/class_icons/demoman.svg"),
+    5: require("inline://images/class_icons/medic.svg"),
+    6: require("inline://images/class_icons/heavy.svg"),
+    7: require("inline://images/class_icons/pyro.svg"),
+    8: require("inline://images/class_icons/spy.svg"),
+    9: require("inline://images/class_icons/engineer.svg"),
 };
 
 export function Player(props: PlayerProp) {
@@ -63,11 +62,10 @@ export function Player(props: PlayerProp) {
 }
 
 function getClassImage(player: PlayerState, imageOpacity: number) {
-    if (!classMap[player.playerClass]) {
+    if (!imageMap[player.playerClass]) {
         return [];
     }
-    const image = `/images/class_icons/${classMap[player.playerClass]}.svg`;
-    return <image href={image}
+    return <image href={imageMap[player.playerClass]}
                   class={"player-icon " + player.team}
                   opacity={imageOpacity}
                   height={32}

@@ -1,3 +1,6 @@
+mod inline;
+
+use crate::script::inline::InlineVisitor;
 use anyhow::Error;
 use jsx_dom_expressions::TransformVisitor;
 use std::collections::HashMap;
@@ -153,6 +156,7 @@ impl Load for Loader {
 
         let module = module
             .fold_with(&mut strip(top_level_mark))
+            .fold_with(&mut as_folder(InlineVisitor {}))
             .fold_with(&mut as_folder(TransformVisitor::new(
                 jsx_dom_expressions::config::Config {
                     module_name: "solid-js/web".to_string(),

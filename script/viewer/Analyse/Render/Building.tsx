@@ -16,28 +16,22 @@ const healthMap = [0, 150, 180, 216];
 function getBuildingType(type: BuildingType) {
 	switch (type) {
 		case BuildingType.TeleporterEntrance:
-			return 'tele_entrance';
+			return require("inline://images/building_icons/tele_entrance.png");
 		case BuildingType.TeleporterExit:
-			return 'tele_exit';
+			return require("inline://images/building_icons/tele_exit.png");
 		case BuildingType.Dispenser:
-			return 'dispenser';
+			return require("inline://images/building_icons/dispenser.png");
 		case BuildingType.Level1Sentry:
-			return 'sentry_1';
+			return require("inline://images/building_icons/sentry_1.png");
 		case BuildingType.Level2Sentry:
-			return 'sentry_2';
+			return require("inline://images/building_icons/sentry_2.png");
 		case BuildingType.Level3Sentry:
-			return 'sentry_3';
+			return require("inline://images/building_icons/sentry_3.png");
 		case BuildingType.MiniSentry:
-			return 'sentry_1';
+			return require("inline://images/building_icons/sentry_1.png");
 		default:
-			return 'unknown';
+			return '';
 	}
-}
-
-function getIcon(building: BuildingState) {
-	const icon = getBuildingType(building.buildingType);
-	const team = building.team === Team.Red ? 'red' : 'blue';
-	return `/images/building_icons/${icon}_${team}.png`;
 }
 
 export function Building(props: BuildingProp) {
@@ -48,6 +42,7 @@ export function Building(props: BuildingProp) {
 	const scaledX = () => x() / worldWidth * props.targetSize.width;
 	const scaledY = () => (worldHeight - y()) / worldHeight * props.targetSize.height;
 	const maxHealth = () => healthMap[props.building.level];
+	const teamColor = () => (props.building.team === Team.Red) ? '#a75d50' : '#5b818f';
 	if (!maxHealth) {
 		return null;
 	}
@@ -57,10 +52,12 @@ export function Building(props: BuildingProp) {
 
 	const alpha = () => props.building.health / maxHealth;
 	try {
-		const image = getIcon(props.building);
+		const image = () => getBuildingType(props.building.buildingType);
 		return <g transform={transform()}
 				  opacity={alpha()}>
-			<image href={image} className={"player-icon"} height={32}
+			<circle r={16} stroke-width={1} stroke="white" fill={teamColor()}
+					opacity={alpha()}/>
+			<image href={image()} className={"player-icon"} height={32}
 				   width={32}
 				   transform={`translate(-16 -16)`}/>
 			<Show when={props.building.angle}>

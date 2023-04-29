@@ -1,6 +1,8 @@
 mod script;
 mod style;
 
+use base64::engine::general_purpose::STANDARD;
+use base64::Engine;
 use fnv::FnvHasher;
 pub use script::bundle_script;
 use std::fs::read;
@@ -42,4 +44,21 @@ pub fn guess_mime(path: &str) -> &'static str {
         return "text/javascript";
     }
     return "text/plain";
+}
+
+fn inline_url(path: &str) -> String {
+    let content = read(path).unwrap_or_else(|e| {
+        eprintln!("Failed to write inline file {path}: {e}");
+        panic!("Failed to inline");
+    });
+    let (mime, encode) = guess_embed(path);
+
+    if encode {
+        let encoded = STANDARD.encode(content);
+        format!("data:{mime};base64,{encoded}")
+    } else {
+        let content = String::from_utf8(content).expect("invalid utf8");
+        let encoded = urlencoding::encode(&content);
+        format!("data:{mime},{encoded}")
+    }
 }

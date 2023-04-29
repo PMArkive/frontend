@@ -36,6 +36,7 @@ ready(async () => {
 
 const parse = async (data: ArrayBuffer, parseProgress: HTMLProgressElement, stored: boolean) => {
     const header = parseHeaderFromBuffer(data);
+    console.log(header);
     const parser = new AsyncParser(data, (progress) => parseProgress.value = progress);
     await parser.cache();
 
