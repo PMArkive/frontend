@@ -226,3 +226,7 @@ p.page-note {
     line-height: 32px;
     font-size: 120%;
 }
+
+table {
+    line-height: 24px;
+}

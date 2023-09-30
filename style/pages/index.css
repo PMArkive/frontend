@@ -24,7 +24,7 @@
     }
 
     & td.title {
-        max-width: 0px;
+        max-width: 0;
     }
 
     & td.date {
