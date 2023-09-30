@@ -74,6 +74,7 @@
 
 #load-more {
     background-color: var(--primary-color-accent);
+    color: var(--text-primary);
     display: block;
     width: 100%;
     line-height: 30px;
