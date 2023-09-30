@@ -57,7 +57,7 @@ function sortPlayer(a, b) {
 	return classSort[a.playerClass] - classSort[b.playerClass];
 }
 function filterPlayers(players: PlayerState[], team: number): PlayerState[] {
-	const filtered = players.filter((player) => player.team === 2);
+	const filtered = players.filter((player) => player.team === team);
 	filtered.sort(sortPlayer);
 	return filtered;
 }
