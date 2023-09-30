@@ -22,7 +22,7 @@ function getBuildingType(type: BuildingType) {
 		case BuildingType.Dispenser:
 			return require("inline://images/building_icons/dispenser.png");
 		case BuildingType.Level1Sentry:
-			return require("inline://images/building_icons/sentry_1.png");
+			return require("inline://images/building_icons/sentry_1.svg");
 		case BuildingType.Level2Sentry:
 			return require("inline://images/building_icons/sentry_2.png");
 		case BuildingType.Level3Sentry:
@@ -57,9 +57,7 @@ export function Building(props: BuildingProp) {
 				  opacity={alpha()}>
 			<circle r={16} stroke-width={1} stroke="white" fill={teamColor()}
 					opacity={alpha()}/>
-			<image href={image()} className={"player-icon"} height={32}
-				   width={32}
-				   transform={`translate(-16 -16)`}/>
+			<image href={image()} className={"player-icon"} height={32} width={32} transform={`translate(-16 -16)`}/>
 			<Show when={props.building.angle}>
 				<polygon points="-6,14 0, 16 6,14 0,24" fill="white"
 						 transform={rotate()}/>

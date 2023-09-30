@@ -13,16 +13,16 @@ export interface PannerProps {
 }
 
 export const Panner = (props: ParentProps<PannerProps>) => {
-	const [scale, setScale] = createSignal(0);
-	const [translateX, setTranslateX] = createSignal(0);
-	const [translateY, setTranslateY] = createSignal(0);
-
 	const panner = new CenteredPanZoom({
 		screenHeight: props.height,
 		screenWidth: props.width,
 		scale: props.scale,
 		contentSize: props.contentSize
 	});
+
+	const [scale, setScale] = createSignal(props.scale);
+	const [translateX, setTranslateX] = createSignal(Math.floor(panner.viewport.x));
+	const [translateY, setTranslateY] = createSignal(Math.floor(panner.viewport.y));
 
 	let startX = 0;
 	let startY = 0;

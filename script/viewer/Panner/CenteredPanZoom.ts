@@ -20,6 +20,7 @@ export class CenteredPanZoom {
 	};
 
 	constructor(options: CenteredPanZoomOptions) {
+		const scale = options.scale || (options.screenWidth / options.contentSize.width);
 		this.screen = new Viewport({
 			x: 0,
 			y: 0,
@@ -27,12 +28,12 @@ export class CenteredPanZoom {
 			height: options.screenHeight
 		});
 		this.viewport = new Viewport({
-			x: 0,
-			y: 0,
+			x: (options.screenWidth - (options.contentSize.width * scale)) / 2,
+			y: ( options.screenHeight - (options.contentSize.height * scale)) / 2,
 			width: options.screenWidth,
 			height: options.screenHeight
 		});
-		this.scale = options.scale || 1;
+		this.scale = scale;
 		this.contentSize = options.contentSize;
 	}
 
