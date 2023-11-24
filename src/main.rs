@@ -79,8 +79,14 @@ async fn main() -> Result<()> {
         .try_init()
         .expect("Failed to init tracing");
 
-    let config = args().skip(1).next().expect("no config file provided");
-    let config = Config::load(&config)?;
+    let config = args()
+        .skip(1)
+        .next()
+        .as_deref()
+        .map(Config::load)
+        .transpose()?
+        .or_else(Config::env)
+        .expect("no config file or env provided");
     let connection = config.database.connect().await?;
 
     let session_store = MemoryStore::new();

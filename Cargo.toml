@@ -32,3 +32,4 @@ reqwest = "0.11.16"
 rand = "0.8.5"
 demostf-build = { path = "./build", version = "*" }
 include_dir = "0.7.3"
+serde-env = "0.1.1"

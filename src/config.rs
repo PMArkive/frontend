@@ -1,6 +1,7 @@
 use crate::Result;
 use config::{Environment, File};
 use serde::Deserialize;
+use serde_env::from_env;
 use sqlx::postgres::PgConnectOptions;
 use sqlx::PgPool;
 use std::net::IpAddr;
@@ -22,6 +23,10 @@ impl Config {
 
         Ok(s.try_deserialize()?)
     }
+
+    pub fn env() -> Option<Self> {
+        from_env().ok()
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -42,7 +47,26 @@ impl DbConfig {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(untagged)]
+pub struct RawListen {
+    path: Option<PathBuf>,
+    address: Option<IpAddr>,
+    port: Option<u16>,
+}
+
+impl TryFrom<RawListen> for Listen {
+    type Error = &'static str;
+
+    fn try_from(value: RawListen) -> std::result::Result<Self, Self::Error> {
+        match (value.path, value.address, value.port) {
+            (Some(path), None, None) => Ok(Listen::Socket { path }),
+            (None, Some(address), Some(port)) => Ok(Listen::Tcp { address, port }),
+            _ => Err("invalid listen section"),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(try_from = "RawListen")]
 pub enum Listen {
     Socket { path: PathBuf },
     Tcp { address: IpAddr, port: u16 },
@@ -51,6 +75,16 @@ pub enum Listen {
 #[derive(Debug, Deserialize)]
 pub struct SiteConfig {
     pub url: String,
+    #[serde(default = "default_api")]
     pub api: String,
+    #[serde(default = "default_maps")]
     pub maps: String,
+}
+
+fn default_api() -> String {
+    "https://api.demos.tf/".into()
+}
+
+fn default_maps() -> String {
+    "https://maps.demos.tf/".into()
 }

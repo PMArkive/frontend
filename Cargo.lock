@@ -1074,6 +1074,7 @@ dependencies = [
  "sea-query",
  "sea-query-binder",
  "serde",
+ "serde-env",
  "sqlx",
  "steam-openid",
  "steamid-ng",
@@ -3026,6 +3027,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bb2f3770c8bce3bcda7e149193a069a0f4365bda1fa5cd88e03bca26afc1216c"
 dependencies = [
  "serde_derive",
+]
+
+[[package]]
+name = "serde-env"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c68119a0846249fd6f4b38561b4b4727dbc4fd9fea074f1253bca7d50440ce58"
+dependencies = [
+ "anyhow",
+ "log",
+ "serde",
 ]
 
 [[package]]
