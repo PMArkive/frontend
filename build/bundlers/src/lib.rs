@@ -17,6 +17,7 @@ fn guess_embed(path: &str) -> (&'static str, bool) {
     match path.split('.').last().unwrap() {
         "svg" => ("image/svg+xml", true),
         "png" => ("image/png", true),
+        "webp" => ("image/webp", true),
         ext => panic!("no mimetype known for {ext}"),
     }
 }
@@ -32,6 +33,8 @@ pub fn guess_mime(path: &str) -> &'static str {
         return "image/svg+xml";
     } else if path.ends_with("png") {
         return "image/png";
+    } else if path.ends_with("webp") {
+        return "image/webp";
     } else if path.ends_with("css") {
         return "text/css";
     } else if path.ends_with("wasm") {
