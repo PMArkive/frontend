@@ -6,7 +6,7 @@ mod fragments;
 mod pages;
 mod session;
 
-use crate::asset::serve_asset;
+use crate::asset::{guess_mime, serve_asset};
 pub use crate::config::Config;
 use crate::config::Listen;
 use crate::data::demo::{Demo, Filter, ListDemo};
@@ -27,13 +27,15 @@ use crate::session::{SessionData, COOKIE_NAME};
 use async_session::{MemoryStore, Session, SessionStore};
 use axum::extract::{MatchedPath, Path, Query, RawQuery};
 use axum::headers::Cookie;
-use axum::http::header::{LOCATION, SET_COOKIE};
+use axum::http::header::{CONTENT_TYPE, ETAG, LOCATION, SET_COOKIE};
 use axum::http::{HeaderValue, Request, StatusCode};
 use axum::response::IntoResponse;
 use axum::{extract::State, routing::get, Router, Server, TypedHeader};
 use demostf_build::Asset;
 pub use error::Error;
+use hyper::header::CACHE_CONTROL;
 use hyperlocal::UnixServerExt;
+use include_dir::{include_dir, Dir};
 use maud::{Markup, Render};
 use sqlx::PgPool;
 use std::env::{args, var};
@@ -42,7 +44,6 @@ use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use steam_openid::SteamOpenId;
-use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span};
 use tracing_subscriber::{
@@ -65,6 +66,8 @@ struct LogoPng;
 #[derive(Asset)]
 #[asset(source = "images/logo.svg", url = "/images/logo.svg")]
 struct LogoSvg;
+
+static KILL_ICONS: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/images/kill_icons");
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -120,7 +123,7 @@ async fn main() -> Result<()> {
         .route("/viewer", get(viewer))
         .route("/viewer/:id", get(viewer))
         .route("/:id", get(demo))
-        .nest_service("/images", ServeDir::new("images"))
+        .route("/images/kill_icons/:icon", get(kill_icons))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request
@@ -385,4 +388,26 @@ async fn viewer(
 }
 async fn handler_404() -> impl IntoResponse {
     Error::NotFound
+}
+
+pub async fn kill_icons(path: Path<String>) -> impl IntoResponse {
+    let path = path.as_str();
+    match KILL_ICONS.get_file(path) {
+        Some(file) => (
+            [
+                (
+                    CONTENT_TYPE,
+                    HeaderValue::from_str(guess_mime(path)).unwrap(),
+                ),
+                (ETAG, HeaderValue::from_static("theseshouldbefullystatic")),
+                (
+                    CACHE_CONTROL,
+                    HeaderValue::from_static("public, max-age=2592000, immutable"),
+                ),
+            ],
+            file.contents(),
+        )
+            .into_response(),
+        None => StatusCode::NOT_FOUND.into_response(),
+    }
 }
