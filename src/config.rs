@@ -52,4 +52,5 @@ pub enum Listen {
 pub struct SiteConfig {
     pub url: String,
     pub api: String,
+    pub maps: String,
 }

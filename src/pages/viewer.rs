@@ -4,8 +4,9 @@ use demostf_build::Asset;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
-pub struct ViewerPage {
+pub struct ViewerPage<'a> {
     pub demo: Option<Demo>,
+    pub maps: &'a str,
 }
 
 #[derive(Asset)]
@@ -30,7 +31,7 @@ pub struct ViewerStyle;
 )]
 pub struct ParserWasm;
 
-impl Page for ViewerPage {
+impl Page for ViewerPage<'_> {
     fn title(&self) -> Cow<'static, str> {
         format!(
             "{} - demos.tf",
@@ -45,8 +46,9 @@ impl Page for ViewerPage {
     fn render(&self) -> Markup {
         let script = ViewerScript::url();
         let style_url = ViewerStyle::url();
+        let maps = self.maps;
         html! {
-            .viewer-page {
+            .viewer-page data-maps = (maps) {
                 @if let Some(demo) = self.demo.as_ref() {
                     input type = "hidden" name = "url" value = (demo.url) {}
                     progress.download min = "0" max = "100" value = "0" {}

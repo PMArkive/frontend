@@ -16,9 +16,11 @@ export interface MapRenderProps {
 	scale: number;
 }
 
+const map_root = document.querySelector('[data-maps]').getAttribute('data-maps');
+
 export function MapRender(props: MapRenderProps) {
 	const mapAlias = findMapAlias(props.header.map);
-	const image = `/images/leveloverview/dist/${mapAlias}.webp`;
+	const image = `${map_root}images/${mapAlias}.webp`;
 	const background = `url(${image})`;
 
 	return (

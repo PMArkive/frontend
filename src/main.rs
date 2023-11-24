@@ -55,6 +55,7 @@ struct App {
     connection: PgPool,
     openid: SteamOpenId,
     api: String,
+    maps: String,
     pub session_store: MemoryStore,
 }
 
@@ -85,6 +86,7 @@ async fn main() -> Result<()> {
         openid: SteamOpenId::new(&config.site.url, "/login/callback")
             .expect("invalid steam login url"),
         api: config.site.api,
+        maps: config.site.maps,
         session_store: session_store.clone(),
     });
 
@@ -373,7 +375,13 @@ async fn viewer(
     } else {
         None
     };
-    Ok(render(ViewerPage { demo }, session))
+    Ok(render(
+        ViewerPage {
+            demo,
+            maps: &app.maps,
+        },
+        session,
+    ))
 }
 async fn handler_404() -> impl IntoResponse {
     Error::NotFound
