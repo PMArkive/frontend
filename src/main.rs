@@ -45,6 +45,8 @@ use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use steam_openid::SteamOpenId;
+use tokio::signal;
+use tokio::signal::ctrl_c;
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span};
 use tracing_subscriber::{
@@ -157,12 +159,18 @@ async fn main() -> Result<()> {
         .fallback(handler_404)
         .with_state(state);
     let service = app.into_make_service();
+    let ctrl_c = async {
+        ctrl_c().await.expect("failed to install Ctrl+C handler");
+    };
 
     match config.listen {
         Listen::Tcp { address, port } => {
             let addr = SocketAddr::from((address, port));
             info!("listening on {}", addr);
-            Server::bind(&addr).serve(service).await?;
+            Server::bind(&addr)
+                .serve(service)
+                .with_graceful_shutdown(ctrl_c)
+                .await?;
         }
         Listen::Socket { path } => {
             info!("listening on {}", path.display());
@@ -172,7 +180,7 @@ async fn main() -> Result<()> {
             let socket = Server::bind_unix(&path)?;
             set_permissions(&path, Permissions::from_mode(0o666))?;
 
-            socket.serve(service).await?;
+            socket.serve(service).with_graceful_shutdown(ctrl_c).await?;
         }
     }
 

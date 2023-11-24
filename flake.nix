@@ -27,7 +27,7 @@
       pkgs = (import nixpkgs) {
         inherit system overlays;
       };
-      inherit (pkgs) lib callPackage;
+      inherit (pkgs) lib callPackage dockerTools;
 
       src = lib.sources.sourceByRegex ./. ["Cargo.*" "(src|build|images|script|style)(/.*)?" "sqlx-data.json"];
       nodeSrc = lib.sources.sourceByRegex ./. ["package.*"];
@@ -50,6 +50,24 @@
             ln -s ${node_modules}/node_modules .
           '';
           nativeBuildInputs = with pkgs; [pkg-config openssl];
+        };
+        docker = dockerTools.buildLayeredImage {
+          name = "demostf/frontend";
+          tag = "latest";
+          maxLayers = 5;
+          contents = [
+            frontend
+          ];
+          config = {
+            Cmd = ["frontend"];
+            ExposedPorts = {
+              "80/tcp" = {};
+            };
+            Env = [
+              "LISTEN_ADDRESS=0.0.0.0"
+              "LISTEN_PORT=80"
+            ];
+          };
         };
       };
       devShells.default = pkgs.mkShell {
