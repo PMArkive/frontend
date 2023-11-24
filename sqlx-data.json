@@ -1,0 +1,364 @@
+{
+  "db": "PostgreSQL",
+  "047f7ac22872178be671d3994baec9116658520f0ff83d09ae8321ac096b28de": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name!",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "team!: Team",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "class!: Class",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "kills",
+          "ordinal": 4,
+          "type_info": "Int4"
+        },
+        {
+          "name": "deaths",
+          "ordinal": 5,
+          "type_info": "Int4"
+        },
+        {
+          "name": "assists",
+          "ordinal": 6,
+          "type_info": "Int4"
+        },
+        {
+          "name": "steam_id!: SteamId",
+          "ordinal": 7,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "SELECT\n                    max(players.id) as \"id!\", max(players.name) as \"name!\", max(team) as \"team!: Team\", max(class) as \"class!: Class\",\n                    max(kills) as \"kills\", max(deaths) as \"deaths\", max(assists) as \"assists\", max(steamid) as \"steam_id!: SteamId\"\n                FROM players\n                INNER JOIN users ON user_id = users.id \n                WHERE demo_id = $1\n                GROUP BY user_id"
+  },
+  "05e9dfee9d5ee8ea3bd13d7433ba0ba39ed00ab0ffb0c3fc9021921382be00bd": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "map",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "red",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "blu",
+          "ordinal": 4,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "duration",
+          "ordinal": 5,
+          "type_info": "Int4"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 6,
+          "type_info": "Timestamp"
+        },
+        {
+          "name": "server",
+          "ordinal": 7,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "player_count",
+          "ordinal": 8,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT\n                    id, name, map, red, blu, duration, created_at, server, \"playerCount\" as player_count\n                FROM demos WHERE deleted_at IS NULL ORDER BY id DESC LIMIT 50"
+  },
+  "44fdd79c15ce83bff64db5558711a40d097ff41c029e096f29138a1d5bbc8762": {
+    "describe": {
+      "columns": [
+        {
+          "name": "token!",
+          "ordinal": 0,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "name!",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "SELECT\n                    token as \"token!\", name as \"name!\"\n                FROM users WHERE steamid = $1"
+  },
+  "4c62efff159fa311007f71db061e4eeb040c79977f0c452065d5361fb134b0d3": {
+    "describe": {
+      "columns": [
+        {
+          "name": "from",
+          "ordinal": 0,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "text",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "time",
+          "ordinal": 2,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "SELECT\n                    \"from\", text, time\n                FROM chat\n                WHERE demo_id = $1\n                ORDER BY time ASC"
+  },
+  "4d5444cde6681e6f5a537445c7c132bd3da6ee374fe9dcbaf478668a6f08214b": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Varchar",
+          "Varchar",
+          "Varchar"
+        ]
+      }
+    },
+    "query": "INSERT INTO users(steamid, name, avatar, token)\n                    VALUES($1, $2, $3, $4)"
+  },
+  "5073fab60c719e464b592393d94372067be0ea36e4a1d138646f496b8cad56c7": {
+    "describe": {
+      "columns": [
+        {
+          "name": "token!",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name!",
+          "ordinal": 1,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        true,
+        true
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "SELECT\n                token as \"token!\", name as \"name!\"\n            FROM users_named WHERE steamid = $1"
+  },
+  "68e8265e13596ad6de3e3d346b6d2fb62a68eda3e98f690e7e8d954627d8025c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "url",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "map",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "red",
+          "ordinal": 4,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "blu",
+          "ordinal": 5,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "uploader",
+          "ordinal": 6,
+          "type_info": "Int4"
+        },
+        {
+          "name": "duration",
+          "ordinal": 7,
+          "type_info": "Int4"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 8,
+          "type_info": "Timestamp"
+        },
+        {
+          "name": "score_red",
+          "ordinal": 9,
+          "type_info": "Int4"
+        },
+        {
+          "name": "score_blue",
+          "ordinal": 10,
+          "type_info": "Int4"
+        },
+        {
+          "name": "server",
+          "ordinal": 11,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "nick",
+          "ordinal": 12,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "player_count",
+          "ordinal": 13,
+          "type_info": "Int4"
+        },
+        {
+          "name": "uploader_name_preferred",
+          "ordinal": 14,
+          "type_info": "Text"
+        },
+        {
+          "name": "uploader_steam_id?: SteamId",
+          "ordinal": 15,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "uploader_name?",
+          "ordinal": 16,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "SELECT\n                demos.id, demos.name, url, map, red, blu, uploader, duration, demos.created_at,\n                \"scoreRed\" as score_red, \"scoreBlue\" as score_blue, server, nick,\n                \"playerCount\" as player_count,\n                users_named.name as uploader_name_preferred,\n                users.steamid as \"uploader_steam_id?: SteamId\",\n                users.name as \"uploader_name?\"\n            FROM demos\n            LEFT JOIN users_named ON uploader = users_named.id\n            LEFT JOIN users ON uploader = users.id\n            WHERE deleted_at IS NULL AND demos.id = $1"
+  },
+  "af217d7d86c606e4d76bd0c79a2551ed5d423b3900cb1d6d8b0fe3789414eb27": {
+    "describe": {
+      "columns": [
+        {
+          "name": "map!",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        true
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT\n            map as \"map!\"\n        FROM map_list\n        ORDER BY count DESC LIMIT 50"
+  }
+}

@@ -8,7 +8,7 @@ tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 serde = { version = "1.0.159", features = ["derive"] }
 toml = "0.7.3"
-sqlx = { version = "0.6.3", features = ["postgres", "time", "runtime-tokio-rustls"] }
+sqlx = { version = "0.6.3", features = ["postgres", "time", "runtime-tokio-rustls", "offline"] }
 sea-query = { version = "0.28.4", features = ["backend-postgres", "with-time", "derive"] }
 sea-query-binder = { version = "0.3.0", features = ["with-time", "sqlx-postgres"] }
 thiserror = "1.0.40"
