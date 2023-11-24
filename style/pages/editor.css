@@ -1,0 +1,5 @@
+@import 'edit/multislider.css';
+
+.edit-page .edit-disabled {
+    opacity: 0.5;
+}

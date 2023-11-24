@@ -17,6 +17,7 @@ use crate::fragments::demo_list::DemoList;
 use crate::pages::about::AboutPage;
 use crate::pages::api::ApiPage;
 use crate::pages::demo::{ClassIconsStyle, DemoPage};
+use crate::pages::edit::{EditWasm, EditWorkerScript, EditorPage, EditorScript, EditorStyle};
 use crate::pages::index::{DemoListScript, Index};
 use crate::pages::profile::Profile;
 use crate::pages::upload::{UploadPage, UploadScript};
@@ -111,6 +112,13 @@ async fn main() -> Result<()> {
             get(serve_asset::<ParseWorkerScript>),
         )
         .route(ParserWasm::route(), get(serve_asset::<ParserWasm>))
+        .route(EditorScript::route(), get(serve_asset::<EditorScript>))
+        .route(EditorStyle::route(), get(serve_asset::<EditorStyle>))
+        .route(
+            EditWorkerScript::route(),
+            get(serve_asset::<EditWorkerScript>),
+        )
+        .route(EditWasm::route(), get(serve_asset::<EditWasm>))
         .route(LogoPng::route(), get(serve_asset::<LogoPng>))
         .route(LogoSvg::route(), get(serve_asset::<LogoSvg>))
         .route("/fragments/demo-list", get(demo_list))
@@ -121,6 +129,7 @@ async fn main() -> Result<()> {
         .route("/logout", get(logout))
         .route("/upload", get(upload))
         .route("/viewer", get(viewer))
+        .route("/edit", get(edit))
         .route("/viewer/:id", get(viewer))
         .route("/:id", get(demo))
         .route("/images/kill_icons/:icon", get(kill_icons))
@@ -386,6 +395,11 @@ async fn viewer(
         session,
     ))
 }
+
+async fn edit(session: SessionData) -> Result<Markup> {
+    Ok(render(EditorPage, session))
+}
+
 async fn handler_404() -> impl IntoResponse {
     Error::NotFound
 }
