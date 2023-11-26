@@ -41,7 +41,7 @@ pub fn render<T: Page>(page: T, session: SessionData) -> Markup {
                     }
                     span { a href = "/about" { "about" } }
                     span { a href = "/viewer" { "viewer" } }
-                    span.beta { a href = "/editor" { "editor" } }
+                    span.beta { a href = "/edit" { "editor" } }
                     @if let SessionData::Authenticated(user) = session {
                         span.right { a href = "/logout" { "Logout" } }
                         span.right { a href = "/upload" { "Upload" } }
