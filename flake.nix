@@ -57,6 +57,7 @@
           maxLayers = 5;
           contents = [
             frontend
+            dockerTools.caCertificates
           ];
           config = {
             Cmd = ["frontend"];
