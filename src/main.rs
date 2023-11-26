@@ -59,6 +59,7 @@ struct App {
     openid: SteamOpenId,
     api: String,
     maps: String,
+    map_list: Vec<String>,
     pub session_store: MemoryStore,
 }
 
@@ -90,6 +91,7 @@ async fn main() -> Result<()> {
         .expect("no config file or env provided");
     let connection = config.database.connect().await?;
 
+    let map_list = map_list(&connection).await?.collect();
     let session_store = MemoryStore::new();
 
     let state = Arc::new(App {
@@ -98,6 +100,7 @@ async fn main() -> Result<()> {
             .expect("invalid steam login url"),
         api: config.site.api,
         maps: config.site.maps,
+        map_list,
         session_store: session_store.clone(),
     });
 
@@ -194,11 +197,10 @@ async fn index(
 ) -> Result<Markup> {
     let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
-    let maps: Vec<_> = map_list(&app.connection).await?.collect();
     Ok(render(
         Index {
             demos: &demos,
-            maps: &maps,
+            maps: &app.map_list,
             api: &app.api,
         },
         session,
@@ -345,7 +347,6 @@ async fn uploads(
     filter.uploader = Some(uploader.clone());
 
     let demos = ListDemo::list(&app.connection, filter).await?;
-    let maps: Vec<_> = map_list(&app.connection).await?.collect();
     let user = User::get(&app.connection, uploader)
         .await
         .map_err(|_| Error::NotFound)?;
@@ -353,7 +354,7 @@ async fn uploads(
         Uploads {
             user,
             demos: &demos,
-            maps: &maps,
+            maps: &app.map_list,
             api: &app.api,
         },
         session,
@@ -371,7 +372,6 @@ async fn profiles(
     filter.players.push(profile.clone());
 
     let demos = ListDemo::list(&app.connection, filter).await?;
-    let maps: Vec<_> = map_list(&app.connection).await?.collect();
     let user = User::get(&app.connection, profile)
         .await
         .map_err(|_| Error::NotFound)?;
@@ -379,7 +379,7 @@ async fn profiles(
         Profile {
             user,
             demos: &demos,
-            maps: &maps,
+            maps: &app.map_list,
             api: &app.api,
         },
         session,
