@@ -39,10 +39,10 @@ impl Page for EditorPage {
                 }
                 .dropzone role = "button" {
                     noscript {
-                        "Javascript is required to view a demo."
+                        "Javascript is required to edit a demo."
                     }
-                    span.text { "Drop files or click to view" }
-                    input type = "file" {}
+                    span.text.onlyscript { "Drop files or click to view" }
+                    input.onlyscript type = "file" {}
                 }
                 .placeholder {}
             }

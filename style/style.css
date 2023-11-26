@@ -230,3 +230,7 @@ p.page-note {
 table {
     line-height: 24px;
 }
+
+.onlyscript {
+    display:none;
+}

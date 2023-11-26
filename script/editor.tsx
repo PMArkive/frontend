@@ -5,6 +5,7 @@ import {count_ticks} from "./edit/tools";
 import {Editor} from "./edit/EditPage";
 
 ready(async () => {
+    document.querySelectorAll('.onlyscript').forEach(e => e.classList.remove('onlyscript'));
     const fileInput: HTMLInputElement | null = document.querySelector(`.dropzone input[type="file"]`);
     const drop_text = document.querySelector(`.dropzone .text`);
 

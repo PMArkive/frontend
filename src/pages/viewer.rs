@@ -57,11 +57,11 @@ impl Page for ViewerPage<'_> {
                         noscript {
                             "Javascript is required to view a demo."
                         }
-                        span.text { "Drop files or click to view" }
-                        input type = "file" {}
+                        span.text.onlyscript { "Drop files or click to view" }
+                        input.onlyscript type = "file" {}
                     }
                 }
-                progress.parse min = "0" max = "100" value = "0" {}
+                progress.parse.onlyscript min = "0" max = "100" value = "0" {}
             }
             script module src = (script) type = "text/javascript" {}
             link rel="stylesheet" type="text/css" href=(style_url);

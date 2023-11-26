@@ -6,6 +6,7 @@ import {render} from "solid-js/web";
 import {Analyser} from "./viewer/Analyse/Analyser";
 
 ready(async () => {
+    document.querySelectorAll('.onlyscript').forEach(e => e.classList.remove('onlyscript'));
     const fileInput: HTMLInputElement | null = document.querySelector(`.dropzone input[type="file"]`);
     const urlInput: HTMLInputElement | null = document.querySelector(`.viewer-page input[name="url"]`);
     const drop_text = document.querySelector(`.dropzone .text`);
