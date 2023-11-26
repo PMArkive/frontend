@@ -25,6 +25,7 @@ pub enum Class {
     Medic,
     Sniper,
     Spy,
+    #[sqlx(rename = "Unknown")]
     Unknown,
 }
 
