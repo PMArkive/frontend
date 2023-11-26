@@ -45,7 +45,6 @@ use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use steam_openid::SteamOpenId;
-use tokio::signal;
 use tokio::signal::ctrl_c;
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span};

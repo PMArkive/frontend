@@ -80,26 +80,14 @@ checksum = "8da52d66c7071e2e3fa2a1e5c6d088fec47b593032b254f5e980de8ea54454d6"
 
 [[package]]
 name = "ast_node"
-version = "0.9.2"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93f26ba4b3f1c2776bdacf6d0b96fce173155f2da6ace0202e39e7041ae33083"
+checksum = "c704e2f6ee1a98223f5a7629a6ef0f3decb3b552ed282889dc957edff98ce1e6"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "ast_node"
-version = "0.9.2"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
@@ -178,18 +166,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "better_scoped_tls"
-version = "0.1.0"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "scoped-tls",
-]
-
-[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
+
+[[package]]
+name = "bitflags"
+version = "2.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "327762f6e5a765692301e5bb513e0d9fef63be86bbc14528052b1cd3e6f03e07"
 
 [[package]]
 name = "block-buffer"
@@ -318,12 +304,6 @@ dependencies = [
  "termcolor",
  "unicode-width",
 ]
-
-[[package]]
-name = "const-fnv1a-hash"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32b13ea120a812beba79e34316b3942a857c86ec1593cb34f27bb28272ce2cca"
 
 [[package]]
 name = "const-str"
@@ -553,22 +533,22 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "base64 0.21.0",
- "const-fnv1a-hash",
+ "fnv",
  "jsx-dom-expressions",
  "lightningcss",
  "rand 0.8.5",
  "swc",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
  "swc_bundler",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
  "swc_core",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_codegen 0.137.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_loader 0.42.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_typescript 0.175.4 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
+ "swc_ecma_loader",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_typescript",
+ "swc_ecma_visit",
  "urlencoding",
 ]
 
@@ -704,20 +684,9 @@ version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1d449976075322384507443937df2f1d5577afbf4282f12a5a66ef29fa3e6307"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "from_variant"
-version = "0.1.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
@@ -912,7 +881,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a7d079e129b77477a49c5c4f1cfe9ce6c2c909ef52520693e8e811a714c7b20"
 dependencies = [
  "Inflector",
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -960,13 +929,13 @@ dependencies = [
 [[package]]
 name = "jsx-dom-expressions"
 version = "0.1.0"
-source = "git+https://github.com/icewind1991/swc-plugin-jsx-dom-expressions?branch=loader-browser-overwrite-old#97ec20c7db17ff40220d70e151e412035906221f"
+source = "git+https://github.com/icewind1991/swc-plugin-jsx-dom-expressions?branch=mixed-svg#56de4af8df415d0bdd4f578586e47c9db312502f"
 dependencies = [
  "html-escape",
  "serde",
  "serde_json",
  "string_cache",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
  "swc_core",
 ]
 
@@ -1061,7 +1030,7 @@ version = "1.0.0-alpha.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6338806873ab8053fa9aac727f603fdd2fe4d8bec192faab114183f8483c67f8"
 dependencies = [
- "bitflags",
+ "bitflags 1.3.2",
  "browserslist-rs 0.7.0",
  "const-str",
  "cssparser",
@@ -1354,7 +1323,7 @@ version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a215f11d4e3b505238167f6dbe47e7d809dcf452319506328d904d62c4eb8da5"
 dependencies = [
- "bitflags",
+ "bitflags 1.3.2",
  "cssparser",
  "fxhash",
  "log",
@@ -1529,6 +1498,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pmutil"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "52a40bc70c2c58040d2d8b167ba9a5ff59fc9dab7ad44771cfde3dcfde7a09c6"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.13",
+]
+
+[[package]]
 name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1542,15 +1522,15 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "preset_env_base"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c963ac17c08dfc36f01b7d2c4426e759ac1cbd181c2a9ed807f3dea5200b90e1"
+checksum = "b09a48d8ea8b031bde7755cdf6f87f7123a0cbefc36b0cd09cbb2de726594393"
 dependencies = [
  "ahash",
  "anyhow",
  "browserslist-rs 0.12.3",
  "dashmap",
- "from_variant 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "from_variant",
  "once_cell",
  "semver 1.0.17",
  "serde",
@@ -1762,7 +1742,7 @@ version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb5a58c1855b4b6819d59012155603f0b22ad30cad752600aadfcb695265519a"
 dependencies = [
- "bitflags",
+ "bitflags 1.3.2",
 ]
 
 [[package]]
@@ -1771,7 +1751,7 @@ version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "567664f262709473930a4bf9e51bf2ebf3348f2e748ccc50dea20646858f8f29"
 dependencies = [
- "bitflags",
+ "bitflags 1.3.2",
 ]
 
 [[package]]
@@ -1817,9 +1797,9 @@ dependencies = [
 
 [[package]]
 name = "rkyv"
-version = "0.7.40"
+version = "0.7.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c30f1d45d9aa61cbc8cd1eb87705470892289bb2d01943e7803b873a57404dc3"
+checksum = "21499ed91807f07ae081880aabb2ccc0235e9d88011867d984525e9a4c3cfa3e"
 dependencies = [
  "bytecheck",
  "hashbrown",
@@ -1831,9 +1811,9 @@ dependencies = [
 
 [[package]]
 name = "rkyv_derive"
-version = "0.7.40"
+version = "0.7.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff26ed6c7c4dfc2aa9480b86a60e3c7233543a270a680e10758a507c5a4ce476"
+checksum = "b2e06b915b5c230a17d7a736d1e2e63ee753c256a8614ef3f5147b13a4f5541d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1867,7 +1847,7 @@ version = "0.37.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85597d61f83914ddeba6a47b3b8ffe7365107221c2e557ed94426489fefb5f77"
 dependencies = [
- "bitflags",
+ "bitflags 1.3.2",
  "errno",
  "io-lifetimes",
  "libc",
@@ -2076,9 +2056,9 @@ dependencies = [
 
 [[package]]
 name = "st-map"
-version = "0.1.6"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc9c9f3a1df5f73b7392bd9773108fef41ad9126f0282412fd5904389f0c0c4f"
+checksum = "f09d891835f076b0d4a58dd4478fb54d47aa3da1f7a4c6e89ad6c791357ab5ed"
 dependencies = [
  "arrayvec",
  "static-map-macro",
@@ -2105,11 +2085,11 @@ dependencies = [
 
 [[package]]
 name = "static-map-macro"
-version = "0.2.3"
+version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "752564de9cd8937fdbc1c55d47ac391758c352ab3755607cc391b659fe87d56b"
+checksum = "b862d598fbc9f7085b017890e2e61433f501e7467f2c585323e1aa3c07ef8599"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -2153,22 +2133,10 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0090512bdfee4b56d82480d66c0fd8a6f53f0fe0f97e075e949b252acdd482e0"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "string_enum"
-version = "0.4.0"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
@@ -2225,9 +2193,9 @@ dependencies = [
 
 [[package]]
 name = "swc"
-version = "0.259.6"
+version = "0.260.48"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f6ce93b570b7c73b02f23893d02fb13136ae8c27ee96d2d5e57dce0fad8d329"
+checksum = "0c15f1fed422d787f292bbfda7025c3c8d8e9f8fdf5a1e584336d7da40be8314"
 dependencies = [
  "ahash",
  "anyhow",
@@ -2245,51 +2213,39 @@ dependencies = [
  "serde",
  "serde_json",
  "sourcemap",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
  "swc_cached",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_config 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_codegen 0.137.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_common",
+ "swc_config",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
  "swc_ecma_ext_transforms",
  "swc_ecma_lints",
- "swc_ecma_loader 0.42.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_loader",
  "swc_ecma_minifier",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_parser",
  "swc_ecma_preset_env",
  "swc_ecma_transforms",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_base",
  "swc_ecma_transforms_compat",
- "swc_ecma_transforms_optimization 0.185.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_error_reporters 0.14.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_optimization",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
+ "swc_error_reporters",
  "swc_node_comments",
  "swc_timer",
- "swc_visit 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_visit",
  "tracing",
  "url",
 ]
 
 [[package]]
 name = "swc_atoms"
-version = "0.4.43"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64593af3e0fbacd1b7147a0188f1fd77a2fc8ae3c2425bdb9528de255b9f452b"
+checksum = "5c17c2810ab8281e81fd88e7a4356efbf56481087bf801baa84e757316a4564d"
 dependencies = [
- "once_cell",
- "rustc-hash",
- "serde",
- "string_cache",
- "string_cache_codegen",
- "triomphe",
-]
-
-[[package]]
-name = "swc_atoms"
-version = "0.4.43"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
+ "bytecheck",
  "once_cell",
  "rkyv",
  "rustc-hash",
@@ -2301,8 +2257,9 @@ dependencies = [
 
 [[package]]
 name = "swc_bundler"
-version = "0.212.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.213.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "88afe25f2327258665c0b3373a959341689c10fb2ed2d0a9d700d4fdc4b705cb"
 dependencies = [
  "ahash",
  "anyhow",
@@ -2314,17 +2271,17 @@ dependencies = [
  "petgraph",
  "radix_fmt",
  "relative-path",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_codegen 0.137.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_loader 0.42.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_optimization 0.185.4 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_fast_graph 0.18.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
+ "swc_ecma_loader",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_optimization",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
+ "swc_fast_graph",
  "swc_graph_analyzer",
  "tracing",
 ]
@@ -2345,46 +2302,19 @@ dependencies = [
 
 [[package]]
 name = "swc_common"
-version = "0.30.5"
+version = "0.31.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53e95bf36e3e217431c50eab784c5601bf5f0ed3657aac6bda57748fa4d6103b"
-dependencies = [
- "ahash",
- "ast_node 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "better_scoped_tls 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cfg-if",
- "either",
- "from_variant 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "new_debug_unreachable",
- "num-bigint",
- "once_cell",
- "parking_lot",
- "rustc-hash",
- "serde",
- "siphasher",
- "sourcemap",
- "string_cache",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_eq_ignore_macros 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_visit 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
- "unicode-width",
- "url",
-]
-
-[[package]]
-name = "swc_common"
-version = "0.30.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+checksum = "5e727f62843d9383511b7844ec3c28a56e416331ec564af3e6d4aafa0190429d"
 dependencies = [
  "ahash",
  "anyhow",
- "ast_node 0.9.2 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "ast_node",
  "atty",
- "better_scoped_tls 0.1.0 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "better_scoped_tls",
+ "bytecheck",
  "cfg-if",
  "either",
- "from_variant 0.1.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "from_variant",
  "new_debug_unreachable",
  "num-bigint",
  "once_cell",
@@ -2395,9 +2325,9 @@ dependencies = [
  "siphasher",
  "sourcemap",
  "string_cache",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_eq_ignore_macros 0.1.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_visit 0.5.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_eq_ignore_macros",
+ "swc_visit",
  "termcolor",
  "tracing",
  "unicode-width",
@@ -2413,18 +2343,7 @@ dependencies = [
  "indexmap",
  "serde",
  "serde_json",
- "swc_config_macro 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_config"
-version = "0.1.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "indexmap",
- "serde",
- "serde_json",
- "swc_config_macro 0.1.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_config_macro",
 ]
 
 [[package]]
@@ -2433,38 +2352,27 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7dadb9998d4f5fc36ef558ed5a092579441579ee8c6fcce84a5228cca9df4004"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_config_macro"
-version = "0.1.1"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
 [[package]]
 name = "swc_core"
-version = "0.74.6"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.75.48"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "031078e8f701adc642563ffd36e671bc2e7b9144c62a100e7652cc5317fdeb51"
 dependencies = [
  "once_cell",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
  "swc_ecma_transforms_testing",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "swc_plugin",
  "swc_plugin_macro",
  "swc_plugin_proxy",
@@ -2473,42 +2381,28 @@ dependencies = [
 
 [[package]]
 name = "swc_ecma_ast"
-version = "0.102.5"
+version = "0.103.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6bc96ac4740ddd7e09baaa153b6cf74e62ed7436d674606c060ea01fd7c20cd0"
+checksum = "2cf9a2bea4d019564781b64ad9038a859b829f58ddb6e3ba5571292f5b5e0145"
 dependencies = [
- "bitflags",
- "is-macro",
- "num-bigint",
- "scoped-tls",
- "serde",
- "string_enum 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-id",
-]
-
-[[package]]
-name = "swc_ecma_ast"
-version = "0.102.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "bitflags",
+ "bitflags 2.4.1",
+ "bytecheck",
  "is-macro",
  "num-bigint",
  "rkyv",
  "scoped-tls",
- "string_enum 0.4.0 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "serde",
+ "string_enum",
+ "swc_atoms",
+ "swc_common",
  "unicode-id",
 ]
 
 [[package]]
 name = "swc_ecma_codegen"
-version = "0.137.6"
+version = "0.138.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75b1fc2f9d9a83e15ea27df387279c9f79c12eedeb58af29da663fda952600b1"
+checksum = "80be2cea85be7cf00d7c82b7238845c916168917ebfbffee41a42d8f59249a82"
 dependencies = [
  "memchr",
  "num-bigint",
@@ -2516,28 +2410,10 @@ dependencies = [
  "rustc-hash",
  "serde",
  "sourcemap",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_codegen_macros 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
-]
-
-[[package]]
-name = "swc_ecma_codegen"
-version = "0.137.6"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "memchr",
- "num-bigint",
- "once_cell",
- "rustc-hash",
- "serde",
- "sourcemap",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_codegen_macros 0.7.2 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_codegen_macros",
  "tracing",
 ]
 
@@ -2547,44 +2423,32 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf4ee0caee1018808d94ecd09490cb7affd3d504b19aa11c49238f5fc4b54901"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_ecma_codegen_macros"
-version = "0.7.2"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
 [[package]]
 name = "swc_ecma_ext_transforms"
-version = "0.101.8"
+version = "0.102.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "382bdecc616c216eaa7c66f7c359884bf1d4d4f114ba379564de7f4d70744eed"
+checksum = "4b92027e0033fa9af45779d8765b872599d45617fadf1f28d318caf9180f423e"
 dependencies = [
  "phf 0.10.1",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_lints"
-version = "0.80.1"
+version = "0.81.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10d6bdb3d15eaf8a19b72d1cb3f85e2ae77d526ce8599ce1cbc370d0e91e29fc"
+checksum = "36d25a81aaf4354a153dafdd32c5e7e7c4214ca85962f3ae7a1271e219e4c9d1"
 dependencies = [
  "ahash",
  "auto_impl",
@@ -2593,19 +2457,19 @@ dependencies = [
  "rayon",
  "regex",
  "serde",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_config 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_config",
+ "swc_ecma_ast",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_loader"
-version = "0.42.5"
+version = "0.43.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f07db9ffa757d71893e265c716307c3c9568ab85645c126e80e0d0ba7528aef5"
+checksum = "6c414e3f97521776589995a575b6187eeef2f67876569d3b61ab4542fbbf64e1"
 dependencies = [
  "ahash",
  "anyhow",
@@ -2619,35 +2483,15 @@ dependencies = [
  "serde",
  "serde_json",
  "swc_cached",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
-]
-
-[[package]]
-name = "swc_ecma_loader"
-version = "0.42.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "ahash",
- "anyhow",
- "dashmap",
- "lru",
- "normpath",
- "once_cell",
- "parking_lot",
- "path-clean",
- "pathdiff",
- "serde",
- "serde_json",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_minifier"
-version = "0.179.5"
+version = "0.180.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1175dc1992992d12a09457113b5d76a756d1aa43fc2f9eeff4563ea8aa2f8b4"
+checksum = "c31a23d92fe2b9a90788a02a16dcc37e3f215f5193bd3ccfe5f9e4df768e3af7"
 dependencies = [
  "ahash",
  "arrayvec",
@@ -2662,27 +2506,27 @@ dependencies = [
  "ryu-js",
  "serde",
  "serde_json",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
  "swc_cached",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_config 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_codegen 0.137.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_optimization 0.185.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_common",
+ "swc_config",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_optimization",
  "swc_ecma_usage_analyzer",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "swc_timer",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_parser"
-version = "0.132.6"
+version = "0.133.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b9b8409efcb3c70fe31fb3203406ab73b3c3cd279aa2005887d1918049b2a38e"
+checksum = "1265e024029484ecc950bbb8ef347e0a874e3165c52ab64bfda1052d3e53c8e5"
 dependencies = [
  "either",
  "lexical",
@@ -2691,37 +2535,18 @@ dependencies = [
  "smallvec",
  "smartstring",
  "stacker",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
- "typed-arena",
-]
-
-[[package]]
-name = "swc_ecma_parser"
-version = "0.132.6"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "either",
- "lexical",
- "num-bigint",
- "serde",
- "smallvec",
- "smartstring",
- "stacker",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
  "tracing",
  "typed-arena",
 ]
 
 [[package]]
 name = "swc_ecma_preset_env"
-version = "0.193.4"
+version = "0.194.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b78558a5654eb0fd2f42bb80d5ec674dd6578a846cc4ab6aab02dc3e814926b"
+checksum = "04f4a1ee1f6d9e842cf75934e64de6265fceed096d21ee34e357ba680aa190b6"
 dependencies = [
  "ahash",
  "anyhow",
@@ -2733,19 +2558,20 @@ dependencies = [
  "serde",
  "serde_json",
  "st-map",
- "string_enum 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "string_enum",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
  "swc_ecma_transforms",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_testing"
 version = "0.20.8"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "25198f96ef93c4bb4cc8fa13c9b22a018cf2c0c7609ee91f7abc7968ebc2e2df"
 dependencies = [
  "anyhow",
  "hex",
@@ -2755,88 +2581,66 @@ dependencies = [
 
 [[package]]
 name = "swc_ecma_transforms"
-version = "0.216.4"
+version = "0.217.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1eb5ce7ddd675cf38308f7c9456170c9250debaf0fbceac45470d74aa850d844"
+checksum = "db1f1fdd64d24ceb70845fd4d9da54bf4d9080004ac7ff71062a2fb1e9fda041"
 dependencies = [
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
  "swc_ecma_transforms_compat",
  "swc_ecma_transforms_module",
- "swc_ecma_transforms_optimization 0.185.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_optimization",
  "swc_ecma_transforms_proposal",
- "swc_ecma_transforms_react 0.171.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_typescript 0.175.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_react",
+ "swc_ecma_transforms_typescript",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_base"
-version = "0.125.1"
+version = "0.126.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72b87668640fe6d63ecabaae1805534d1445ff63382ab8961cd623ccdeb1bfbc"
+checksum = "c22d3d99910583edf07db0b22b4cd3517abe86729f7dd219db29961e327d8519"
 dependencies = [
- "better_scoped_tls 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "bitflags",
+ "better_scoped_tls",
+ "bitflags 2.4.1",
  "indexmap",
  "once_cell",
  "phf 0.10.1",
  "rustc-hash",
  "serde",
  "smallvec",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
-]
-
-[[package]]
-name = "swc_ecma_transforms_base"
-version = "0.125.1"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "better_scoped_tls 0.1.0 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "bitflags",
- "indexmap",
- "once_cell",
- "phf 0.10.1",
- "rustc-hash",
- "serde",
- "smallvec",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_parser",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_classes"
-version = "0.114.1"
+version = "0.115.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "910df98b5306c191dc7165447493f0ed199283fb1e1395b0691c1ab533979092"
+checksum = "a3099f594b34a1259f0a3d271fd0a94e78d4b7845ea77d6a34dd60cc7f3d7c88"
 dependencies = [
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_compat"
-version = "0.151.3"
+version = "0.152.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c428703ef286721a8634fdd2801bab1c7b2744c30b6eacde9c266fa43fc98d55"
+checksum = "c61bbc2081bd8cc48c3b7d506a129c7c1342d8d1f8712592646fdc6fdcaf4940"
 dependencies = [
  "ahash",
  "arrayvec",
@@ -2845,16 +2649,16 @@ dependencies = [
  "num-bigint",
  "serde",
  "smallvec",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_config 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_config",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
  "swc_ecma_transforms_classes",
- "swc_ecma_transforms_macros 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_trace_macro 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_macros",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
+ "swc_trace_macro",
  "tracing",
 ]
 
@@ -2864,58 +2668,46 @@ version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "984d5ac69b681fc5438f9abf82b0fda34fe04e119bc75f8213b7e01128c7c9a2"
 dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_ecma_transforms_macros"
-version = "0.5.1"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_module"
-version = "0.168.3"
+version = "0.169.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b25b66039df07f8cf2a5d86f4feb0ff8eea27b2625de3bd8cc06b15266052409"
+checksum = "2da85e11b32cab2ba04c680f17fd110ab9dafdaa0e235768914f641cf4b10c87"
 dependencies = [
  "Inflector",
  "ahash",
  "anyhow",
- "bitflags",
+ "bitflags 2.4.1",
  "indexmap",
  "is-macro",
  "path-clean",
  "pathdiff",
  "regex",
  "serde",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
  "swc_cached",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_loader 0.42.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_loader",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_optimization"
-version = "0.185.4"
+version = "0.186.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "544681f98bd62c45e8fc091cfbf8425fb02fd458a4ad81b9557be8bb41e5db37"
+checksum = "51e0e9be4e1efd241b5581563fa54e6b38de925db02b1bd039803bf9632a1a58"
 dependencies = [
  "ahash",
  "dashmap",
@@ -2924,117 +2716,68 @@ dependencies = [
  "petgraph",
  "rustc-hash",
  "serde_json",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_macros 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_fast_graph 0.18.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
-]
-
-[[package]]
-name = "swc_ecma_transforms_optimization"
-version = "0.185.4"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "ahash",
- "dashmap",
- "indexmap",
- "once_cell",
- "petgraph",
- "rustc-hash",
- "serde_json",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_macros 0.5.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_fast_graph 0.18.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_macros",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
+ "swc_fast_graph",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_proposal"
-version = "0.159.3"
+version = "0.160.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c033651e300bd2c9488a37f503cc20ae87e2943594c31bbded3df823e3977f4a"
+checksum = "0f454f43d096b5ac53f5c6f8718ff3b5c3e227e7011272522841d602ea6c9b7a"
 dependencies = [
  "either",
  "rustc-hash",
  "serde",
  "smallvec",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
  "swc_ecma_transforms_classes",
- "swc_ecma_transforms_macros 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_ecma_transforms_macros",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_react"
-version = "0.171.3"
+version = "0.172.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e285d9a9a69d680d2159e5de46f3494e1fbe8d7d1d3299f330835dd955a968ec"
+checksum = "125b6708b342d042cfd62c2b05119d7f8089855baad310c2954274ac22773c44"
 dependencies = [
  "ahash",
  "base64 0.13.1",
  "dashmap",
  "indexmap",
  "once_cell",
- "regex",
  "serde",
  "sha-1",
- "string_enum 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_config 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_parser 0.132.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_macros 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_ecma_transforms_react"
-version = "0.171.3"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "ahash",
- "base64 0.13.1",
- "dashmap",
- "indexmap",
- "once_cell",
- "regex",
- "serde",
- "sha-1",
- "string_enum 0.4.0 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_config 0.1.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_macros 0.5.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "string_enum",
+ "swc_atoms",
+ "swc_common",
+ "swc_config",
+ "swc_ecma_ast",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_macros",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_testing"
-version = "0.128.2"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.129.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "732bdc12a52e0eb057f15210fbbde5b89f5a21fbaa802e59af85d54fdb41827f"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -3044,126 +2787,81 @@ dependencies = [
  "serde_json",
  "sha-1",
  "sourcemap",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_codegen 0.137.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_parser 0.132.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
+ "swc_ecma_parser",
  "swc_ecma_testing",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_ecma_transforms_base",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "tempfile",
  "testing",
 ]
 
 [[package]]
 name = "swc_ecma_transforms_typescript"
-version = "0.175.4"
+version = "0.176.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfead3c26e81dd4b7c567c13e465270a81c6b50e70307b7a424528dfa6d8368b"
+checksum = "e454e3ff9a7fcb80cabe573c741dfde93aacc03a2a0fd1578f5c61da71e26543"
 dependencies = [
  "serde",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_base 0.125.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_transforms_react 0.171.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_ecma_transforms_typescript"
-version = "0.175.4"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "serde",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_base 0.125.1 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_transforms_react 0.171.3 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_utils 0.115.8 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_react",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
 ]
 
 [[package]]
 name = "swc_ecma_usage_analyzer"
-version = "0.11.8"
+version = "0.12.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1873aa9055b43c5e0f84e91f21ceebbc7a5069f15cdabf57dd5965de1c6355d"
+checksum = "d1c01b218026bd01c6f1242686b6aa3b24a8f3748626a113e5cece1cf49fd2f7"
 dependencies = [
  "ahash",
  "indexmap",
  "rustc-hash",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_utils 0.115.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_utils",
+ "swc_ecma_visit",
  "swc_timer",
  "tracing",
 ]
 
 [[package]]
 name = "swc_ecma_utils"
-version = "0.115.8"
+version = "0.116.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "077231ec8a3423b1b5dea4e6e220f7681315acca80494624b71717cf39d3ae64"
+checksum = "4d0d9e6c2c4cdb90eb2d9a1b0963d190e706b8846dcb54bb66d06be6c669c256"
 dependencies = [
  "indexmap",
  "num_cpus",
  "once_cell",
  "rustc-hash",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_visit 0.88.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
- "unicode-id",
-]
-
-[[package]]
-name = "swc_ecma_utils"
-version = "0.115.8"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "indexmap",
- "num_cpus",
- "once_cell",
- "rustc-hash",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_visit 0.88.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_visit",
  "tracing",
  "unicode-id",
 ]
 
 [[package]]
 name = "swc_ecma_visit"
-version = "0.88.5"
+version = "0.89.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "67210c9d3bc4cdf6a1b2c69cb4ec77660a37e55e883c5ed9f8bc0e801758334b"
+checksum = "d212dd6c58b496ecd880b0c1bd2de65a6c4004cb891423bfffa0068fcf5be9de"
 dependencies = [
  "num-bigint",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_ecma_ast 0.102.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_visit 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing",
-]
-
-[[package]]
-name = "swc_ecma_visit"
-version = "0.88.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "num-bigint",
- "swc_atoms 0.4.43 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_visit 0.5.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_atoms",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_visit",
  "tracing",
 ]
 
@@ -3173,18 +2871,7 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c20468634668c2bbab581947bb8c75c97158d5a6959f4ba33df20983b20b4f6"
 dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_eq_ignore_macros"
-version = "0.1.1"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -3192,61 +2879,39 @@ dependencies = [
 
 [[package]]
 name = "swc_error_reporters"
-version = "0.14.5"
+version = "0.15.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fbe286e2eb813c957935bea1076cdb6d3cc9d6455dd29a0f3a283b7739bf4dc5"
+checksum = "4ad32cbdb779bcae0f5f178347fd2d984ccc8393ea0dbcde351be0a8a2370ea2"
 dependencies = [
  "anyhow",
  "miette",
  "once_cell",
  "parking_lot",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_error_reporters"
-version = "0.14.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "anyhow",
- "miette",
- "once_cell",
- "parking_lot",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
 ]
 
 [[package]]
 name = "swc_fast_graph"
-version = "0.18.5"
+version = "0.19.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29c9081b942cd9760525ef23f4c932cb2b314c5f06f3d8b25f7bb8a1449ff7ec"
+checksum = "3c41b07bb4ffefcc70272a2f1e3d4e1e1b6b5bd505b68040e28f79ad8d35ec9f"
 dependencies = [
  "indexmap",
  "petgraph",
  "rustc-hash",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_fast_graph"
-version = "0.18.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "indexmap",
- "petgraph",
- "rustc-hash",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
 ]
 
 [[package]]
 name = "swc_graph_analyzer"
-version = "0.19.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.20.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d1bdd413c31882cb8f54e70dcba20e175c36a499456f4f739feb92cc2c012034"
 dependencies = [
  "ahash",
  "auto_impl",
  "petgraph",
- "swc_fast_graph 0.18.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_fast_graph",
  "tracing",
 ]
 
@@ -3256,18 +2921,7 @@ version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3e582c3e3c2269238524923781df5be49e011dbe29cf7683a2215d600a562ea6"
 dependencies = [
- "pmutil",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_macros_common"
-version = "0.3.7"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -3275,52 +2929,55 @@ dependencies = [
 
 [[package]]
 name = "swc_node_comments"
-version = "0.17.5"
+version = "0.18.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de34c439673ee576ca4a8e12fcf7db5afcd1e043a9e5fd3fd61f3a818d94a1d3"
+checksum = "80423f9f4f85218ca177c702b54b9fb66c3bd707430ccd78b581a8fdb2d8022f"
 dependencies = [
  "ahash",
  "dashmap",
- "swc_atoms 0.4.43 (registry+https://github.com/rust-lang/crates.io-index)",
- "swc_common 0.30.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "swc_atoms",
+ "swc_common",
 ]
 
 [[package]]
 name = "swc_plugin"
 version = "0.90.0"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca5df720531bfbd7ceb1139319c39c20c446abfb8f7e0eb47b104205a71152b4"
 dependencies = [
  "once_cell",
 ]
 
 [[package]]
 name = "swc_plugin_macro"
-version = "0.9.11"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.9.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "785309d342a69df4c929ee59e14e36889ca832f1d2a3c1d03c47c93126c72dbc"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.109",
+ "syn 2.0.13",
 ]
 
 [[package]]
 name = "swc_plugin_proxy"
-version = "0.31.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.32.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0cfbe89b626e8ef1554a948c8596891ba44c8dafd8a3c37e8a6a456b701566a9"
 dependencies = [
- "better_scoped_tls 0.1.0 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "better_scoped_tls",
  "rkyv",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_ecma_ast 0.102.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_trace_macro 0.1.2 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_trace_macro",
  "tracing",
 ]
 
 [[package]]
 name = "swc_timer"
-version = "0.18.5"
+version = "0.19.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df35c994e168cc29726934e9d6d70e2baeb278293ab9d592f7d1b1a312b1c0fc"
+checksum = "1cc8582db551c7e879fdd1939123eb02915c4e06510a5bfd44c3cc3e1a4957b8"
 dependencies = [
  "tracing",
 ]
@@ -3337,32 +2994,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "swc_trace_macro"
-version = "0.1.2"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
 name = "swc_visit"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d1d5999f23421c8e21a0f2bc53a0b9e8244f3b421de89471561af2fbe40b9cca"
 dependencies = [
  "either",
- "swc_visit_macros 0.5.6 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "swc_visit"
-version = "0.5.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "either",
- "swc_visit_macros 0.5.6 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_visit_macros",
 ]
 
 [[package]]
@@ -3372,23 +3010,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebeed7eb0f545f48ad30f5aab314e5208b735bcea1d1464f26e20f06db904989"
 dependencies = [
  "Inflector",
- "pmutil",
+ "pmutil 0.5.3",
  "proc-macro2",
  "quote",
- "swc_macros_common 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "swc_visit_macros"
-version = "0.5.6"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
-dependencies = [
- "Inflector",
- "pmutil",
- "proc-macro2",
- "quote",
- "swc_macros_common 0.3.7 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_macros_common",
  "syn 1.0.109",
 ]
 
@@ -3448,8 +3073,9 @@ dependencies = [
 
 [[package]]
 name = "testing"
-version = "0.32.5"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.33.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f8aa132535a499b7d18cbf3a0ec31e7b66a496c118fec6a6e9ccdb42eeffe25"
 dependencies = [
  "ansi_term",
  "difference",
@@ -3457,8 +3083,8 @@ dependencies = [
  "pretty_assertions",
  "regex",
  "serde_json",
- "swc_common 0.30.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
- "swc_error_reporters 0.14.5 (git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old)",
+ "swc_common",
+ "swc_error_reporters",
  "testing_macros",
  "tracing",
  "tracing-subscriber",
@@ -3466,18 +3092,19 @@ dependencies = [
 
 [[package]]
 name = "testing_macros"
-version = "0.2.9"
-source = "git+https://github.com/icewind1991/swc?branch=loader-browser-overwrite-old#0c49a8f37437de788426060aa4bd689919408911"
+version = "0.2.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1f390ac254ba29b41d9d044e327e626756952a56a20be6add636c77a2645cef"
 dependencies = [
  "anyhow",
  "glob",
  "once_cell",
- "pmutil",
+ "pmutil 0.6.1",
  "proc-macro2",
  "quote",
  "regex",
  "relative-path",
- "syn 1.0.109",
+ "syn 2.0.13",
 ]
 
 [[package]]
