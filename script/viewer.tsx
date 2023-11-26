@@ -4,8 +4,10 @@ import {download} from "./download";
 import {AsyncParser} from "./viewer/Analyse/Data/AsyncParser";
 import {render} from "solid-js/web";
 import {Analyser} from "./viewer/Analyse/Analyser";
+import {loadMapData} from "./viewer/Analyse/MapBoundries";
 
 ready(async () => {
+    let mapPromise = loadMapData();
     document.querySelectorAll('.onlyscript').forEach(e => e.classList.remove('onlyscript'));
     const fileInput: HTMLInputElement | null = document.querySelector(`.dropzone input[type="file"]`);
     const urlInput: HTMLInputElement | null = document.querySelector(`.viewer-page input[name="url"]`);
@@ -22,6 +24,7 @@ ready(async () => {
 
             if (header.type === "HL2DEMO" && header.game === "tf") {
                 drop_text.textContent = "Parsing...";
+                await mapPromise;
                 parse(data, parseProgress, false);
             } else {
                 drop_text.textContent = "Malformed demo or not a TF2 demo";
@@ -31,6 +34,7 @@ ready(async () => {
         const url = urlInput.value;
         console.log(url);
         const data = await download(url, (progress) => downloadProgress.value = progress);
+        await mapPromise;
         parse(data, parseProgress, true);
     }
 })

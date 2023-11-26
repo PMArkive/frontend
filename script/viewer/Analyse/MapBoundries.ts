@@ -1,7 +1,18 @@
-import {mapBoundaries} from './boundaries';
+let mapBoundaries = {};
 
-mapBoundaries['koth_viaduct'] = mapBoundaries['koth_product_rc8'];
-mapBoundaries['cp_prolands'] = mapBoundaries['cp_badlands'];
+
+export const loadMapData = async () => {
+	if (Object.keys(mapBoundaries).length > 0) {
+		return;
+	}
+	const map_root = document.querySelector('[data-maps]').getAttribute('data-maps');
+	const res = await fetch(`${map_root}boundaries.json`);
+
+	mapBoundaries = await res.json();
+
+	mapBoundaries['koth_viaduct'] = mapBoundaries['koth_product_rc8'];
+	mapBoundaries['cp_prolands'] = mapBoundaries['cp_badlands'];
+}
 
 const mapAliases = new Map<string, string>([
 	['cp_prolands', 'cp_badlands']
