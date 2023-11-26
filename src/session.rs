@@ -11,6 +11,7 @@ use tracing::debug;
 
 pub const COOKIE_NAME: &str = "tf_session";
 
+#[derive(Debug)]
 pub enum SessionData {
     Authenticated(User),
     UnAuthenticated,
@@ -58,9 +59,7 @@ where
             session_cookie.unwrap()
         );
         // continue to decode the session cookie
-        let Ok(Some(session)) = store
-            .load_session(session_cookie.unwrap().to_owned())
-            .await else {
+        let Ok(Some(session)) = store.load_session(session_cookie.unwrap().to_owned()).await else {
             return Ok(Self::UnAuthenticated);
         };
         let Some(user) = session.get::<User>("user") else {

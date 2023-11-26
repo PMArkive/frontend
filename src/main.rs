@@ -245,6 +245,7 @@ async fn login_callback(
         error!("{e:?}");
         Error::SteamAuth
     })?;
+    info!(steam_id, "received steam login callback");
     let steam_id = SteamId::new(steam_id);
     let user = User::get(&app.connection, steam_id).await?;
     let mut session = Session::new();

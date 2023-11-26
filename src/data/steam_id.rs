@@ -1,6 +1,6 @@
 use maud::Render;
 use sea_query::Value;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{de::Error, Deserialize, Deserializer, Serialize};
 use sqlx::database::HasValueRef;
 use sqlx::error::BoxDynError;
 use sqlx::{Database, Decode, Type};
@@ -89,13 +89,23 @@ where
     }
 }
 
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum RawSteamId<'a> {
+    String(&'a str),
+    Num(u64),
+}
+
 impl<'de> Deserialize<'de> for SteamId {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let str = <&str as Deserialize>::deserialize(deserializer)?;
-        Ok(str.parse().unwrap())
+        let raw = RawSteamId::deserialize(deserializer)?;
+        match raw {
+            RawSteamId::String(str) => str.parse().map_err(D::Error::custom),
+            RawSteamId::Num(num) => Ok(SteamId::Id(num)),
+        }
     }
 }
 
