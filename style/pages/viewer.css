@@ -12,3 +12,7 @@ progress {
     width: 100%;
     display: block;
 }
+
+body > footer {
+    display: none;
+}
