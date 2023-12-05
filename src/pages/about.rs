@@ -54,7 +54,7 @@ impl Page for AboutPage {
                     }
                     p {
                         "Any issue, bug or suggestion can be reported over on "
-                        a href = "https://github.com/demostf/demos.tf/issues" { "Github" }
+                        a href = "https://github.com/demostf/frontend/issues" { "Github" }
                         "."
                     }
                 }
