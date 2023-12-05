@@ -31,7 +31,7 @@ impl Render for PluginSection<'_> {
                     }
                     li {
                         "Make sure the "
-                        a href = "https://github.com/spiretf/docker-comp-server/raw/master/curl.ext.so" { "cURL extension" }
+                        a href = "https://github.com/sapphonie/SM-neocurl-ext" { "cURL extension" }
                         " is installed on your server."
                     }
                     li {
