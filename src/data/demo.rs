@@ -6,7 +6,7 @@ use crate::Result;
 use maud::Render;
 use sea_query::extension::postgres::PgExpr;
 use sea_query::{
-    Alias, Expr, Func, Order, PostgresQueryBuilder, Query, SelectStatement, SimpleExpr,
+    Alias, Expr, Func, JoinType, Order, PostgresQueryBuilder, Query, SelectStatement, SimpleExpr,
 };
 use sea_query_binder::SqlxBinder;
 use serde::{Deserialize, Deserializer};
@@ -83,7 +83,8 @@ impl Demo {
             id as i32
         )
         .fetch_optional(connection)
-        .await? else {
+        .await?
+        else {
             return Ok(None);
         };
 
@@ -429,11 +430,14 @@ impl Filter {
         }
         if let Some(uploader) = &self.uploader {
             query
-                .inner_join(
+                .join_as(
+                    JoinType::InnerJoin,
                     Users::Table,
-                    Expr::col((Users::Table, Users::Id)).equals((Demos::Table, Demos::Uploader)),
+                    Alias::new("upload_user"),
+                    Expr::col((Alias::new("upload_user"), Users::Id))
+                        .equals((Demos::Table, Demos::Uploader)),
                 )
-                .and_where(Expr::col(Users::SteamId).eq(uploader));
+                .and_where(Expr::col((Alias::new("upload_user"), Users::SteamId)).eq(uploader));
         }
         if !self.players.is_empty() && self.players.len() < 19 {
             let mut player = self.players.iter();
@@ -452,7 +456,7 @@ impl Filter {
                     Users::Table,
                     Expr::col((Users::Table, Users::Id)).equals((Players::Table, Players::UserId)),
                 )
-                .and_where(Expr::col(Users::SteamId).is_in(self.players.clone()));
+                .and_where(Expr::col((Users::Table, Users::SteamId)).is_in(self.players.clone()));
             query.group_by_col((Demos::Table, Players::Id));
             query.and_having(
                 Expr::cust(&players_arr)
