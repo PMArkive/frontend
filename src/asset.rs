@@ -26,21 +26,22 @@ pub async fn serve_asset<A: Asset>() -> impl IntoResponse {
 
 pub fn guess_mime(path: &str) -> &'static str {
     if path.ends_with("svg") {
-        return "image/svg+xml";
+        "image/svg+xml"
     } else if path.ends_with("png") {
-        return "image/png";
+        "image/png"
     } else if path.ends_with("webp") {
-        return "image/webp";
+        "image/webp"
     } else if path.ends_with("css") {
-        return "text/css";
+        "text/css"
     } else if path.ends_with("wasm") {
-        return "application/wasm";
+        "application/wasm"
     } else if path.ends_with("js")
         || path.ends_with("ts")
         || path.ends_with("jsx")
         || path.ends_with("tsx")
     {
-        return "text/javascript";
+        "text/javascript"
+    } else {
+        "text/plain"
     }
-    return "text/plain";
 }

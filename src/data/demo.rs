@@ -400,7 +400,7 @@ where
     if s.is_empty() {
         return Ok(Vec::new());
     }
-    Ok(s.split(",").map(T::from_str).flatten().collect())
+    Ok(s.split(',').flat_map(T::from_str).collect())
 }
 
 impl Filter {
@@ -445,7 +445,7 @@ impl Filter {
             for player in player {
                 write!(&mut players_arr, r#",'{}'"#, player).unwrap();
             }
-            players_arr.push_str("]");
+            players_arr.push(']');
 
             query
                 .inner_join(

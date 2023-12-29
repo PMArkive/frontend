@@ -16,7 +16,7 @@ pub struct Uploads<'a> {
 
 impl<'a> Uploads<'a> {
     fn map_list(&self) -> impl Render + 'a {
-        MapList(&self.maps)
+        MapList(self.maps)
     }
     fn demo_list(&self) -> impl Render + 'a {
         DemoList { demos: self.demos }

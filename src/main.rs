@@ -82,8 +82,7 @@ async fn main() -> Result<()> {
         .expect("Failed to init tracing");
 
     let config = args()
-        .skip(1)
-        .next()
+        .nth(1)
         .as_deref()
         .map(Config::load)
         .transpose()?
@@ -291,7 +290,7 @@ async fn logout(
 ) -> impl IntoResponse {
     if let Some(session_cookie) = cookie.as_deref().and_then(|cookie| cookie.get(COOKIE_NAME)) {
         if let Ok(Some(cookie)) = app.session_store.load_session(session_cookie.into()).await {
-            let _ = app.session_store.destroy_session(cookie);
+            let _ = app.session_store.destroy_session(cookie).await;
         }
     }
     (

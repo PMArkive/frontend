@@ -17,7 +17,7 @@ pub struct DemoListScript;
 
 impl<'a> Index<'a> {
     fn map_list(&self) -> impl Render + 'a {
-        MapList(&self.maps)
+        MapList(self.maps)
     }
     fn demo_list(&self) -> impl Render + 'a {
         DemoList { demos: self.demos }
@@ -61,9 +61,9 @@ impl Render for MapList<'_> {
         let mut first = true;
         for map in self.0 {
             if !first {
-                buffer.push_str(",");
+                buffer.push(',');
             }
-            buffer.push_str(&map);
+            buffer.push_str(map);
             first = false;
         }
     }

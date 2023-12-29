@@ -44,7 +44,7 @@ impl Render for PluginSection<'_> {
                         code { "/tf/addons/sourcemod/plugins/" }
                         " on your server."
                     }
-                    @if let None = self.key {
+                    @if self.key.is_none() {
                         li {
                             "Login to retrieve your api-key."
                         }
