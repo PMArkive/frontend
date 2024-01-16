@@ -1,0 +1,118 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                demos.id, demos.name, url, map, red, blu, uploader, duration, demos.created_at,\n                \"scoreRed\" as score_red, \"scoreBlue\" as score_blue, server, nick,\n                \"playerCount\" as player_count,\n                users_named.name as uploader_name_preferred,\n                users.steamid as \"uploader_steam_id?: SteamId\",\n                users.name as \"uploader_name?\"\n            FROM demos\n            LEFT JOIN users_named ON uploader = users_named.id\n            LEFT JOIN users ON uploader = users.id\n            WHERE deleted_at IS NULL AND demos.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "url",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "map",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "red",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "blu",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "uploader",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 7,
+        "name": "duration",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 9,
+        "name": "score_red",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "score_blue",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "server",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 12,
+        "name": "nick",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 13,
+        "name": "player_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 14,
+        "name": "uploader_name_preferred",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 15,
+        "name": "uploader_steam_id?: SteamId",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 16,
+        "name": "uploader_name?",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "68e8265e13596ad6de3e3d346b6d2fb62a68eda3e98f690e7e8d954627d8025c"
+}

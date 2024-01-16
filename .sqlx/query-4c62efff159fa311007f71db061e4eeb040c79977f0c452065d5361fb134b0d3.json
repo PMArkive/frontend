@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                    \"from\", text, time\n                FROM chat\n                WHERE demo_id = $1\n                ORDER BY time ASC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "from",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "text",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "time",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "4c62efff159fa311007f71db061e4eeb040c79977f0c452065d5361fb134b0d3"
+}

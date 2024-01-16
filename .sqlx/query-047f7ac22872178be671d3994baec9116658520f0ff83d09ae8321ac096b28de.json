@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                    max(players.id) as \"id!\", max(players.name) as \"name!\", max(team) as \"team!: Team\", max(class) as \"class!: Class\",\n                    max(kills) as \"kills\", max(deaths) as \"deaths\", max(assists) as \"assists\", max(steamid) as \"steam_id!: SteamId\"\n                FROM players\n                INNER JOIN users ON user_id = users.id \n                WHERE demo_id = $1\n                GROUP BY user_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "team!: Team",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "class!: Class",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "kills",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "deaths",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "assists",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 7,
+        "name": "steam_id!: SteamId",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "047f7ac22872178be671d3994baec9116658520f0ff83d09ae8321ac096b28de"
+}

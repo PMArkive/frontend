@@ -7,10 +7,10 @@ edition = "2021"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 serde = { version = "1.0.159", features = ["derive"] }
-toml = "0.7.3"
-sqlx = { version = "0.6.3", features = ["postgres", "time", "runtime-tokio-rustls", "offline"] }
-sea-query = { version = "0.28.4", features = ["backend-postgres", "with-time", "derive"] }
-sea-query-binder = { version = "0.3.0", features = ["with-time", "sqlx-postgres"] }
+toml = "0.8.8"
+sqlx = { version = "0.7.3", features = ["postgres", "time", "runtime-tokio-rustls"] }
+sea-query = { version = "0.30.7", features = ["backend-postgres", "with-time", "derive"] }
+sea-query-binder = { version = "0.5.0", features = ["with-time", "sqlx-postgres"] }
 thiserror = "1.0.40"
 tokio = { version = "1.27.0", features = ["full"] }
 config = { version = "0.13.3", features = ["toml"] }
@@ -21,13 +21,13 @@ hyper = "0.14.25"
 hyperlocal = "0.8.0"
 tower-http = { version = "0.4.0", features = ["trace", "fs"] }
 steamid-ng = "1.0.0"
-itertools = "0.10.5"
+itertools = "0.12.0"
 const-fnv1a-hash = "1.1.0"
 const_base = "0.2.0"
 const-str = "0.5.4"
 steam-openid = "0.2.0"
 async-session = "3.0.0"
-quick-xml = { version = "0.28.1", features = ["serialize"] }
+quick-xml = { version = "0.31.0", features = ["serialize"] }
 reqwest = "0.11.16"
 rand = "0.8.5"
 demostf-build = { path = "./build", version = "*" }

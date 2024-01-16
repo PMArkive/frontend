@@ -1,7 +1,7 @@
 {
   inputs = {
     utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "nixpkgs/release-22.11";
+    nixpkgs.url = "nixpkgs/release-23.11";
     rust-overlay.url = "github:oxalica/rust-overlay";
     naersk.url = "github:nix-community/naersk";
     naersk.inputs.nixpkgs.follows = "nixpkgs";
@@ -21,17 +21,18 @@
       overlays = [
         (import rust-overlay)
         (final: prev: {
-          npmlock2nix = import npmlock2nix {pkgs = final;};
+          npmlock2nix = final.callPackage npmlock2nix {};
         })
       ];
       pkgs = (import nixpkgs) {
         inherit system overlays;
       };
       inherit (pkgs) lib callPackage dockerTools;
+      inherit (lib.sources) sourceByRegex;
 
-      src = lib.sources.sourceByRegex ./. ["Cargo.*" "(src|build|images|script|style)(/.*)?" "sqlx-data.json"];
-      nodeSrc = lib.sources.sourceByRegex ./. ["package.*"];
-      toolchain = pkgs.rust-bin.nightly."2023-03-31".default;
+      src = sourceByRegex ./. ["Cargo.*" "(src|build|images|script|style|.sqlx)(/.*)?"];
+      nodeSrc = sourceByRegex ./. ["package.*"];
+      toolchain = pkgs.rust-bin.nightly."2024-01-16".default;
 
       naersk' = callPackage naersk {
         rustc = toolchain;
@@ -41,6 +42,7 @@
       packages = rec {
         node_modules = pkgs.npmlock2nix.v2.node_modules {
           src = nodeSrc;
+          nodejs = pkgs.nodejs_20;
         };
         frontend = naersk'.buildPackage {
           pname = "demostf-frontend";

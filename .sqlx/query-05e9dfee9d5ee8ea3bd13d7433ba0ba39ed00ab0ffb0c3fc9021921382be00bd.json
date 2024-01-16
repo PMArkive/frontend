@@ -1,0 +1,68 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                    id, name, map, red, blu, duration, created_at, server, \"playerCount\" as player_count\n                FROM demos WHERE deleted_at IS NULL ORDER BY id DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "map",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "red",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "blu",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "duration",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 7,
+        "name": "server",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "player_count",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "05e9dfee9d5ee8ea3bd13d7433ba0ba39ed00ab0ffb0c3fc9021921382be00bd"
+}
