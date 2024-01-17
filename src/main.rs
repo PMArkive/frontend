@@ -13,6 +13,7 @@ use crate::data::demo::{Demo, Filter, ListDemo};
 use crate::data::maps::map_list;
 use crate::data::steam_id::SteamId;
 use crate::data::user::User;
+use crate::error::SetupError;
 use crate::fragments::demo_list::DemoList;
 use crate::pages::about::AboutPage;
 use crate::pages::api::ApiPage;
@@ -38,6 +39,9 @@ use hyper::header::CACHE_CONTROL;
 use hyperlocal::UnixServerExt;
 use include_dir::{include_dir, Dir};
 use maud::{Markup, Render};
+use opentelemetry::KeyValue;
+use opentelemetry_otlp::WithExportConfig;
+use opentelemetry_sdk::{runtime, trace, Resource};
 use sqlx::PgPool;
 use std::env::{args, var};
 use std::fs::{remove_file, set_permissions, Permissions};
@@ -72,6 +76,46 @@ struct LogoSvg;
 
 static KILL_ICONS: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/images/kill_icons");
 
+fn setup() -> Result<Config, SetupError> {
+    let open_telemetry = if let Some(tracing_endpoint) = var("TRACING_ENDPOINT")
+        .ok()
+        .filter(|endpoint| !endpoint.is_empty())
+    {
+        let otlp_exporter = opentelemetry_otlp::new_exporter()
+            .tonic()
+            .with_endpoint(tracing_endpoint);
+        let tracer =
+            opentelemetry_otlp::new_pipeline()
+                .tracing()
+                .with_exporter(otlp_exporter)
+                .with_trace_config(trace::config().with_resource(Resource::new(vec![
+                    KeyValue::new("service.name", "drops.tf"),
+                ])))
+                .install_batch(runtime::Tokio)?;
+        Some(tracing_opentelemetry::layer().with_tracer(tracer))
+    } else {
+        None
+    };
+
+    tracing_subscriber::registry()
+        .with(EnvFilter::new(var("RUST_LOG").unwrap_or_else(|_| {
+            "demostf_frontend=debug,tower_http=debug,sqlx=debug".into()
+        })))
+        .with(open_telemetry)
+        .with(tracing_subscriber::fmt::layer().with_filter(EnvFilter::new(
+            var("RUST_LOG").unwrap_or_else(|_| "warn,demostf_frontend=info".into()),
+        )))
+        .try_init()?;
+
+    args()
+        .nth(1)
+        .as_deref()
+        .map(Config::load)
+        .transpose()?
+        .or_else(Config::env)
+        .ok_or(SetupError::NoConfigProvided)
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::registry()
@@ -81,13 +125,7 @@ async fn main() -> Result<()> {
         .try_init()
         .expect("Failed to init tracing");
 
-    let config = args()
-        .nth(1)
-        .as_deref()
-        .map(Config::load)
-        .transpose()?
-        .or_else(Config::env)
-        .expect("no config file or env provided");
+    let config = setup()?;
     let connection = config.database.connect().await?;
 
     let map_list = map_list(&connection).await?.collect();

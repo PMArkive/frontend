@@ -1,3 +1,4 @@
+use crate::error::SetupError;
 use crate::Result;
 use config::{Environment, File};
 use serde::Deserialize;
@@ -15,7 +16,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn load(path: &str) -> Result<Self> {
+    pub fn load(path: &str) -> Result<Self, SetupError> {
         let s = config::Config::builder()
             .add_source(File::with_name(path))
             .add_source(Environment::default().separator("_"))
