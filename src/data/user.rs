@@ -3,14 +3,25 @@ use crate::{Error, Result};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use reqwest::get;
+use serde::ser::SerializeStruct;
 use serde::{Deserialize, Serialize};
 use sqlx::{query, query_as, Executor, Postgres};
+use std::fmt::{Debug, Formatter};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct User {
     pub steam_id: SteamId,
     pub name: String,
     pub token: String,
+}
+
+impl Debug for User {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("User")
+            .field("steam_id", &self.steam_id)
+            .field("name", &self.name)
+            .finish_non_exhaustive()
+    }
 }
 
 struct UserResult {
