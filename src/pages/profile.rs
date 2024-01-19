@@ -1,23 +1,22 @@
 use crate::data::demo::ListDemo;
+use crate::data::maps::MapList;
 use crate::data::user::User;
 use crate::fragments::demo_list::DemoList;
-use crate::pages::index::{DemoListScript, MapList};
+use crate::pages::index::DemoListScript;
 use crate::pages::Page;
 use demostf_build::Asset;
 use maud::{html, Markup, Render};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct Profile<'a> {
     pub user: User,
     pub demos: &'a [ListDemo],
-    pub maps: &'a [String],
+    pub maps: &'a MapList,
     pub api: &'a str,
 }
 
 impl<'a> Profile<'a> {
-    fn map_list(&self) -> impl Render + 'a {
-        MapList(self.maps)
-    }
     fn demo_list(&self) -> impl Render + 'a {
         DemoList { demos: self.demos }
     }
@@ -35,7 +34,7 @@ impl Page for Profile<'_> {
                 "Demos with "
                 (self.user.name)
             }
-            #filter-bar data-maps = (self.map_list()) data-api-base = (self.api) {}
+            #filter-bar data-maps = (self.maps) data-api-base = (self.api) {}
             table.demolist {
                 thead {
                     tr {

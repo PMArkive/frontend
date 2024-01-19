@@ -1,5 +1,5 @@
 use crate::data::steam_id::SteamId;
-use crate::data::user::User;
+use crate::data::user::{Token, User};
 use crate::{App, Result};
 use async_session::SessionStore as _;
 use axum::extract::{FromRef, FromRequestParts};
@@ -18,7 +18,7 @@ pub enum SessionData {
 }
 
 impl SessionData {
-    pub fn token(&self) -> Option<String> {
+    pub fn token(&self) -> Option<Token> {
         match self {
             SessionData::Authenticated(user) => Some(user.token.clone()),
             SessionData::UnAuthenticated => None,

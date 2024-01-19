@@ -10,7 +10,7 @@ use crate::asset::{guess_mime, serve_asset};
 pub use crate::config::Config;
 use crate::config::Listen;
 use crate::data::demo::{Demo, Filter, ListDemo};
-use crate::data::maps::map_list;
+use crate::data::maps::{map_list, MapList};
 use crate::data::steam_id::SteamId;
 use crate::data::user::User;
 use crate::error::SetupError;
@@ -52,7 +52,7 @@ use steam_openid::SteamOpenId;
 use tokio::signal::ctrl_c;
 use tonic::transport::{ClientTlsConfig, Identity};
 use tower_http::trace::TraceLayer;
-use tracing::{error, info, info_span};
+use tracing::{error, info, info_span, instrument};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer};
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
@@ -62,7 +62,7 @@ struct App {
     openid: SteamOpenId,
     api: String,
     maps: String,
-    map_list: Vec<String>,
+    map_list: MapList,
     pub session_store: MemoryStore,
 }
 
@@ -137,7 +137,7 @@ async fn main() -> Result<()> {
     let config = setup()?;
     let connection = config.database.connect().await?;
 
-    let map_list = map_list(&connection).await?.collect();
+    let map_list = map_list(&connection).await?;
     let session_store = MemoryStore::new();
 
     let state = Arc::new(App {
@@ -235,7 +235,7 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-#[axum::debug_handler]
+#[instrument(skip(app))]
 async fn index(
     State(app): State<Arc<App>>,
     session: SessionData,
@@ -253,6 +253,7 @@ async fn index(
     ))
 }
 
+#[instrument(skip(_app))]
 async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     Ok(render(
         AboutPage {
@@ -262,6 +263,7 @@ async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Mar
     ))
 }
 
+#[instrument(skip(app))]
 async fn api(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     Ok(render(
         ApiPage {
@@ -272,6 +274,7 @@ async fn api(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup
     ))
 }
 
+#[instrument(skip(app))]
 async fn demo(
     State(app): State<Arc<App>>,
     Path(id): Path<String>,
@@ -321,6 +324,7 @@ async fn login_callback(
     ))
 }
 
+#[instrument(skip(app))]
 async fn login(State(app): State<Arc<App>>) -> impl IntoResponse {
     (
         StatusCode::FOUND,
@@ -331,6 +335,7 @@ async fn login(State(app): State<Arc<App>>) -> impl IntoResponse {
     )
 }
 
+#[instrument(skip(app, cookie))]
 async fn logout(
     State(app): State<Arc<App>>,
     cookie: Option<TypedHeader<Cookie>>,
@@ -356,11 +361,12 @@ async fn logout(
     )
 }
 
+#[instrument(skip(app))]
 async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoResponse {
     if let Some(token) = session.token() {
         render(
             UploadPage {
-                key: token.as_str(),
+                key: &token,
                 api: app.api.as_str(),
             },
             session,
@@ -375,14 +381,14 @@ async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoR
     }
 }
 
-#[axum::debug_handler]
+#[instrument(skip(app))]
 async fn demo_list(State(app): State<Arc<App>>, filter: Option<Query<Filter>>) -> Result<Markup> {
     let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
     Ok(DemoList { demos: &demos }.render())
 }
 
-#[axum::debug_handler]
+#[instrument(skip(app))]
 async fn uploads(
     State(app): State<Arc<App>>,
     session: SessionData,
@@ -407,7 +413,7 @@ async fn uploads(
     ))
 }
 
-#[axum::debug_handler]
+#[instrument(skip(app))]
 async fn profiles(
     State(app): State<Arc<App>>,
     session: SessionData,
@@ -432,6 +438,7 @@ async fn profiles(
     ))
 }
 
+#[instrument(skip(app))]
 async fn viewer(
     State(app): State<Arc<App>>,
     id: Option<Path<String>>,

@@ -4,6 +4,7 @@ use maud::{html, Markup};
 use std::borrow::Cow;
 use std::fmt::Display;
 
+#[derive(Debug)]
 pub struct ApiPage<'a> {
     pub api_base: &'a str,
     pub steam_id: SteamId,

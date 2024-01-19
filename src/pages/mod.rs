@@ -13,6 +13,7 @@ use crate::session::SessionData;
 use demostf_build::Asset;
 use maud::{html, Markup, DOCTYPE};
 use std::borrow::Cow;
+use std::fmt::Debug;
 use tracing::instrument;
 
 pub trait Page {
@@ -25,7 +26,7 @@ pub trait Page {
 pub struct GlobalStyle;
 
 #[instrument]
-pub fn render<T: Page>(page: T, session: SessionData) -> Markup {
+pub fn render<T: Page + Debug>(page: T, session: SessionData) -> Markup {
     let style_url = GlobalStyle::url();
     html! {
         (DOCTYPE)

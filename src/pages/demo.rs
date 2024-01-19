@@ -10,6 +10,7 @@ use std::borrow::Cow;
 #[asset(source = "style/pages/class-icons.css", url = "/class-icons.css")]
 pub struct ClassIconsStyle;
 
+#[derive(Debug)]
 pub struct DemoPage {
     pub demo: Demo,
 }

@@ -1,16 +1,18 @@
+use crate::data::user::Token;
 use crate::pages::plugin_section::PluginSection;
 use crate::pages::Page;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct AboutPage {
-    pub key: Option<String>,
+    pub key: Option<Token>,
 }
 
 impl AboutPage {
     pub fn plugin_section(&self) -> PluginSection {
         PluginSection {
-            key: self.key.as_deref(),
+            key: self.key.as_ref(),
         }
     }
 }

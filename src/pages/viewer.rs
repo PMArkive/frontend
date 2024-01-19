@@ -4,6 +4,7 @@ use demostf_build::Asset;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct ViewerPage<'a> {
     pub demo: Option<Demo>,
     pub maps: &'a str,

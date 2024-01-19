@@ -3,6 +3,7 @@ use demostf_build::Asset;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct EditorPage;
 
 #[derive(Asset)]

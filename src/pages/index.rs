@@ -1,13 +1,15 @@
 use crate::data::demo::ListDemo;
+use crate::data::maps::MapList;
 use crate::fragments::demo_list::DemoList;
 use crate::pages::Page;
 use demostf_build::Asset;
 use maud::{html, Markup, Render};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct Index<'a> {
     pub demos: &'a [ListDemo],
-    pub maps: &'a [String],
+    pub maps: &'a MapList,
     pub api: &'a str,
 }
 
@@ -16,9 +18,6 @@ pub struct Index<'a> {
 pub struct DemoListScript;
 
 impl<'a> Index<'a> {
-    fn map_list(&self) -> impl Render + 'a {
-        MapList(self.maps)
-    }
     fn demo_list(&self) -> impl Render + 'a {
         DemoList { demos: self.demos }
     }
@@ -33,7 +32,7 @@ impl Page for Index<'_> {
         let script = DemoListScript::url();
         html! {
             h1 { "Demos" }
-            #filter-bar data-maps = (self.map_list()) data-api-base = (self.api) {}
+            #filter-bar data-maps = (self.maps) data-api-base = (self.api) {}
             table.demolist {
                 thead {
                     tr {
@@ -50,21 +49,6 @@ impl Page for Index<'_> {
             }
             button #load-more { "Load more.." }
             script defer src = (script) type = "text/javascript" {}
-        }
-    }
-}
-
-pub struct MapList<'a>(pub &'a [String]);
-
-impl Render for MapList<'_> {
-    fn render_to(&self, buffer: &mut String) {
-        let mut first = true;
-        for map in self.0 {
-            if !first {
-                buffer.push(',');
-            }
-            buffer.push_str(map);
-            first = false;
         }
     }
 }

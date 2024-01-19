@@ -1,26 +1,39 @@
 use crate::data::steam_id::SteamId;
 use crate::{Error, Result};
+use maud::Render;
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use reqwest::get;
-use serde::ser::SerializeStruct;
 use serde::{Deserialize, Serialize};
 use sqlx::{query, query_as, Executor, Postgres};
 use std::fmt::{Debug, Formatter};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct User {
     pub steam_id: SteamId,
     pub name: String,
-    pub token: String,
+    pub token: Token,
 }
 
-impl Debug for User {
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct Token(String);
+
+impl Debug for Token {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("User")
-            .field("steam_id", &self.steam_id)
-            .field("name", &self.name)
-            .finish_non_exhaustive()
+        f.write_str("redacted")
+    }
+}
+
+impl Token {
+    pub fn new(token: String) -> Self {
+        Token(token)
+    }
+}
+
+impl Render for Token {
+    fn render_to(&self, buffer: &mut String) {
+        self.0.render_to(buffer)
     }
 }
 
@@ -59,7 +72,7 @@ impl User {
         if let Some(user) = user {
             Ok(User {
                 steam_id,
-                token: user.token,
+                token: Token::new(user.token),
                 name: user.name,
             })
         } else {
@@ -82,7 +95,7 @@ impl User {
             .await?;
             Ok(User {
                 steam_id,
-                token,
+                token: Token::new(token),
                 name: profile.name,
             })
         }

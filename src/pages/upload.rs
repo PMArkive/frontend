@@ -1,11 +1,13 @@
+use crate::data::user::Token;
 use crate::pages::plugin_section::PluginSection;
 use crate::pages::Page;
 use demostf_build::Asset;
 use maud::{html, Markup};
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct UploadPage<'a> {
-    pub key: &'a str,
+    pub key: &'a Token,
     pub api: &'a str,
 }
 

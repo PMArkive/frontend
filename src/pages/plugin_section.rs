@@ -1,7 +1,9 @@
+use crate::data::user::Token;
 use maud::{html, Markup, Render};
 
+#[derive(Debug)]
 pub struct PluginSection<'a> {
-    pub key: Option<&'a str>,
+    pub key: Option<&'a Token>,
 }
 
 impl Render for PluginSection<'_> {

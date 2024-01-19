@@ -12,7 +12,7 @@ use sea_query_binder::SqlxBinder;
 use serde::{Deserialize, Deserializer};
 use sqlx::{query_as, Executor, FromRow, Postgres};
 use std::borrow::Cow;
-use std::fmt::Write;
+use std::fmt::{Debug, Formatter, Write};
 use std::ops::Range;
 use std::str::FromStr;
 use time::format_description::well_known::Iso8601;
@@ -39,6 +39,14 @@ pub struct Demo {
     pub player_count: i32,
     pub players: Vec<Player>,
     pub chat: Vec<Chat>,
+}
+
+impl Debug for Demo {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Demo")
+            .field("id", &self.id)
+            .finish_non_exhaustive()
+    }
 }
 
 impl Demo {
@@ -150,7 +158,7 @@ impl Render for ViewerUrl {
     }
 }
 
-#[derive(Debug, FromRow)]
+#[derive(FromRow)]
 pub struct ListDemo {
     pub id: i32,
     pub name: String,
@@ -161,6 +169,14 @@ pub struct ListDemo {
     pub created_at: PrimitiveDateTime,
     pub server: String,
     pub player_count: i32,
+}
+
+impl Debug for ListDemo {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ListDemo")
+            .field("id", &self.id)
+            .finish_non_exhaustive()
+    }
 }
 
 impl ListDemo {
