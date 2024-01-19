@@ -36,6 +36,8 @@ pub enum SetupError {
     TracingSubscriber(#[from] TryInitError),
     #[error(transparent)]
     Config(#[from] ConfigError),
+    #[error("{0}")]
+    Other(String),
 }
 
 impl IntoResponse for Error {

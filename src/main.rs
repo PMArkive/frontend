@@ -44,17 +44,16 @@ use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::{runtime, trace, Resource};
 use sqlx::PgPool;
 use std::env::{args, var};
-use std::fs::{remove_file, set_permissions, Permissions};
+use std::fs::{read, remove_file, set_permissions, Permissions};
 use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use steam_openid::SteamOpenId;
 use tokio::signal::ctrl_c;
+use tonic::transport::{ClientTlsConfig, Identity};
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span};
-use tracing_subscriber::{
-    fmt::layer, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer,
-};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer};
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
 
@@ -77,19 +76,42 @@ struct LogoSvg;
 static KILL_ICONS: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/images/kill_icons");
 
 fn setup() -> Result<Config, SetupError> {
-    let open_telemetry = if let Some(tracing_endpoint) = var("TRACING_ENDPOINT")
-        .ok()
-        .filter(|endpoint| !endpoint.is_empty())
+    let config = args()
+        .nth(1)
+        .as_deref()
+        .map(Config::load)
+        .transpose()?
+        .or_else(Config::env)
+        .ok_or(SetupError::NoConfigProvided)?;
+
+    let open_telemetry = if let Some(tracing_cfg) = config
+        .tracing
+        .as_ref()
+        .filter(|tracing_cfg| !tracing_cfg.endpoint.is_empty())
     {
-        let otlp_exporter = opentelemetry_otlp::new_exporter()
+        let mut otlp_exporter = opentelemetry_otlp::new_exporter()
             .tonic()
-            .with_endpoint(tracing_endpoint);
+            .with_endpoint(&tracing_cfg.endpoint);
+
+        if let Some(tracing_ident) = tracing_cfg.tls.as_ref().map(|tracing_tls_cfg| {
+            let key = read(&tracing_tls_cfg.key_file).map_err(|_| {
+                SetupError::Other(format!("failed to open {}", tracing_tls_cfg.key_file))
+            })?;
+            let cert = read(&tracing_tls_cfg.cert_file).map_err(|_| {
+                SetupError::Other(format!("failed to open {}", tracing_tls_cfg.cert_file))
+            })?;
+            Result::<_, SetupError>::Ok(Identity::from_pem(cert, key))
+        }) {
+            let tls_config = ClientTlsConfig::new().identity(tracing_ident?);
+            otlp_exporter = otlp_exporter.with_tls_config(tls_config);
+        }
+
         let tracer =
             opentelemetry_otlp::new_pipeline()
                 .tracing()
                 .with_exporter(otlp_exporter)
                 .with_trace_config(trace::config().with_resource(Resource::new(vec![
-                    KeyValue::new("service.name", "drops.tf"),
+                    KeyValue::new("service.name", "demos.tf"),
                 ])))
                 .install_batch(runtime::Tokio)?;
         Some(tracing_opentelemetry::layer().with_tracer(tracer))
@@ -107,24 +129,11 @@ fn setup() -> Result<Config, SetupError> {
         )))
         .try_init()?;
 
-    args()
-        .nth(1)
-        .as_deref()
-        .map(Config::load)
-        .transpose()?
-        .or_else(Config::env)
-        .ok_or(SetupError::NoConfigProvided)
+    Ok(config)
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    tracing_subscriber::registry()
-        .with(layer().with_filter(EnvFilter::new(
-            var("RUST_LOG").unwrap_or_else(|_| "warn,frontend=info".into()),
-        )))
-        .try_init()
-        .expect("Failed to init tracing");
-
     let config = setup()?;
     let connection = config.database.connect().await?;
 

@@ -13,6 +13,8 @@ pub struct Config {
     pub listen: Listen,
     pub database: DbConfig,
     pub site: SiteConfig,
+    #[serde(default)]
+    pub tracing: Option<TracingConfig>,
 }
 
 impl Config {
@@ -88,4 +90,17 @@ fn default_api() -> String {
 
 fn default_maps() -> String {
     "https://maps.demos.tf/".into()
+}
+
+#[derive(Debug, Deserialize)]
+pub struct TracingConfig {
+    pub endpoint: String,
+    #[serde(default)]
+    pub tls: Option<TracingTlsConfig>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct TracingTlsConfig {
+    pub cert_file: String,
+    pub key_file: String,
 }
