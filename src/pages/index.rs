@@ -1,14 +1,13 @@
-use crate::data::demo::ListDemo;
 use crate::data::maps::MapList;
 use crate::fragments::demo_list::DemoList;
 use crate::pages::Page;
 use demostf_build::Asset;
-use maud::{html, Markup, Render};
+use maud::{html, Markup};
 use std::borrow::Cow;
 
 #[derive(Debug)]
 pub struct Index<'a> {
-    pub demos: &'a [ListDemo],
+    pub demos: DemoList<'a>,
     pub maps: &'a MapList,
     pub api: &'a str,
 }
@@ -16,12 +15,6 @@ pub struct Index<'a> {
 #[derive(Asset)]
 #[asset(source = "script/demo_list.js", url = "/demo_list.js")]
 pub struct DemoListScript;
-
-impl<'a> Index<'a> {
-    fn demo_list(&self) -> impl Render + 'a {
-        DemoList { demos: self.demos }
-    }
-}
 
 impl Page for Index<'_> {
     fn title(&self) -> Cow<'static, str> {
@@ -44,7 +37,7 @@ impl Page for Index<'_> {
                     }
                 }
                 tbody {
-                    (self.demo_list())
+                    (self.demos)
                 }
             }
             button #load-more { "Load more.." }

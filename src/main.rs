@@ -245,7 +245,7 @@ async fn index(
     let demos = ListDemo::list(&app.connection, filter).await?;
     Ok(render(
         Index {
-            demos: &demos,
+            demos: DemoList::new(&demos),
             maps: &app.map_list,
             api: &app.api,
         },
@@ -405,7 +405,7 @@ async fn uploads(
     Ok(render(
         Uploads {
             user,
-            demos: &demos,
+            demos: DemoList::new(&demos),
             maps: &app.map_list,
             api: &app.api,
         },
@@ -430,7 +430,7 @@ async fn profiles(
     Ok(render(
         Profile {
             user,
-            demos: &demos,
+            demos: DemoList::new(&demos),
             maps: &app.map_list,
             api: &app.api,
         },

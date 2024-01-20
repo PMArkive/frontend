@@ -1,8 +1,23 @@
 use crate::data::demo::ListDemo;
 use maud::{html, Markup, Render};
+use std::fmt::{Debug, Formatter};
 
 pub struct DemoList<'a> {
     pub demos: &'a [ListDemo],
+}
+
+impl<'a> DemoList<'a> {
+    pub fn new(demos: &'a [ListDemo]) -> Self {
+        DemoList { demos }
+    }
+}
+
+impl Debug for DemoList<'_> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_list()
+            .entries(self.demos.iter().map(|d| d.id))
+            .finish()
+    }
 }
 
 impl Render for DemoList<'_> {
