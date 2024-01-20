@@ -456,29 +456,41 @@ impl Filter {
                 .and_where(Expr::col((Alias::new("upload_user"), Users::SteamId)).eq(uploader));
         }
         if !self.players.is_empty() && self.players.len() < 19 {
-            let mut player = self.players.iter();
-            let mut players_arr = format!("array['{}'", player.next().unwrap());
-            for player in player {
-                write!(&mut players_arr, r#",'{}'"#, player).unwrap();
-            }
-            players_arr.push(']');
+            if self.players.len() == 1 {
+                let player = &self.players[0];
+                query
+                    .inner_join(
+                        Players::Table,
+                        Expr::col((Demos::Table, Demos::Id))
+                            .equals((Players::Table, Players::DemoId)),
+                    )
+                    .and_where(Expr::col((Players::Table, Players::SteamId)).eq(player));
+            } else {
+                let mut player = self.players.iter();
+                let mut players_arr = format!("array['{}'", player.next().unwrap());
+                for player in player {
+                    write!(&mut players_arr, r#",'{}'"#, player).unwrap();
+                }
+                players_arr.push(']');
 
-            query
-                .inner_join(
-                    Players::Table,
-                    Expr::col((Demos::Table, Demos::Id)).equals((Players::Table, Players::DemoId)),
-                )
-                .inner_join(
-                    Users::Table,
-                    Expr::col((Users::Table, Users::Id)).equals((Players::Table, Players::UserId)),
-                )
-                .and_where(Expr::col((Users::Table, Users::SteamId)).is_in(self.players.clone()));
-            query.group_by_col((Demos::Table, Players::Id));
-            query.and_having(
-                Expr::cust(&players_arr)
-                    .cast_as(Alias::new("varchar[]"))
-                    .contained(Func::cust(ArrayAgg).arg(Expr::col((Users::Table, Users::SteamId)))),
-            );
+                query
+                    .inner_join(
+                        Players::Table,
+                        Expr::col((Demos::Table, Demos::Id))
+                            .equals((Players::Table, Players::DemoId)),
+                    )
+                    .and_where(
+                        Expr::col((Players::Table, Players::SteamId)).is_in(self.players.clone()),
+                    );
+                query.group_by_col((Demos::Table, Players::Id));
+                query.and_having(
+                    Expr::cust(&players_arr)
+                        .cast_as(Alias::new("text[]"))
+                        .contained(
+                            Func::cust(ArrayAgg).arg(Expr::col((Players::Table, Players::SteamId))),
+                        ),
+                );
+            }
         }
     }
 }

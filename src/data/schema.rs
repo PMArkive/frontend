@@ -91,6 +91,8 @@ pub enum Players {
     Assists,
     #[iden = "deaths"]
     Deaths,
+    #[iden = "steam_id"]
+    SteamId,
 }
 
 #[allow(dead_code)]
