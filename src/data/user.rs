@@ -7,6 +7,7 @@ use reqwest::get;
 use serde::{Deserialize, Serialize};
 use sqlx::{query, query_as, Executor, Postgres};
 use std::fmt::{Debug, Formatter};
+use tracing::instrument;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
@@ -43,6 +44,7 @@ struct UserResult {
 }
 
 impl User {
+    #[instrument(skip(connection))]
     pub async fn get(
         connection: impl Executor<'_, Database = Postgres> + Copy,
         steam_id: SteamId,
@@ -101,6 +103,7 @@ impl User {
         }
     }
 
+    #[instrument]
     async fn fetch(steam_id: &SteamId) -> Result<Profile> {
         let SteamId::Id(steam_id) = steam_id else {
             return Err(Error::NotFound);
