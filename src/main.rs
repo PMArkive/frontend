@@ -214,7 +214,7 @@ async fn main() -> Result<()> {
     match config.listen {
         Listen::Tcp { address, port } => {
             let addr = SocketAddr::from((address, port));
-            info!("listening on {}", addr);
+            info!("listening on http://{}", addr);
             Server::bind(&addr)
                 .serve(service)
                 .with_graceful_shutdown(ctrl_c)

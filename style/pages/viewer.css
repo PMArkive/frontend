@@ -16,3 +16,10 @@ progress {
 body > footer {
     display: none;
 }
+
+#error {
+    color: var(--button-critical);
+    text-align: center;
+    font-size: 2em;
+    padding-top: 2em;
+}

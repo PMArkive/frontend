@@ -63,6 +63,7 @@ impl Page for ViewerPage<'_> {
                     }
                 }
                 progress.parse.onlyscript min = "0" max = "100" value = "0" {}
+                #error {}
             }
             script module src = (script) type = "text/javascript" {}
             link rel="stylesheet" type="text/css" href=(style_url);

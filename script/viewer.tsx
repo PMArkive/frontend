@@ -40,12 +40,17 @@ ready(async () => {
 })
 
 const parse = async (data: ArrayBuffer, parseProgress: HTMLProgressElement, stored: boolean) => {
-    const header = parseHeaderFromBuffer(data);
-    console.log(header);
-    const parser = new AsyncParser(data, (progress) => parseProgress.value = progress);
-    await parser.cache();
+    try {
+        const header = parseHeaderFromBuffer(data);
+        console.log(header);
+        const parser = new AsyncParser(data, (progress) => parseProgress.value = progress);
+        await parser.cache();
 
-    const page = document.querySelector('.viewer-page');
+        const page = document.querySelector('.viewer-page');
 
-    render(() => <Analyser parser={parser} header={header} isStored={stored}/>, page);
+        render(() => <Analyser parser={parser} header={header} isStored={stored}/>, page);
+    } catch (e) {
+        const errorDiv: HTMLDivElement = document.querySelector(`#error`);
+        errorDiv.textContent = e.message;
+    }
 }
