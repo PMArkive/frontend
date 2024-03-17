@@ -5,6 +5,10 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     npmlock2nix.url = "github:nix-community/npmlock2nix";
     npmlock2nix.flake = false;
+    flocken = {
+      url = "github:mirkolenz/flocken/v2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -13,6 +17,7 @@
     utils,
     rust-overlay,
     npmlock2nix,
+    flocken,
   }:
     utils.lib.eachDefaultSystem (system: let
       overlays = [
@@ -28,12 +33,27 @@
       pkgs = (import nixpkgs) {
         inherit system overlays;
       };
+      inherit (flocken.legacyPackages.${system}) mkDockerManifest;
     in rec {
       packages = rec {
         node_modules = pkgs.demostf-frontend-node-modules;
         frontend = pkgs.demostf-frontend;
         docker = pkgs.demostf-frontend-docker;
         default = frontend;
+
+        dockerManifest = mkDockerManifest {
+          tags = ["latest"];
+          registries = {
+            "docker.io" = {
+              enable = true;
+              repo = "demostf/frontend";
+              username = "$DOCKERHUB_USERNAME";
+              password = "$DOCKERHUB_TOKEN";
+            };
+          };
+          version = "1.0.0";
+          images = with self.packages; [x86_64-linux.docker aarch64-linux.docker];
+        };
       };
       devShells.default = pkgs.mkShell {
         OPENSSL_NO_VENDOR = 1;
