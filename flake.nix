@@ -34,6 +34,8 @@
         inherit system overlays;
       };
       inherit (flocken.legacyPackages.${system}) mkDockerManifest;
+      inherit (builtins) fromTOML readFile;
+      version = (fromTOML (readFile ./Cargo.toml)).package.version;
     in rec {
       packages = rec {
         node_modules = pkgs.demostf-frontend-node-modules;
@@ -51,7 +53,7 @@
               password = "$DOCKERHUB_TOKEN";
             };
           };
-          version = "1.0.0";
+          inherit version;
           images = with self.packages; [x86_64-linux.docker aarch64-linux.docker];
         };
       };
