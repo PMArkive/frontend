@@ -76,5 +76,7 @@
           sqlx-cli
         ];
       };
-    });
+    }) // {
+      overlays.default = import ./overlay.nix;
+    };
 }
