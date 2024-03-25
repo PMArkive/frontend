@@ -35,16 +35,20 @@ impl Config {
 #[derive(Debug, Deserialize)]
 pub struct DbConfig {
     hostname: String,
-    username: String,
-    password: String,
+    username: Option<String>,
+    password: Option<String>,
 }
 
 impl DbConfig {
     pub async fn connect(&self) -> Result<PgPool> {
-        let opt = PgConnectOptions::new()
-            .host(&self.hostname)
-            .username(&self.username)
-            .password(&self.password);
+        let mut opt = PgConnectOptions::new().host(&self.hostname);
+        if let Some(username) = &self.username {
+            opt = opt.username(username);
+        }
+        if let Some(password) = &self.password {
+            opt = opt.password(password);
+        }
+
         Ok(PgPool::connect_with(opt).await?)
     }
 }
