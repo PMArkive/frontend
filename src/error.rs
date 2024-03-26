@@ -2,6 +2,7 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use config::ConfigError;
 use opentelemetry::trace::TraceError;
+use secretfile::SecretError;
 use tracing_subscriber::util::TryInitError;
 
 #[derive(Debug, thiserror::Error)]
@@ -36,6 +37,8 @@ pub enum SetupError {
     TracingSubscriber(#[from] TryInitError),
     #[error(transparent)]
     Config(#[from] ConfigError),
+    #[error(transparent)]
+    Secret(#[from] SecretError),
     #[error("{0}")]
     Other(String),
 }

@@ -38,3 +38,4 @@ demostf-build = { path = "./build", version = "*" }
 include_dir = "0.7.3"
 serde-env = "0.1.1"
 tonic = { version = "0.9.2", features = ["tls", "tls-webpki-roots"] }
+secretfile = "0.1.0"

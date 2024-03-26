@@ -42,9 +42,10 @@ use maud::{Markup, Render};
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::{runtime, trace, Resource};
+use secretfile::load;
 use sqlx::PgPool;
 use std::env::{args, var};
-use std::fs::{read, remove_file, set_permissions, Permissions};
+use std::fs::{remove_file, set_permissions, Permissions};
 use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
@@ -94,12 +95,8 @@ fn setup() -> Result<Config, SetupError> {
             .with_endpoint(&tracing_cfg.endpoint);
 
         if let Some(tracing_ident) = tracing_cfg.tls.as_ref().map(|tracing_tls_cfg| {
-            let key = read(&tracing_tls_cfg.key_file).map_err(|_| {
-                SetupError::Other(format!("failed to open {}", tracing_tls_cfg.key_file))
-            })?;
-            let cert = read(&tracing_tls_cfg.cert_file).map_err(|_| {
-                SetupError::Other(format!("failed to open {}", tracing_tls_cfg.cert_file))
-            })?;
+            let key = load(&tracing_tls_cfg.key_file)?;
+            let cert = load(&tracing_tls_cfg.cert_file)?;
             Result::<_, SetupError>::Ok(Identity::from_pem(cert, key))
         }) {
             let tls_config = ClientTlsConfig::new().identity(tracing_ident?);
