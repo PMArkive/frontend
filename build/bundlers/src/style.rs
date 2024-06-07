@@ -14,10 +14,7 @@ pub fn bundle_style(style: &str) -> Vec<u8> {
     let mut bundler = Bundler::new(
         &fs,
         None,
-        ParserOptions {
-            nesting: true,
-            ..ParserOptions::default()
-        },
+        ParserOptions::default(),
     );
     let mut stylesheet = bundler
         .bundle(Path::new(style))
@@ -26,7 +23,7 @@ pub fn bundle_style(style: &str) -> Vec<u8> {
         Browsers::from_browserslist(["last 2 versions"]).expect("failed to parse browserlist");
     stylesheet
         .minify(MinifyOptions {
-            targets: browsers.clone(),
+            targets: browsers.into(),
             ..MinifyOptions::default()
         })
         .expect("failed to minify css");
@@ -40,7 +37,7 @@ pub fn bundle_style(style: &str) -> Vec<u8> {
 
     stylesheet
         .to_css(PrinterOptions {
-            targets: browsers,
+            targets: browsers.into(),
             minify,
             ..PrinterOptions::default()
         })
@@ -54,7 +51,9 @@ struct InlineUrlVisitor;
 impl<'i> Visitor<'i> for InlineUrlVisitor {
     type Error = Infallible;
 
-    const TYPES: VisitTypes = visit_types!(URLS);
+    fn visit_types(&self) -> VisitTypes {
+        visit_types!(URLS)
+    }
 
     fn visit_url(&mut self, url: &mut Url<'i>) -> Result<(), Self::Error> {
         if let Some(path) = url.url.strip_prefix("inline://") {

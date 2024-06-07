@@ -4,23 +4,24 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-lightningcss = { version = "1.0.0-alpha.40", features = ["browserslist", "visitor"] }
+lightningcss = { version = "1.0.0-alpha.57", features = ["browserslist", "visitor"] }
 base64 = "0.21.0"
 urlencoding = "2.1.2"
-swc = "0.260.20"
-swc_common = { version = "0.31.4", features = ["tty-emitter", "concurrent"] }
-swc_core = { version = "0.75.20" }
-swc_bundler = { version = "0.213.14" }
-swc_ecma_loader = { version = "0.43.5", features = ["node", "cache"] }
-swc_ecma_ast = { version = "0.103.4" }
-swc_atoms = { version = "0.5.3" }
-swc_ecma_parser = { version = "0.133.8", features = ["typescript"] }
-swc_ecma_codegen = { version = "0.138.9" }
-swc_ecma_transforms_base = { version = "0.126.10" }
-swc_ecma_transforms_typescript = { version = "0.176.12" }
-swc_ecma_visit = { version = "0.89.4" }
+swc = "0.273.28"
+swc_common = { version = "0.33", features = ["tty-emitter", "concurrent"] }
+swc_core = { version = "0.90" }
+swc_bundler = { version = "0.225.19" }
+swc_ecma_loader = { version = "0.45.28", features = ["node", "cache"] }
+swc_ecma_ast = { version = "0.112.8" }
+swc_atoms = { version = "0.6.7" }
+swc_ecma_parser = { version = "0.143.16", features = ["typescript"] }
+swc_ecma_codegen = { version = "0.148.18" }
+swc_ecma_transforms_base = { version = "0.137.21" }
+swc_ecma_transforms_typescript = { version = "0.188.19" }
+swc_ecma_visit = { version = "0.98.7" }
 anyhow = "1.0.70"
-jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "mixed-svg" }
+jsx-dom-expressions = { version = "0.1", git = "https://github.com/icewind1991/swc-plugin-jsx-dom-expressions", branch = "fix-builtin-import" }
+#jsx-dom-expressions = { version = "0.1", git = "https://github.com/milomg/swc-plugin-jsx-dom-expressions" }
 #jsx-dom-expressions = { version = "0.1", path = "../../../../rust/swc-plugin-jsx-dom-expressions" }
 rand = "0.8.5"
 fnv = "1.0.7"

@@ -71,10 +71,7 @@ pub fn bundle_script(script: &str) -> Vec<u8> {
 fn write<W: Write>(minify: bool, cm: Arc<SourceMap>, module: &Module, out: W) {
     let wr = JsWriter::new(cm.clone(), "\n", out, None);
     let mut emitter = Emitter {
-        cfg: swc_ecma_codegen::Config {
-            minify,
-            ..Default::default()
-        },
+        cfg: swc_ecma_codegen::Config::default().with_minify(minify),
         cm: cm.clone(),
         comments: None,
         wr: if minify {
@@ -152,15 +149,17 @@ impl Load for Loader {
             panic!("failed to parse")
         });
 
+        let program = Program::Module(module);
+
         let top_level_mark = Mark::new();
 
-        let module = module
+        let program = program
             .fold_with(&mut strip(top_level_mark))
             .fold_with(&mut as_folder(InlineVisitor {}))
             .fold_with(&mut as_folder(TransformVisitor::new(
                 jsx_dom_expressions::config::Config {
                     module_name: "solid-js/web".to_string(),
-                    builtins: vec![
+                    built_ins: vec![
                         "For".into(),
                         "Show".into(),
                         "Switch".into(),
@@ -178,6 +177,8 @@ impl Load for Loader {
             )))
             .fold_with(&mut hygiene())
             .fold_with(&mut fixer(None));
+
+        let module = program.module().unwrap();
 
         // if let FileName::Real(path) = &f {
         //     let mut out = vec![];

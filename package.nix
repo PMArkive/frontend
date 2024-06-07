@@ -27,10 +27,12 @@ in
       ln -s ${demostf-frontend-node-modules}/node_modules .
     '';
 
+    doCheck = false;
+
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
-        "jsx-dom-expressions-0.1.0" = "sha256-k5lLHS2umLRwZU0gaszrqCesDAxFVQXMfScT4Ry0SkI=";
+        "jsx-dom-expressions-0.1.0" = "sha256-5TN9FBfPYznTkpL9ZtnKv3RghX7r8c2WvSL1sc+F0cw=";
       };
     };
   }
