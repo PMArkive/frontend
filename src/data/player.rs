@@ -53,6 +53,7 @@ impl Render for Class {
 }
 
 #[derive(Debug, FromRow)]
+#[allow(dead_code)]
 pub struct Player {
     pub id: i32,
     pub steam_id: SteamId,

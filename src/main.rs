@@ -6,6 +6,7 @@ mod fragments;
 mod pages;
 mod session;
 
+use std::convert::Infallible;
 use crate::asset::{guess_mime, serve_asset};
 pub use crate::config::Config;
 use crate::config::Listen;
@@ -27,16 +28,14 @@ use crate::pages::viewer::{ParseWorkerScript, ParserWasm, ViewerPage, ViewerScri
 use crate::pages::{render, GlobalStyle};
 use crate::session::{SessionData, COOKIE_NAME};
 use async_session::{MemoryStore, Session, SessionStore};
-use axum::extract::{MatchedPath, Path, Query, RawQuery};
-use axum::headers::Cookie;
+use axum::extract::{connect_info, MatchedPath, Path, Query, RawQuery};
 use axum::http::header::{CONTENT_TYPE, ETAG, LOCATION, SET_COOKIE};
 use axum::http::{HeaderValue, Request, StatusCode};
 use axum::response::IntoResponse;
-use axum::{extract::State, routing::get, Router, Server, TypedHeader};
+use axum::{extract::State, routing::get, Router, serve};
 use demostf_build::Asset;
 pub use error::Error;
 use hyper::header::CACHE_CONTROL;
-use hyperlocal::UnixServerExt;
 use include_dir::{include_dir, Dir};
 use maud::{Markup, Render};
 use opentelemetry::KeyValue;
@@ -49,8 +48,16 @@ use std::fs::{remove_file, set_permissions, Permissions};
 use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
+use axum_extra::headers::Cookie;
+use axum_extra::TypedHeader;
+use hyper::body::Incoming;
+use hyper_util::{rt::{TokioExecutor, TokioIo}, server};
 use steam_openid::SteamOpenId;
+use tokio::net::unix::UCred;
+use tokio::net::{UnixListener, UnixStream};
+use tokio::select;
 use tokio::signal::ctrl_c;
+use tonic::codegen::Service;
 use tonic::transport::{ClientTlsConfig, Identity};
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, info_span, instrument};
@@ -203,17 +210,17 @@ async fn main() -> Result<()> {
         )
         .fallback(handler_404)
         .with_state(state);
-    let service = app.into_make_service();
-    let ctrl_c = async {
-        ctrl_c().await.expect("failed to install Ctrl+C handler");
-    };
 
     match config.listen {
         Listen::Tcp { address, port } => {
+            let service = app.into_make_service();
             let addr = SocketAddr::from((address, port));
-            info!("listening on http://{}", addr);
-            Server::bind(&addr)
-                .serve(service)
+            let listener = tokio::net::TcpListener::bind(addr).await?;
+            info!("listening on http://{}", listener.local_addr()?);
+            let ctrl_c = async {
+                ctrl_c().await.expect("failed to install Ctrl+C handler");
+            };
+            serve(listener, service)
                 .with_graceful_shutdown(ctrl_c)
                 .await?;
         }
@@ -222,10 +229,60 @@ async fn main() -> Result<()> {
             if path.exists() {
                 remove_file(&path)?;
             }
-            let socket = Server::bind_unix(&path)?;
+            let uds = UnixListener::bind(path.clone())?;
             set_permissions(&path, Permissions::from_mode(0o666))?;
 
-            socket.serve(service).with_graceful_shutdown(ctrl_c).await?;
+            #[derive(Clone, Debug)]
+            #[allow(dead_code)]
+            struct UdsConnectInfo {
+                peer_addr: Arc<tokio::net::unix::SocketAddr>,
+                peer_cred: UCred,
+            }
+
+            impl connect_info::Connected<&UnixStream> for UdsConnectInfo {
+                fn connect_info(target: &UnixStream) -> Self {
+                    let peer_addr = target.peer_addr().unwrap();
+                    let peer_cred = target.peer_cred().unwrap();
+
+                    Self {
+                        peer_addr: Arc::new(peer_addr),
+                        peer_cred,
+                    }
+                }
+            }
+
+            let mut make_service = app.into_make_service_with_connect_info::<UdsConnectInfo>();
+
+            // See https://github.com/tokio-rs/axum/blob/main/examples/serve-with-hyper/src/main.rs for
+            // more details about this setup
+            loop {
+                let (socket, _remote_addr) = select! {
+                    result = uds.accept() => {
+                        result?
+                    },
+                    _ = ctrl_c() => {
+                        break;
+                    }
+                };
+
+                let tower_service = unwrap_infallible(make_service.call(&socket).await);
+
+                tokio::spawn(async move {
+                    let socket = TokioIo::new(socket);
+
+                    let hyper_service =
+                        hyper::service::service_fn(move |request: Request<Incoming>| {
+                            tower_service.clone().call(request)
+                        });
+
+                    if let Err(err) = server::conn::auto::Builder::new(TokioExecutor::new())
+                        .serve_connection_with_upgrades(socket, hyper_service)
+                        .await
+                    {
+                        eprintln!("failed to serve connection: {err:#}");
+                    }
+                });
+            }
         }
     }
 
@@ -487,5 +544,12 @@ pub async fn kill_icons(path: Path<String>) -> impl IntoResponse {
         )
             .into_response(),
         None => StatusCode::NOT_FOUND.into_response(),
+    }
+}
+
+fn unwrap_infallible<T>(result: Result<T, Infallible>) -> T {
+    match result {
+        Ok(value) => value,
+        Err(err) => match err {},
     }
 }

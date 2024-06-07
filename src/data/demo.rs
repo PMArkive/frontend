@@ -19,6 +19,7 @@ use time::format_description::well_known::Iso8601;
 use time::{OffsetDateTime, PrimitiveDateTime, UtcOffset};
 use tracing::instrument;
 
+#[allow(dead_code)]
 pub struct Demo {
     pub id: i32,
     pub name: String,
@@ -159,6 +160,7 @@ impl Render for ViewerUrl {
 }
 
 #[derive(FromRow)]
+#[allow(dead_code)]
 pub struct ListDemo {
     pub id: i32,
     pub name: String,

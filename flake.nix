@@ -27,7 +27,7 @@
         })
         (import ./overlay.nix)
         (final: prev: {
-          demostf-frontend-toolchain = final.rust-bin.nightly."2024-01-16".default;
+          demostf-frontend-toolchain = final.rust-bin.nightly."2024-06-04".default;
         })
       ];
       pkgs = (import nixpkgs) {
