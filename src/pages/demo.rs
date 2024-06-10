@@ -101,8 +101,8 @@ impl Page for DemoPage {
                 span.time { (self.demo.duration()) }
             }
             p.demo-download {
-                a.button.button-primary href = (self.demo.url) download = (self.demo.name) { "Download" }
-                a.button href = (self.demo.viewer_url()) { "View" }
+                a.button.button-primary href = (self.demo.url) download = (self.demo.name) rel = "nofollow" { "Download" }
+                a.button href = (self.demo.viewer_url()) rel = "nofollow" { "View" }
                 details.chat {
                     summary.button.button-tertiary { "Toggle Chat" }
                     div {
