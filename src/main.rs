@@ -6,7 +6,6 @@ mod fragments;
 mod pages;
 mod session;
 
-use std::convert::Infallible;
 use crate::asset::{guess_mime, serve_asset};
 pub use crate::config::Config;
 use crate::config::Listen;
@@ -32,26 +31,31 @@ use axum::extract::{connect_info, MatchedPath, Path, Query, RawQuery};
 use axum::http::header::{CONTENT_TYPE, ETAG, LOCATION, SET_COOKIE};
 use axum::http::{HeaderValue, Request, StatusCode};
 use axum::response::IntoResponse;
-use axum::{extract::State, routing::get, Router, serve};
+use axum::{extract::State, routing::get, serve, Router};
+use axum_extra::headers::Cookie;
+use axum_extra::TypedHeader;
 use demostf_build::Asset;
 pub use error::Error;
+use hyper::body::Incoming;
 use hyper::header::CACHE_CONTROL;
+use hyper_util::{
+    rt::{TokioExecutor, TokioIo},
+    server,
+};
 use include_dir::{include_dir, Dir};
 use maud::{Markup, Render};
+use opentelemetry::trace::TracerProvider;
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::{runtime, trace, Resource};
 use secretfile::load;
 use sqlx::PgPool;
+use std::convert::Infallible;
 use std::env::{args, var};
 use std::fs::{remove_file, set_permissions, Permissions};
 use std::net::SocketAddr;
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
-use axum_extra::headers::Cookie;
-use axum_extra::TypedHeader;
-use hyper::body::Incoming;
-use hyper_util::{rt::{TokioExecutor, TokioIo}, server};
 use steam_openid::SteamOpenId;
 use tokio::net::unix::UCred;
 use tokio::net::{UnixListener, UnixStream};
@@ -97,8 +101,11 @@ fn setup() -> Result<Config, SetupError> {
         .as_ref()
         .filter(|tracing_cfg| !tracing_cfg.endpoint.is_empty())
     {
+        let tls_config = tonic::transport::ClientTlsConfig::new().with_webpki_roots();
+
         let mut otlp_exporter = opentelemetry_otlp::new_exporter()
             .tonic()
+            .with_tls_config(tls_config)
             .with_endpoint(&tracing_cfg.endpoint);
 
         if let Some(tracing_ident) = tracing_cfg.tls.as_ref().map(|tracing_tls_cfg| {
@@ -110,14 +117,14 @@ fn setup() -> Result<Config, SetupError> {
             otlp_exporter = otlp_exporter.with_tls_config(tls_config);
         }
 
-        let tracer =
-            opentelemetry_otlp::new_pipeline()
-                .tracing()
-                .with_exporter(otlp_exporter)
-                .with_trace_config(trace::config().with_resource(Resource::new(vec![
-                    KeyValue::new("service.name", "demos.tf"),
-                ])))
-                .install_batch(runtime::Tokio)?;
+        let tracer = opentelemetry_otlp::new_pipeline()
+            .tracing()
+            .with_exporter(otlp_exporter)
+            .with_trace_config(trace::Config::default().with_resource(Resource::new(vec![
+                KeyValue::new("service.name", "demos.tf"),
+            ])))
+            .install_batch(runtime::Tokio)?
+            .tracer("demos.tf");
         Some(tracing_opentelemetry::layer().with_tracer(tracer))
     } else {
         None
