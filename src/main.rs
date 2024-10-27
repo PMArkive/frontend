@@ -101,11 +101,10 @@ fn setup() -> Result<Config, SetupError> {
         .as_ref()
         .filter(|tracing_cfg| !tracing_cfg.endpoint.is_empty())
     {
-        let tls_config = tonic::transport::ClientTlsConfig::new().with_webpki_roots();
+        let mut tls_config = ClientTlsConfig::new().with_webpki_roots();
 
         let mut otlp_exporter = opentelemetry_otlp::new_exporter()
             .tonic()
-            .with_tls_config(tls_config)
             .with_endpoint(&tracing_cfg.endpoint);
 
         if let Some(tracing_ident) = tracing_cfg.tls.as_ref().map(|tracing_tls_cfg| {
@@ -113,9 +112,9 @@ fn setup() -> Result<Config, SetupError> {
             let cert = load(&tracing_tls_cfg.cert_file)?;
             Result::<_, SetupError>::Ok(Identity::from_pem(cert, key))
         }) {
-            let tls_config = ClientTlsConfig::new().identity(tracing_ident?);
-            otlp_exporter = otlp_exporter.with_tls_config(tls_config);
+            tls_config = tls_config.identity(tracing_ident?);
         }
+        otlp_exporter = otlp_exporter.with_tls_config(tls_config);
 
         let tracer = opentelemetry_otlp::new_pipeline()
             .tracing()
