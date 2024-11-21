@@ -1,11 +1,10 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   configFile = format.generate "demostf-frontend.toml" {
     output.target = cfg.outputPath;
     mqtt = {
@@ -15,7 +14,8 @@ with lib; let
     device."password-file" = "$CREDENTIALS_DIRECTORY/device_password";
   };
   cfg = config.services.demostf-frontend;
-in {
+in
+{
   options.services.demostf-frontend = {
     enable = mkEnableOption "Log archiver";
 
@@ -77,7 +77,7 @@ in {
           "mqtt_password:${cfg.mqtt.passwordFile}"
           "device_password:${cfg.devicePasswordFile}"
         ];
-        ReadWritePaths = [cfg.outputPath];
+        ReadWritePaths = [ cfg.outputPath ];
         Restart = "on-failure";
         DynamicUser = true;
         PrivateTmp = true;
@@ -99,7 +99,7 @@ in {
         RestrictAddressFamilies = "AF_INET AF_INET6";
         RestrictRealtime = true;
         ProtectProc = "noaccess";
-        SystemCallFilter = ["@system-service" "~@resources" "~@privileged"];
+        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
         IPAddressDeny = "multicast";
         PrivateUsers = true;
         ProcSubset = "pid";
@@ -112,7 +112,7 @@ in {
       inherit (config.systemd.services."demostf-frontend") description;
 
       enable = true;
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       timerConfig = {
         OnCalendar = cfg.interval;
         RandomizedDelaySec = "15m";

@@ -11,11 +11,7 @@ use std::path::Path;
 pub fn bundle_style(style: &str) -> Vec<u8> {
     // todo build time?
     let fs = FileProvider::new();
-    let mut bundler = Bundler::new(
-        &fs,
-        None,
-        ParserOptions::default(),
-    );
+    let mut bundler = Bundler::new(&fs, None, ParserOptions::default());
     let mut stylesheet = bundler
         .bundle(Path::new(style))
         .expect("failed to bundle css");

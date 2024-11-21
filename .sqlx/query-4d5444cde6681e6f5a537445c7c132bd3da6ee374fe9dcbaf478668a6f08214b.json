@@ -4,12 +4,7 @@
   "describe": {
     "columns": [],
     "parameters": {
-      "Left": [
-        "Varchar",
-        "Varchar",
-        "Varchar",
-        "Varchar"
-      ]
+      "Left": ["Varchar", "Varchar", "Varchar", "Varchar"]
     },
     "nullable": []
   },

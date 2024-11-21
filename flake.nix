@@ -1,82 +1,46 @@
 {
   inputs = {
-    utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "nixpkgs/release-24.05";
-    rust-overlay.url = "github:oxalica/rust-overlay";
-    npmlock2nix.url = "github:nix-community/npmlock2nix";
-    npmlock2nix.flake = false;
-    flocken = {
-      url = "github:mirkolenz/flocken/v2";
+    nixpkgs.url = "nixpkgs/nixos-24.05";
+    flakelight = {
+      url = "github:nix-community/flakelight";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-  };
-
-  outputs = {
-    self,
-    nixpkgs,
-    utils,
-    rust-overlay,
-    npmlock2nix,
-    flocken,
-  }:
-    utils.lib.eachDefaultSystem (system: let
-      overlays = [
-        (import rust-overlay)
-        (final: prev: {
-          npmlock2nix = final.callPackage npmlock2nix {};
-        })
-        (import ./overlay.nix)
-        (final: prev: {
-          demostf-frontend-toolchain = final.rust-bin.nightly."2024-06-04".default;
-        })
-      ];
-      pkgs = (import nixpkgs) {
-        inherit system overlays;
-      };
-      inherit (flocken.legacyPackages.${system}) mkDockerManifest;
-      inherit (builtins) fromTOML readFile;
-      version = (fromTOML (readFile ./Cargo.toml)).package.version;
-    in rec {
-      packages = rec {
-        node_modules = pkgs.demostf-frontend-node-modules;
-        frontend = pkgs.demostf-frontend;
-        docker = pkgs.demostf-frontend-docker;
-        default = frontend;
-
-        dockerManifest = mkDockerManifest {
-          tags = ["latest"];
-          registries = {
-            "docker.io" = {
-              enable = true;
-              repo = "demostf/frontend";
-              username = "$DOCKERHUB_USERNAME";
-              password = "$DOCKERHUB_TOKEN";
-            };
-          };
-          inherit version;
-          images = with self.packages; [x86_64-linux.docker aarch64-linux.docker];
-        };
-      };
-      devShells.default = pkgs.mkShell {
-        OPENSSL_NO_VENDOR = 1;
-
-        nativeBuildInputs = with pkgs; [
-          demostf-frontend-toolchain
-          bacon
-          cargo-edit
-          cargo-outdated
-          clippy
-          cargo-audit
-          cargo-watch
-          pkg-config
-          openssl
-          nodejs
-          nodePackages.svgo
-          typescript
-          sqlx-cli
-        ];
-      };
-    }) // {
-      overlays.default = import ./overlay.nix;
+    mill-scale = {
+      url = "github:icewind1991/mill-scale";
+      inputs.flakelight.follows = "flakelight";
     };
+    npmlock2nix = {
+      url = "github:nix-community/npmlock2nix";
+      flake = false;
+    };
+  };
+  outputs = { mill-scale, npmlock2nix, ... }: mill-scale ./. {
+    packageOpts = { demostf-frontend-node-modules, ... }: {
+      preBuild = ''
+        ln -s ${demostf-frontend-node-modules}/node_modules .
+      '';
+    };
+    extraPaths = [
+      ./.sqlx
+      ./images
+      ./script
+      ./style
+    ];
+    withOverlays = [
+      (final: prev: {
+        npmlock2nix = final.callPackage npmlock2nix { };
+      })
+      (final: prev: {
+        demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+      })
+      (import ./overlay.nix)
+    ];
+    toolchain = pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+    tools = pkgs: with pkgs; [
+      nodejs
+      nodePackages.svgo
+      typescript
+      sqlx-cli
+    ];
+  };
 }
