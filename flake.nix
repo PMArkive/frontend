@@ -2,11 +2,13 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.05";
     flakelight = {
-      url = "github:nix-community/flakelight";
+      # url = "github:nix-community/flakelight";
+      url = "path:/home/robin/Projects/flakelight";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mill-scale = {
-      url = "github:icewind1991/mill-scale";
+      # url = "github:icewind1991/mill-scale";
+      url = "path:/home/robin/Projects/mill-scale";
       inputs.flakelight.follows = "flakelight";
     };
     npmlock2nix = {
@@ -37,6 +39,8 @@
     ];
     toolchain = pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
     tools = pkgs: with pkgs; [
+      bacon
+      cargo-edit
       nodejs
       nodePackages.svgo
       typescript

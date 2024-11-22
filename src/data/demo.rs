@@ -293,10 +293,10 @@ impl Render for DemoFormat {
             MapMode::Ultiduo => "Ultiduo",
             MapMode::Bball => "BBall",
             MapMode::Other => match self.player_count {
-                17 | 18 | 19 => "HL",
-                15 | 14 => "Prolander",
-                13 | 12 | 11 => "6v6",
-                7 | 8 | 9 => "4v4",
+                17..=19 => "HL",
+                14..=15 => "Prolander",
+                11..=13 => "6v6",
+                7..=9 => "4v4",
                 _ => "Other",
             },
         };

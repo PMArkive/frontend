@@ -22,17 +22,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1731933812,
-        "narHash": "sha256-PeuRDDq1DcHxbOmXWb3nWMp5PqWUn5PSKimNbUzWEaQ=",
-        "owner": "nix-community",
-        "repo": "flakelight",
-        "rev": "f4b26f683be5c9ac1ec05f968dbbcb35f4bb6346",
-        "type": "github"
+        "lastModified": 1732198790,
+        "narHash": "sha256-VNTFKcX52PRh3I88ofYTyBWCtqVQB3fVIMO64HHs3+0=",
+        "path": "/home/robin/Projects/flakelight",
+        "type": "path"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "flakelight",
-        "type": "github"
+        "path": "/home/robin/Projects/flakelight",
+        "type": "path"
       }
     },
     "mill-scale": {
@@ -44,17 +41,14 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1732197065,
-        "narHash": "sha256-Lyosd/rJHFp1xnWPNhukQkW1hFtIiIiVDxQ+fcVypgI=",
-        "owner": "icewind1991",
-        "repo": "mill-scale",
-        "rev": "8051d162308a80dde168b7efe012bfa1363be4ba",
-        "type": "github"
+        "lastModified": 1732212005,
+        "narHash": "sha256-t2+yKoxZe2JkvyHkJAAyyLS6N8yzyx0o95DuzHqv7JA=",
+        "path": "/home/robin/Projects/mill-scale",
+        "type": "path"
       },
       "original": {
-        "owner": "icewind1991",
-        "repo": "mill-scale",
-        "type": "github"
+        "path": "/home/robin/Projects/mill-scale",
+        "type": "path"
       }
     },
     "nixpkgs": {

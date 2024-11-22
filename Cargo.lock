@@ -953,7 +953,7 @@ dependencies = [
 
 [[package]]
 name = "demostf-frontend"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "async-session",
  "axum",

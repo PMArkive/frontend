@@ -14,6 +14,7 @@ export class Session {
         this.sessionName = name;
         this.initialState = initialState;
         this.onState = onState;
+        this.open();
     }
 
     public static create(state: PlaybackState): Session {
@@ -98,7 +99,7 @@ export class Session {
                     tick: update["tick"]
                 }));
             }
-            if (update["playing"]) {
+            if (update.hasOwnProperty("playing")) {
                 this.socket.send(JSON.stringify({
                     type: 'play',
                     session: this.sessionName,
