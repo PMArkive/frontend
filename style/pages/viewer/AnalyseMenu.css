@@ -3,19 +3,31 @@
     top: 0;
     left: 0;
     opacity: 0.5;
-    transition: all 0.5s;
+    transition: opacity 0.3s;
+
+    & .share {
+        display: flex;
+        align-items: center;
+
+        &.shared {
+            padding: 2px 2px 2px 6px;
+        }
+    }
 
     &:hover {
         opacity: 1;
+
+        & span.share-text {
+            opacity: 1;
+        }
     }
 
     & .share-session {
-
         background: transparent;
         color: var(--primary-color);
         font-size: 200%;
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         margin: 10px;
         border: none;
         cursor: pointer;
@@ -27,7 +39,7 @@
         }
     }
 
-    & .share-text {
+    & input.share-text {
         color: var(--primary-color);
         background-color: var(--text-secondary);
         padding: 5px;
@@ -38,5 +50,19 @@
         &:active, &:focus {
             outline: none;
         }
+    }
+
+    span.share-text {
+        color: var(--primary-color);
+        opacity: 0;
+        transition: opacity 0.5s;
+
+        &:active, &:focus {
+            outline: none;
+        }
+    }
+
+    .clients {
+        margin-left: 10px;
     }
 }

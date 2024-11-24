@@ -86,6 +86,8 @@ pub struct SiteConfig {
     pub api: String,
     #[serde(default = "default_maps")]
     pub maps: String,
+    #[serde(default = "default_sync")]
+    pub sync: String,
 }
 
 fn default_api() -> String {
@@ -94,6 +96,10 @@ fn default_api() -> String {
 
 fn default_maps() -> String {
     "https://maps.demos.tf/".into()
+}
+
+fn default_sync() -> String {
+    "wss://sync.demos.tf/".into()
 }
 
 #[derive(Debug, Deserialize)]

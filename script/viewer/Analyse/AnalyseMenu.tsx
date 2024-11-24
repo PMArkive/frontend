@@ -3,6 +3,8 @@ export interface AnalyseMenuProps {
     onShare: Function;
     canShare: boolean;
     isShared: boolean;
+    clients: number,
+    inShared: boolean,
 }
 
 export function AnalyseMenu(props: AnalyseMenuProps) {
@@ -13,17 +15,34 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
                style={{width: `${(loc().length * 8)}px`}}
                onFocus={(event) => {
                    (event.target as HTMLInputElement).select()
-               }}/> : '';
+               }}/> : <span class="share-text">Start a shared session</span>;
 
-    const shareButton = () => (props.canShare) ? <div class="analyse-menu">
-        <button class="share-session" title="Start a shared session"
-                onClick={() => {
-                    props.onShare()
-                }}/>
-        {shareText}
-    </div> : '';
+    const clientCount = () => (props.isShared) ?
+        <div class="clients">{props.clients} {(props.clients === 1) ? "spectator" : "spectators"}</div> : [];
 
-    return (<div>
+    const shareButton = () => {
+        if (props.canShare) {
+
+            return [
+                <div class="share">
+                    <button class="share-session" title="Start a shared session"
+                            onClick={() => {
+                                props.onShare()
+                            }}/>
+                    {shareText}
+                </div>,
+                clientCount,
+            ]
+        } else if (props.inShared) {
+            return <div class="share shared">
+                You're spectating a session controlled by someone else
+            </div>
+        } else {
+            return [];
+        }
+    }
+
+    return (<div class="analyse-menu">
         {shareButton}
     </div>)
 }

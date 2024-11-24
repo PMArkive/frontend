@@ -1,24 +1,22 @@
-import {ownKeys} from "solid-js/store/types/store";
-
-const syncUri = 'wss://sync.demos.tf';
-
 export class Session {
     public readonly owner_token: string | null;
     private socket: WebSocket | null;
     public readonly sessionName: string;
     private initialState: PlaybackState | null;
     private readonly onState: (StateUpdate) => void | null;
+    private readonly syncUri;
 
-    constructor(name: string, owner_token: string | null = null, initialState: PlaybackState | null, onState: (StateUpdate) => void | null = null) {
+    constructor(name: string, owner_token: string | null = null, initialState: PlaybackState | null, onState: (StateUpdate) => void) {
         this.owner_token = owner_token;
         this.sessionName = name;
         this.initialState = initialState;
         this.onState = onState;
+        this.syncUri = document.querySelector('[data-sync]').getAttribute('data-sync');
         this.open();
     }
 
-    public static create(state: PlaybackState): Session {
-        return new Session(generateToken(), generateToken(), state)
+    public static create(state: PlaybackState, onState: (StateUpdate) => void): Session {
+        return new Session(generateToken(), generateToken(), state, onState)
     }
 
     public static join(name: string, onState: (StateUpdate) => void): Session {
@@ -29,26 +27,36 @@ export class Session {
         if (this.socket) {
             return;
         }
-        this.socket = new WebSocket(syncUri);
+        this.socket = new WebSocket(this.syncUri);
         this.socket.onopen = () => {
             if (this.socket) {
                 if (this.owner_token) {
-                    this.socket.send(JSON.stringify({
-                        type: 'create',
-                        session: this.sessionName,
-                        token: this.owner_token
-                    }));
-                    this.socket.send(JSON.stringify({
-                        type: 'tick',
-                        session: this.sessionName,
-                        tick: this.initialState.tick
-                    }));
-                    this.socket.send(JSON.stringify({
-                        type: 'play',
-                        session: this.sessionName,
-                        play: this.initialState.playing
-                    }));
-                    this.initialState = null;
+                    if (this.initialState) {
+                        this.socket.send(JSON.stringify({
+                            type: 'create',
+                            session: this.sessionName,
+                            token: this.owner_token
+                        }));
+                        this.socket.send(JSON.stringify({
+                            type: 'tick',
+                            session: this.sessionName,
+                            tick: this.initialState.tick
+                        }));
+                        this.socket.send(JSON.stringify({
+                            type: 'play',
+                            session: this.sessionName,
+                            play: this.initialState.playing
+                        }));
+                        this.initialState = null;
+                    }
+                    this.socket.onmessage = (event) => {
+                        const packet = JSON.parse(event.data) as Packet;
+                        if (packet.type === 'clients') {
+                            this.onState({
+                                clients: packet.count
+                            });
+                        }
+                    }
                 } else {
                     this.socket.send(JSON.stringify({
                         type: 'join',
@@ -62,7 +70,7 @@ export class Session {
                             });
                         }
                         if (packet.type === 'play') {
-                            if (packet.play || packet.tick) {
+                            if (packet.play) {
                                 this.onState({
                                     playing: true
                                 });
@@ -123,6 +131,7 @@ function generateToken(): string {
 export interface PlaybackState {
     tick: number,
     playing: boolean,
+    clients: number,
 }
 
 export type StateUpdate = Partial<PlaybackState>;
@@ -147,7 +156,12 @@ export interface PlayPacket {
     type: 'play';
     session: string;
     play?: boolean;
-    tick?: boolean; //old sync server
 }
 
-export type Packet = JoinPacket | CreatePacket | TickPacket | PlayPacket;
+export interface ClientsPacket {
+    type: 'clients';
+    session: string;
+    count: number;
+}
+
+export type Packet = JoinPacket | CreatePacket | TickPacket | PlayPacket | ClientsPacket;

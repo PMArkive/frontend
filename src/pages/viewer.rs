@@ -8,6 +8,7 @@ use std::borrow::Cow;
 pub struct ViewerPage<'a> {
     pub demo: Option<Demo>,
     pub maps: &'a str,
+    pub sync: &'a str,
 }
 
 #[derive(Asset)]
@@ -48,8 +49,9 @@ impl Page for ViewerPage<'_> {
         let script = ViewerScript::url();
         let style_url = ViewerStyle::url();
         let maps = self.maps;
+        let sync = self.sync;
         html! {
-            .viewer-page data-maps = (maps) {
+            .viewer-page data-maps = (maps) data-sync = (sync) {
                 @if let Some(demo) = self.demo.as_ref() {
                     input type = "hidden" name = "url" value = (demo.url) {}
                     progress.download min = "0" max = "100" value = "0" {}

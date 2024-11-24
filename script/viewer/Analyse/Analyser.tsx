@@ -25,13 +25,14 @@ export const Analyser = (props: AnalyseProps) => {
     const [scale, setScale] = createSignal<number>(1);
     const [playing, setPlaying] = createSignal<boolean>(false);
     const [sessionName, setSessionName] = createSignal<string>("");
+    const [clients, setClients] = createSignal<number>(0);
 
     let lastFrameTime = 0;
     let playStartTick = 0;
     let playStartTime = 0;
 
     const onUpdate = (update: StateUpdate) => {
-        if (update["tick"]) {
+        if (update.hasOwnProperty("tick")) {
             setTick(update["tick"]);
         }
         if (update.hasOwnProperty("playing")) {
@@ -40,6 +41,10 @@ export const Analyser = (props: AnalyseProps) => {
             } else {
                 pause();
             }
+        }
+        if (update.hasOwnProperty("clients")) {
+            console.log(update["clients"]);
+            setClients(update["clients"]);
         }
     }
 
@@ -137,7 +142,7 @@ export const Analyser = (props: AnalyseProps) => {
     const buildings = () => parser.getBuildingsAtTick(tick());
     const kills = parser.getKills();
     const playButtonText = () => (playing()) ? '⏸' : '▶️';
-    const disabled = session && !session.isOwner();
+    const inShared = session && !session.isOwner();
     const isShared = () => sessionName() !== '';
 
     console.log(intervalPerTick);
@@ -160,12 +165,15 @@ export const Analyser = (props: AnalyseProps) => {
                              onShare={() => {
                                  session = Session.create({
                                      tick: tick(),
-                                     playing: playing()
-                                 });
+                                     playing: playing(),
+                                     clients: 0,
+                                 }, onUpdate);
                                  setSessionName(session.sessionName);
                              }}
-                             canShare={props.isStored && !disabled}
+                             canShare={props.isStored && !inShared}
                              isShared={isShared()}
+                             clients={clients()}
+                             inShared={inShared}
                 />
                 <SpecHUD parser={parser} tick={tick()}
                          players={players()} kills={kills}/>
@@ -174,14 +182,14 @@ export const Analyser = (props: AnalyseProps) => {
                  title={timeTitle()}>
                 <input class="play-pause-button" type="button"
                        value={playButtonText()}
-                       disabled={disabled}
+                       disabled={inShared}
                        onClick={togglePlay}
                 />
                 <Timeline parser={parser} tick={tick()}
                           onSetTick={throttle(50, (tick) => {
                               setTickNow(tick);
                           })}
-                          disabled={disabled}/>
+                          disabled={inShared}/>
             </div>
         </div>
     );

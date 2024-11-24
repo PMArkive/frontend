@@ -74,6 +74,7 @@ struct App {
     openid: SteamOpenId,
     api: String,
     maps: String,
+    sync: String,
     map_list: MapList,
     pub session_store: MemoryStore,
 }
@@ -156,6 +157,7 @@ async fn main() -> Result<()> {
             .expect("invalid steam login url"),
         api: config.site.api,
         maps: config.site.maps,
+        sync: config.site.sync,
         map_list,
         session_store: session_store.clone(),
     });
@@ -518,6 +520,7 @@ async fn viewer(
         ViewerPage {
             demo,
             maps: &app.maps,
+            sync: &app.sync,
         },
         session,
     ))

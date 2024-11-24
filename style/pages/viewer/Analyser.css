@@ -1,9 +1,9 @@
 .map-holder {
     position: fixed;
-    top: 32px;
+    top: 40px;
     left: 0;
     width: 100%;
-    height: calc(100% - 32px - 100px);
+    height: calc(100% - 40px - 100px);
 }
 
 .time-control {
