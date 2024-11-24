@@ -35,7 +35,7 @@
       (final: prev: {
         demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
       })
-      (import ./overlay.nix)
+      (import ./nix/overlay.nix)
     ];
     toolchain = pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
     tools = pkgs: with pkgs; [

@@ -41,8 +41,8 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1732212005,
-        "narHash": "sha256-t2+yKoxZe2JkvyHkJAAyyLS6N8yzyx0o95DuzHqv7JA=",
+        "lastModified": 1732308743,
+        "narHash": "sha256-z9tk/ssnvmd3zZCaYWtycTAD/7X7jSJX2btO7QO4y1I=",
         "path": "/home/robin/Projects/mill-scale",
         "type": "path"
       },
