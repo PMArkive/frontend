@@ -101,17 +101,21 @@ impl Page for DemoPage {
                 span.time { (self.demo.duration()) }
             }
             p.demo-download {
-                a.button.button-primary href = (self.demo.url) download = (self.demo.name) rel = "nofollow" { "Download" }
-                a.button href = (self.demo.viewer_url()) rel = "nofollow" { "View" }
-                details.chat {
-                    summary.button.button-tertiary { "Toggle Chat" }
-                    div {
-                        table.chat {
-                            @for chat in &self.demo.chat {
-                                tr {
-                                    td.user { (chat.from) }
-                                    td.message { (chat.text) }
-                                    td.duration { (chat.time()) }
+                @if !self.demo.url.is_empty() {
+                    a.button.button-primary href = (self.demo.url) download = (self.demo.name) rel = "nofollow" { "Download" }
+                    a.button href = (self.demo.viewer_url()) rel = "nofollow" { "View" }
+                }
+                @if !self.demo.chat.is_empty() {
+                    details.chat {
+                        summary.button.button-tertiary { "Toggle Chat" }
+                        div {
+                            table.chat {
+                                @for chat in &self.demo.chat {
+                                    tr {
+                                        td.user { (chat.from) }
+                                        td.message { (chat.text) }
+                                        td.duration { (chat.time()) }
+                                    }
                                 }
                             }
                         }
