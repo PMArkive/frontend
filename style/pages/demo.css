@@ -143,6 +143,7 @@ table.players {
         width: 40px;
         vertical-align: top;
     }
+
     & .class {
         width: 40px;
     }
@@ -242,4 +243,10 @@ details.chat {
     & > div {
         padding-top: 45px;
     }
+}
+
+h3.warning {
+    background-color: var(--button-critical);
+    margin: 0 -30px;
+    padding: 30px;
 }

@@ -23,6 +23,9 @@ impl Page for DemoPage {
     fn render(&self) -> Markup {
         let style_url = ClassIconsStyle::url();
         html! {
+            @if self.demo.url.is_empty() {
+                h3.warning { "This demo has been deleted and is no longer available for download." }
+            }
             h2 { (self.demo.server) " - " (self.demo.red) " vs " (self.demo.blu) }
             h3 { (self.demo.name) }
             p {
