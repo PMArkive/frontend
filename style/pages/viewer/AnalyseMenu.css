@@ -22,17 +22,17 @@
         }
     }
 
-    & .share-session {
+    & button.share-session {
         background: transparent;
         color: var(--primary-color);
-        font-size: 200%;
-        width: 24px;
+        padding-left: 32px;
         height: 24px;
         margin: 10px;
         border: none;
         cursor: pointer;
         background-image: url("inline://images//link_white.svg");
         background-size: contain;
+        background-repeat: no-repeat;
 
         &:active, &:focus {
             outline: none;
@@ -43,9 +43,9 @@
         color: var(--primary-color);
         background-color: var(--text-secondary);
         padding: 5px;
-        margin-top: 0;
         border: 1px #888 solid;
         border-radius: 5px;
+        margin-top: -3px;
 
         &:active, &:focus {
             outline: none;
@@ -63,5 +63,20 @@
 
     .clients {
         margin-left: 10px;
+    }
+
+    summary {
+        font-size: 120%;
+        margin: 5px;
+        margin-left: 10px;
+    }
+
+    summary::marker {
+        content: '';
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
     }
 }
