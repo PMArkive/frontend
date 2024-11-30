@@ -5,6 +5,7 @@ import {Timeline} from './Render/Timeline';
 import {SpecHUD} from './Render/SpecHUD';
 import {AnalyseMenu} from './AnalyseMenu'
 import {useKeyDownEvent} from "@solid-primitives/keyboard";
+import Modal from "@lutaok/solid-modal";
 
 import {AsyncParser} from "./Data/AsyncParser";
 import {getMapBoundaries} from "./MapBoundries";
@@ -18,9 +19,10 @@ export interface AnalyseProps {
     parser: AsyncParser;
 }
 
-const event = useKeyDownEvent();
-
 export const Analyser = (props: AnalyseProps) => {
+
+    const event = useKeyDownEvent();
+
     const parser = props.parser;
     const lastTick = parser.demo.tickCount - 1;
     const intervalPerTick = props.header.duration / props.header.ticks;
@@ -30,6 +32,7 @@ export const Analyser = (props: AnalyseProps) => {
     const [playing, setPlaying] = createSignal<boolean>(false);
     const [sessionName, setSessionName] = createSignal<string>("");
     const [clients, setClients] = createSignal<number>(0);
+    const [helpOpen, setHelpOpen] = createSignal<boolean>(false);
 
     createEffect(() => {
         const e = event();
@@ -208,6 +211,7 @@ export const Analyser = (props: AnalyseProps) => {
                                  }, onUpdate);
                                  setSessionName(session.sessionName);
                              }}
+                             openHelp={() => setHelpOpen(true)}
                              canShare={props.isStored && !inShared}
                              isShared={isShared()}
                              clients={clients()}
@@ -229,6 +233,34 @@ export const Analyser = (props: AnalyseProps) => {
                           })}
                           disabled={inShared}/>
             </div>
+            <Modal class="help" isOpen={helpOpen()} onCloseRequest={() => setHelpOpen(false)}
+                   closeOnOutsideClick={true}>
+                <h4>Keyboard Shortcuts</h4>
+                <table class="shortcuts">
+                    <tbody>
+                    <tr>
+                        <td><kbd>.</kbd></td>
+                        <td>Next tick</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>,</kbd></td>
+                        <td>Previous tick</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>⇒</kbd></td>
+                        <td>0.5s forward</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>⇐</kbd></td>
+                        <td>0.5s backwards</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Spacebar</kbd></td>
+                        <td>Play/Pause</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </Modal>
         </div>
     );
 }

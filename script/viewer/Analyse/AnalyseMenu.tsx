@@ -6,6 +6,7 @@ export interface AnalyseMenuProps {
     clients: number,
     inShared: boolean,
     open: boolean,
+    openHelp: Function;
 }
 
 export function AnalyseMenu(props: AnalyseMenuProps) {
@@ -37,6 +38,11 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
                                            (event.target as HTMLInputElement).select()
                                        }}/>
                             </Show>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="help" title="Help" onClick={() => props.openHelp()}>
+                            Help
                         </button>
                     </li>
                 </ul>
