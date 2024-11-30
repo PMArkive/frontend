@@ -4,10 +4,11 @@ import {throttle, debounce} from 'throttle-debounce';
 import {Timeline} from './Render/Timeline';
 import {SpecHUD} from './Render/SpecHUD';
 import {AnalyseMenu} from './AnalyseMenu'
+import {useKeyDownEvent} from "@solid-primitives/keyboard";
 
 import {AsyncParser} from "./Data/AsyncParser";
 import {getMapBoundaries} from "./MapBoundries";
-import {createSignal} from "solid-js";
+import {createEffect, createSignal, untrack} from "solid-js";
 import {Session, StateUpdate} from "./Session";
 import {DemoHead} from "../../header";
 
@@ -17,8 +18,11 @@ export interface AnalyseProps {
     parser: AsyncParser;
 }
 
+const event = useKeyDownEvent();
+
 export const Analyser = (props: AnalyseProps) => {
     const parser = props.parser;
+    const lastTick = parser.demo.tickCount - 1;
     const intervalPerTick = props.header.duration / props.header.ticks;
 
     const [tick, setTick] = createSignal<number>(0);
@@ -26,6 +30,31 @@ export const Analyser = (props: AnalyseProps) => {
     const [playing, setPlaying] = createSignal<boolean>(false);
     const [sessionName, setSessionName] = createSignal<string>("");
     const [clients, setClients] = createSignal<number>(0);
+
+    createEffect(() => {
+        const e = event();
+
+        untrack(() => {
+            if (e) {
+                if (e.key === '.') {
+                    seek(1);
+                }
+                if (e.key === ',') {
+                    seek(-1);
+                }
+                if (e.key === 'ArrowRight') {
+                    seek(15);
+                }
+                if (e.key === 'ArrowLeft') {
+                    seek(-15);
+                }
+                if (e.key === ' ') {
+                    togglePlay();
+                }
+                e.preventDefault();
+            }
+        });
+    });
 
     let lastFrameTime = 0;
     let playStartTick = 0;
@@ -52,7 +81,9 @@ export const Analyser = (props: AnalyseProps) => {
     if (props.isStored && window.location.hash) {
         const parsed = parseInt(window.location.hash.substr(1), 10);
         if (('#' + parsed) === window.location.hash) {
-            setTick(Math.floor(parsed));
+            if (parsed > 0 && parsed < lastTick) {
+                setTick(Math.floor(parsed));
+            }
         } else {
             const name = window.location.hash.substring(1);
             session = Session.join(name, onUpdate);
@@ -69,6 +100,13 @@ export const Analyser = (props: AnalyseProps) => {
         width: backgroundBoundaries.boundary_max.x - backgroundBoundaries.boundary_min.x,
         height: backgroundBoundaries.boundary_max.y - backgroundBoundaries.boundary_min.y,
     };
+
+    const seek = (offset) => {
+        console.log(lastTick, tick(), tick() + offset);
+        const target = Math.max(0, Math.min(lastTick, tick() + offset));
+        console.log(target);
+        setTickNow(target);
+    }
 
     const setTickNow = (tick) => {
         lastFrameTime = 0;
@@ -126,7 +164,7 @@ export const Analyser = (props: AnalyseProps) => {
         const timePassed = (timestamp - playStartTime) / 1000;
         const targetTick = playStartTick + (Math.round(timePassed / intervalPerTick));
         lastFrameTime = timestamp;
-        if (targetTick >= (parser.demo.tick - 1)) {
+        if (targetTick >= (lastTick)) {
             pause();
         }
         setHash(targetTick);
