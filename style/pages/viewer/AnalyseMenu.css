@@ -71,14 +71,15 @@
         margin: 0;
 
         button {
-            color: var(--primary-color);
+            color: white;
             padding-left: 32px;
             height: 24px;
             margin: 10px;
             border: none;
             cursor: pointer;
             background-size: 24px;
-            background: transparent no-repeat;
+            background-color: transparent;
+            background-repeat: no-repeat;
 
             &:active, &:focus {
                 outline: none;

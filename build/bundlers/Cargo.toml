@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-lightningcss = { version = "1.0.0-alpha.57", features = ["browserslist", "visitor"] }
+lightningcss = { version = "1.0.0-alpha.61", features = ["browserslist", "visitor"] }
 base64 = "0.21.0"
 urlencoding = "2.1.2"
 swc = "0.273.28"
