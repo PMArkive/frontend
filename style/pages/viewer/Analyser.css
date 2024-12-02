@@ -81,3 +81,51 @@
         }
     }
 }
+
+.modal-content h4 {
+    margin-top: 0;
+}
+
+kbd {
+    background-color: rgb(34, 36, 38);
+    border-radius: 3px;
+    border: 1px solid rgb(69, 75, 78);
+    box-shadow: rgba(0, 0, 0, 0.2) 0 1px 1px, rgba(24, 26, 27, 0.7) 0 2px inset;
+    color: rgb(200, 195, 188);;
+    display: inline-block;
+    font-size: 1.4em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+    min-width: 1.5em;
+    text-align: center;
+}
+
+.shortcuts {
+    td:first-child {
+        text-align: center;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0 0 0 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    background-color: #181a1b;
+    color: #cfcbc5;
+    overflow: auto;
+    max-height: 90%;
+    max-width: 90%;
+}

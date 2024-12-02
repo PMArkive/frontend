@@ -234,7 +234,7 @@ export const Analyser = (props: AnalyseProps) => {
                           disabled={inShared}/>
             </div>
             <Modal class="help" isOpen={helpOpen()} onCloseRequest={() => setHelpOpen(false)}
-                   closeOnOutsideClick={true}>
+                   closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <h4>Keyboard Shortcuts</h4>
                 <table class="shortcuts">
                     <tbody>
