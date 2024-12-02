@@ -22,8 +22,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1732198790,
-        "narHash": "sha256-VNTFKcX52PRh3I88ofYTyBWCtqVQB3fVIMO64HHs3+0=",
+        "lastModified": 1732368988,
+        "narHash": "sha256-X3Sqxfi8h2qgdBE0pad4E6EUHSVSyHdXnKuYM9/v0tQ=",
         "path": "/home/robin/Projects/flakelight",
         "type": "path"
       },
@@ -53,16 +53,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1731797254,
-        "narHash": "sha256-df3dJApLPhd11AlueuoN0Q4fHo/hagP75LlM5K1sz9g=",
+        "lastModified": 1732981179,
+        "narHash": "sha256-F7thesZPvAMSwjRu0K8uFshTk3ZZSNAsXTIFvXBT+34=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e8c38b73aeb218e27163376a2d617e61a2ad9b59",
+        "rev": "62c435d93bf046a5396f3016472e8f7c8e2aed65",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
-        "ref": "nixos-24.05",
+        "ref": "nixos-24.11",
         "type": "indirect"
       }
     },

@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.05";
+    nixpkgs.url = "nixpkgs/nixos-24.11";
     flakelight = {
       # url = "github:nix-community/flakelight";
       url = "path:/home/robin/Projects/flakelight";
@@ -33,6 +33,7 @@
         npmlock2nix = final.callPackage npmlock2nix { };
       })
       (final: prev: {
+        nodejs-16_x = final.nodejs;
         demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
       })
       (import ./nix/overlay.nix)
