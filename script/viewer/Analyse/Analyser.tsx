@@ -33,28 +33,40 @@ export const Analyser = (props: AnalyseProps) => {
     const [sessionName, setSessionName] = createSignal<string>("");
     const [clients, setClients] = createSignal<number>(0);
     const [helpOpen, setHelpOpen] = createSignal<boolean>(false);
+    const closeDialogs = () => {
+        setHelpOpen(false);
+    };
 
     createEffect(() => {
         const e = event();
 
         untrack(() => {
+            console.log(e);
             if (e) {
                 if (e.key === '.') {
                     seek(1);
+                    e.preventDefault();
                 }
                 if (e.key === ',') {
                     seek(-1);
+                    e.preventDefault();
                 }
                 if (e.key === 'ArrowRight') {
                     seek(15);
+                    e.preventDefault();
                 }
                 if (e.key === 'ArrowLeft') {
                     seek(-15);
+                    e.preventDefault();
                 }
                 if (e.key === ' ') {
                     togglePlay();
+                    e.preventDefault();
                 }
-                e.preventDefault();
+                if (e.key === 'Escape') {
+                    closeDialogs();
+                    e.preventDefault();
+                }
             }
         });
     });
