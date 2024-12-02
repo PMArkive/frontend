@@ -91,7 +91,7 @@ kbd {
     border-radius: 3px;
     border: 1px solid rgb(69, 75, 78);
     box-shadow: rgba(0, 0, 0, 0.2) 0 1px 1px, rgba(24, 26, 27, 0.7) 0 2px inset;
-    color: rgb(200, 195, 188);;
+    color: rgb(200, 195, 188);
     display: inline-block;
     font-size: 1.4em;
     font-weight: 700;
@@ -99,12 +99,11 @@ kbd {
     padding: 2px 4px;
     white-space: nowrap;
     min-width: 1.5em;
-    text-align: center;
 }
 
 .shortcuts {
     td:first-child {
-        text-align: center;
+        text-align: right;
     }
 }
 
@@ -128,4 +127,16 @@ kbd {
     overflow: auto;
     max-height: 90%;
     max-width: 90%;
+}
+
+.modal-content input[type="text"] {
+    min-width: 300px;
+    background-color: rgb(34, 36, 38);
+    border-radius: 3px;
+    border: 1px solid rgb(69, 75, 78);
+    box-shadow: rgba(0, 0, 0, 0.2) 0 1px 1px, rgba(24, 26, 27, 0.7) 0 2px inset;
+    outline: none;
+    color: rgb(200, 195, 188);
+    font-size: 130%;
+    padding: 1px 3px;
 }

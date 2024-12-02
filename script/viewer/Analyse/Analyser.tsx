@@ -5,6 +5,9 @@ import {Timeline} from './Render/Timeline';
 import {SpecHUD} from './Render/SpecHUD';
 import {AnalyseMenu} from './AnalyseMenu'
 import {useKeyDownEvent} from "@solid-primitives/keyboard";
+import {autofocus} from "@solid-primitives/autofocus";
+// prevents from being tree-shaken by TS
+autofocus
 import Modal from "@lutaok/solid-modal";
 
 import {AsyncParser} from "./Data/AsyncParser";
@@ -33,15 +36,17 @@ export const Analyser = (props: AnalyseProps) => {
     const [sessionName, setSessionName] = createSignal<string>("");
     const [clients, setClients] = createSignal<number>(0);
     const [helpOpen, setHelpOpen] = createSignal<boolean>(false);
+    const [gotoOpen, setGotoOpen] = createSignal<boolean>(false);
+    const [gotoInput, setGotoInput] = createSignal<number>(0);
     const closeDialogs = () => {
         setHelpOpen(false);
+        setGotoOpen(false);
     };
 
     createEffect(() => {
         const e = event();
 
         untrack(() => {
-            console.log(e);
             if (e) {
                 if (e.key === '.') {
                     seek(1);
@@ -63,6 +68,16 @@ export const Analyser = (props: AnalyseProps) => {
                     togglePlay();
                     e.preventDefault();
                 }
+                if (e.key === '?') {
+                    setHelpOpen(true);
+                    setGotoOpen(false);
+                    e.preventDefault();
+                }
+                if (!inShared && e.getModifierState("Control") && e.key === 'g') {
+                    setHelpOpen(false);
+                    setGotoOpen(true);
+                    e.preventDefault();
+                }
                 if (e.key === 'Escape') {
                     closeDialogs();
                     e.preventDefault();
@@ -70,6 +85,11 @@ export const Analyser = (props: AnalyseProps) => {
             }
         });
     });
+
+    const gotoTickSubmitted = () => {
+        setTickNow(clampTick(gotoInput()));
+        closeDialogs();
+    }
 
     let lastFrameTime = 0;
     let playStartTick = 0;
@@ -87,7 +107,6 @@ export const Analyser = (props: AnalyseProps) => {
             }
         }
         if (update.hasOwnProperty("clients")) {
-            console.log(update["clients"]);
             setClients(update["clients"]);
         }
     }
@@ -116,10 +135,9 @@ export const Analyser = (props: AnalyseProps) => {
         height: backgroundBoundaries.boundary_max.y - backgroundBoundaries.boundary_min.y,
     };
 
+    const clampTick = (tick) => Math.max(0, Math.min(lastTick, tick))
     const seek = (offset) => {
-        console.log(lastTick, tick(), tick() + offset);
-        const target = Math.max(0, Math.min(lastTick, tick() + offset));
-        console.log(target);
+        const target = clampTick(tick() + offset);
         setTickNow(target);
     }
 
@@ -198,8 +216,6 @@ export const Analyser = (props: AnalyseProps) => {
     const inShared = session && !session.isOwner();
     const isShared = () => sessionName() !== '';
 
-    console.log(intervalPerTick);
-
     const timeTitle = () => `${tickToTime(tick(), intervalPerTick)} (tick ${tick()})`;
 
     return (
@@ -267,11 +283,32 @@ export const Analyser = (props: AnalyseProps) => {
                         <td>0.5s backwards</td>
                     </tr>
                     <tr>
+                        <td><kbd>Ctrl</kbd> + <kbd>G</kbd></td>
+                        <td>Goto tick</td>
+                    </tr>
+                    <tr>
                         <td><kbd>Spacebar</kbd></td>
                         <td>Play/Pause</td>
                     </tr>
+                    <tr>
+                        <td><kbd>?</kbd></td>
+                        <td>This help menu</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Esc</kbd></td>
+                        <td>Close dialogs</td>
+                    </tr>
                     </tbody>
                 </table>
+            </Modal>
+            <Modal class="goto" isOpen={gotoOpen()} onCloseRequest={() => setGotoOpen(false)}
+                   closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
+                <h4>Goto Tick</h4>
+                <form use:formSubmit={gotoTickSubmitted} class="goto">
+                    <input
+                        onInput={(e) => setGotoInput(parseInt(e.target.value, 10))}
+                        ref={autofocus} autofocus type="text" inputmode="numeric" min={0} max={lastTick - 1}/>
+                </form>
             </Modal>
         </div>
     );
@@ -281,3 +318,12 @@ function tickToTime(tick: number, intervalPerTick: number): string {
     let seconds = Math.floor(tick * intervalPerTick);
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
+
+const formSubmit = (ref, accessor) => {
+    const callback = accessor() || (() => {
+    });
+    ref.onsubmit = async (e) => {
+        e.preventDefault();
+        callback(ref);
+    };
+};

@@ -3,6 +3,7 @@
     "@demostf/edit": "0.2.0",
     "@demostf/tf-demos-viewer": "^0.1.2",
     "@lutaok/solid-modal": "^0.1.1",
+    "@solid-primitives/autofocus": "^0.0.111",
     "@solid-primitives/keyboard": "^1.2.8",
     "@solid-primitives/resize-observer": "^2.0.15",
     "@thisbeyond/solid-select": "^0.13.0",
