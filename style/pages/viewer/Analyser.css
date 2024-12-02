@@ -127,6 +127,10 @@ kbd {
     overflow: auto;
     max-height: 90%;
     max-width: 90%;
+
+    &:focus-visible {
+        outline: none;
+    }
 }
 
 .modal-content input[type="text"] {

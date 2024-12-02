@@ -266,30 +266,37 @@ export const Analyser = (props: AnalyseProps) => {
                 <h4>Keyboard Shortcuts</h4>
                 <table class="shortcuts">
                     <tbody>
-                    <tr>
-                        <td><kbd>.</kbd></td>
-                        <td>Next tick</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>,</kbd></td>
-                        <td>Previous tick</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>⇒</kbd></td>
-                        <td>0.5s forward</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>⇐</kbd></td>
-                        <td>0.5s backwards</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>Ctrl</kbd> + <kbd>G</kbd></td>
-                        <td>Goto tick</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>Spacebar</kbd></td>
-                        <td>Play/Pause</td>
-                    </tr>
+                    <Show when={!inShared}>
+                        <tr>
+                            <td><kbd>.</kbd></td>
+                            <td>Next tick</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>,</kbd></td>
+                            <td>Previous tick</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>⇒</kbd></td>
+                            <td>0.5s forward</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>⇐</kbd></td>
+                            <td>0.5s backwards</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>G</kbd></td>
+                            <td>Goto tick</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Spacebar</kbd></td>
+                            <td>Play/Pause</td>
+                        </tr>
+                    </Show>
+                    <Show when={inShared}>
+                        <tr>
+                            <td colspan={2}>Shortcuts no usable as spectator have been hidden</td>
+                        </tr>
+                    </Show>
                     <tr>
                         <td><kbd>?</kbd></td>
                         <td>This help menu</td>
