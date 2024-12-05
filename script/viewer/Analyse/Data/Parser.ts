@@ -20,6 +20,7 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
 
     let playerCount = state.player_count;
     let buildingCount = state.building_count;
+    let projectileCount = state.projectile_count;
     let boundaries = state.boundaries;
     let interval_per_tick = state.interval_per_tick;
     let tickCount = state.tick_count;
@@ -56,6 +57,7 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
     return new ParsedDemo(
         playerCount,
         buildingCount,
+        projectileCount,
         {
             boundary_min: {
                 x: boundaries.boundary_min.x,
@@ -115,6 +117,16 @@ export enum BuildingType {
     Unknown = 7,
 }
 
+export enum ProjectileType {
+    Rocket = 0,
+    HealingArrow = 1,
+    Sticky = 2,
+    Pipe = 3,
+    Flare = 4,
+    LooseCannon = 5,
+    Unknown = 7,
+}
+
 export interface WorldBoundaries {
     boundary_min: {
         x: number,
@@ -151,6 +163,16 @@ export interface BuildingState {
     buildingType: BuildingType,
 }
 
+export interface ProjectileState {
+    position: {
+        x: number,
+        y: number
+    },
+    angle: number,
+    team: Team,
+    projectileType: ProjectileType,
+}
+
 export interface Header {
     interval_per_tick: number,
     map: string
@@ -177,6 +199,7 @@ function unpack_angle(val: number): number {
 export class ParsedDemo {
     public readonly playerCount: number;
     public readonly buildingCount: number;
+    public readonly projectileCount: number;
     public readonly world: WorldBoundaries;
     public readonly data: Uint8Array;
     public readonly header: Header;
@@ -184,9 +207,10 @@ export class ParsedDemo {
     public readonly kills: Kill[];
     public readonly playerInfo: PlayerInfo[];
 
-    constructor(playerCount: number, buildingCount: number, world: WorldBoundaries, header: Header, data: Uint8Array, kills: Kill[], playerInfo: PlayerInfo[], tickCount: number) {
+    constructor(playerCount: number, buildingCount: number, projectileCount: number, world: WorldBoundaries, header: Header, data: Uint8Array, kills: Kill[], playerInfo: PlayerInfo[], tickCount: number) {
         this.playerCount = playerCount;
         this.buildingCount = buildingCount;
+        this.projectileCount = projectileCount;
         this.world = world;
         this.header = header;
         this.data = data;
@@ -212,10 +236,22 @@ export class ParsedDemo {
         const base = (this.playerCount * this.tickCount * PLAYER_PACK_SIZE) + ((buildingIndex * this.tickCount) + tick) * BUILDING_PACK_SIZE;
         return unpackBuilding(this.data, base, this.world);
     }
+
+    getProjectile(tick: number, projectileIndex: number): ProjectileState {
+        if (projectileIndex >= this.projectileCount) {
+            throw new Error("Projectile out of bounds");
+        }
+
+        const base = (this.playerCount * this.tickCount * PLAYER_PACK_SIZE) +
+            (this.buildingCount * this.tickCount * BUILDING_PACK_SIZE) +
+            ((projectileIndex * this.tickCount) + tick) * PROJECTILE_PACK_SIZE;
+        return unpackProjectile(this.data, base, this.world);
+    }
 }
 
 const PLAYER_PACK_SIZE = 8;
 const BUILDING_PACK_SIZE = 7;
+const PROJECTILE_PACK_SIZE = 6;
 
 function unpackPlayer(bytes: Uint8Array, base: number, world: WorldBoundaries, info: PlayerInfo): PlayerState {
     const x = unpack_f32(bytes[base] + (bytes[base + 1] << 8), world.boundary_min.x, world.boundary_max.x);
@@ -255,5 +291,21 @@ function unpackBuilding(bytes: Uint8Array, base: number, world: WorldBoundaries)
         team,
         buildingType,
         level,
+    }
+}
+
+function unpackProjectile(bytes: Uint8Array, base: number, world: WorldBoundaries): ProjectileState {
+    const x = unpack_f32(bytes[base] + (bytes[base + 1] << 8), world.boundary_min.x, world.boundary_max.x);
+    const y = unpack_f32(bytes[base + 2] + (bytes[base + 3] << 8), world.boundary_min.y, world.boundary_max.y);
+    const team_type = bytes[base + 4];
+    const team = (((team_type >> 4) & 1) === 0) ? Team.Blue : Team.Red;
+    const projectileType = ((team_type >> 5) & 7) as ProjectileType;
+    const angle = unpack_angle(bytes[base + 5]);
+
+    return {
+        position: {x, y},
+        angle,
+        team,
+        projectileType,
     }
 }

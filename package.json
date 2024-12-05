@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@demostf/edit": "0.2.0",
-    "@demostf/tf-demos-viewer": "^0.1.2",
+    "@demostf/tf-demos-viewer": "^0.2.0",
     "@lutaok/solid-modal": "^0.1.1",
     "@solid-primitives/autofocus": "^0.0.111",
     "@solid-primitives/keyboard": "^1.2.8",

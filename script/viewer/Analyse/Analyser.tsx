@@ -211,6 +211,7 @@ export const Analyser = (props: AnalyseProps) => {
 
     const players = () => parser.getPlayersAtTick(tick());
     const buildings = () => parser.getBuildingsAtTick(tick());
+    const projectiles = () => parser.getProjectilesAtTick(tick());
     const kills = parser.getKills();
     const playButtonText = () => (playing()) ? '⏸' : '▶️';
     const inShared = session && !session.isOwner();
@@ -226,6 +227,7 @@ export const Analyser = (props: AnalyseProps) => {
                     <MapRender size={worldSize}
                                players={players()}
                                buildings={buildings()}
+                               projectiles={projectiles()}
                                header={props.header}
                                world={backgroundBoundaries}
                                scale={scale()}/>
