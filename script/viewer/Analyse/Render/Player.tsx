@@ -24,7 +24,7 @@ const healthMap = {
 };
 
 const imageMap = {
-    0: require("inline://images/class_icons/empty.svg"),
+    0: '',
     1: require("inline://images/class_icons/scout.svg"),
     2: require("inline://images/class_icons/sniper.svg"),
     3: require("inline://images/class_icons/soldier.svg"),
@@ -55,17 +55,18 @@ export function Player(props: PlayerProp) {
         <polygon points="-6,14 0, 16 6,14 0,24" fill="white"
                  opacity={imageOpacity()}
                  transform={rotate()}/>
-        <circle r={16} stroke-width={1} stroke="white" fill={teamColor()}
+        <circle r={16} stroke-width={1.5} stroke="white" fill={teamColor()}
                 opacity={alpha()}/>
         {getClassImage(props.player, imageOpacity())}
     </g>
 }
 
 function getClassImage(player: PlayerState, imageOpacity: number) {
-    if (!imageMap[player.playerClass]) {
+    const image = imageMap[player.playerClass];
+    if (!image) {
         return [];
     }
-    return <image href={imageMap[player.playerClass]}
+    return <image href={image}
                   class={"player-icon " + player.team}
                   opacity={imageOpacity}
                   height={32}
