@@ -1,68 +1,89 @@
 import {Kill, PlayerState} from "../Data/Parser";
 import {killAlias} from "./killAlias";
+import {For, Show} from "solid-js";
 
 export interface KillFeedProps {
-	kills: Kill[],
-	tick: number;
-	players: PlayerState[];
+    kills: Kill[],
+    tick: number;
+    players: PlayerState[];
 }
 
 export function KillFeed(props: KillFeedProps) {
-	const {kills} = props;
-	const relevantKills = () => kills.filter(kill => kill.tick <= props.tick && kill.tick >= (props.tick - 30 * 10));
+    const {kills} = props;
+    const relevantKills = () => kills.filter(kill => kill.tick <= props.tick && kill.tick >= (props.tick - 30 * 10));
 
-	return <div class="killfeed">
-		<For each={relevantKills()}>{(kill) =>
-			<KillFeedItem kill={kill} players={props.players}/>
-		}</For>
-	</div>
+    return <ul class="killfeed">
+        <For each={relevantKills()}>{(kill) =>
+            <KillFeedItem kill={kill} players={props.players}/>
+        }</For>
+    </ul>
 }
 
 const teamMap = {
-	0: 'unknown',
-	2: 'red',
-	3: 'blue'
+    0: 'unknown',
+    2: 'red',
+    3: 'blue'
 };
 
-export function KillFeedItem({kill, players}: { kill: Kill, players: PlayerState[] }) {
-	const alias = killAlias[kill.weapon] ? killAlias[kill.weapon] : kill.weapon;
-	const attacker = getPlayer(players, kill.attacker);
-	const assister = getPlayer(players, kill.assister);
-	let victim = getPlayer(players, kill.victim);
-	let killIcon;
-	try {
-		killIcon = `/images/kill_icons/${alias}.png`;
-	} catch (e) {
-		console.log(alias);
-		killIcon = `/images/kill_icons/skull.png`;
-	}
-	if (!victim) {
-		victim = {
-			team: 0,
-			info: {
-				name: 'Missing player'
-			}
-		};
-	}
-
-	return <div class="kill">
-		{(attacker && kill.attacker !== kill.victim) ?
-			<span class={"player " + teamMap[attacker.team]}>
-				{attacker.info.name}
-				</span> : ''}
-		{(assister && kill.assister !== kill.victim) ?
-			<span class={teamMap[assister.team]}>﹢</span> : ''}
-		{(assister && kill.assister !== kill.victim) ?
-			(<span class={"player " + teamMap[assister.team]}>
-				{assister.info.name}
-				</span>) : ''}
-		<img src={killIcon} class={`kill-icon ${kill.weapon}`}/>
-		<span class={"player " + teamMap[victim.team]}>
-			{victim.info.name}
-			</span>
-	</div>
+interface KillFeedItemProps {
+    kill: Kill;
+    players: PlayerState[];
 }
 
-function getPlayer(players: PlayerState[], entityId: number): PlayerState {
-	return players.find(player => player.info.userId == entityId);
+export function KillFeedItem(props: KillFeedItemProps) {
+    const attacker = getPlayer(props.players, props.kill.attacker);
+    const assister = getPlayer(props.players, props.kill.assister);
+    let victim = getPlayer(props.players, props.kill.victim);
+
+    return <li class="kill">
+        <PlayerNames players={[attacker, assister]}/>
+        <KillIcon kill={props.kill}/>
+        <PlayerName player={victim}/>
+    </li>
+}
+
+interface KillIconProps {
+    kill: Kill;
+}
+
+export function KillIcon(props: KillIconProps) {
+    const alias = killAlias[props.kill.weapon] ? killAlias[props.kill.weapon] : props.kill.weapon;
+    let killIcon;
+    try {
+        killIcon = `/images/kill_icons/${alias}.png`;
+    } catch (e) {
+        console.log(alias);
+        killIcon = `/images/kill_icons/skull.png`;
+    }
+
+    return <img src={killIcon} class={`kill-icon ${props.kill.weapon}`}/>
+}
+
+interface PlayerNameProps {
+    player: PlayerState | null
+}
+
+export function PlayerName(props: PlayerNameProps) {
+    return <Show when={props.player}>
+        <span className={"player " + teamMap[props.player.team]}>
+            {props.player.info.name}
+        </span>
+    </Show>
+}
+
+interface PlayerNamesProps {
+    players: (PlayerState | null)[]
+}
+
+export function PlayerNames(props: PlayerNamesProps) {
+    return <For each={props.players}>{(player, i) => <>
+        <Show when={i() > 0 && player}>
+            <span className={teamMap[player.team]}>+</span>
+        </Show>
+        <PlayerName player={player}/>
+    </>}</For>
+}
+
+export function getPlayer(players: PlayerState[], entityId: number): PlayerState | null {
+    return players.find(player => player.info.userId == entityId);
 }

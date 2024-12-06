@@ -1,0 +1,55 @@
+div.event-search {
+    width: 700px;
+
+    input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+table.event-list {
+    width: 100%;
+    border-collapse: collapse;
+    line-height: 34px;
+    table-layout: fixed;
+
+    tr.highlighted {
+        background: #3a3a3a;
+    }
+
+    td {
+        vertical-align: top;
+        padding: 0 3px;
+    }
+
+    .kill {
+        & .red {
+            color: #a75d50;
+        }
+
+        & .blue {
+            color: #5b818f;
+        }
+
+        td {
+            width: 45%;
+        }
+
+        td.kill-icon {
+            width: 60px;
+
+            img {
+                max-width: 60px;
+                max-height: 25px;
+                height: auto;
+                width: auto;
+            }
+
+            text-align: center;
+        }
+
+        td.kill-source {
+            text-align: right;
+        }
+    }
+}

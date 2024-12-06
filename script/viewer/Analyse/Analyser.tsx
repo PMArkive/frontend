@@ -15,6 +15,8 @@ import {getMapBoundaries} from "./MapBoundries";
 import {createEffect, createSignal, untrack} from "solid-js";
 import {Session, StateUpdate} from "./Session";
 import {DemoHead} from "../../header";
+import {EventSearch} from "./EventSearch";
+import {Event} from "./Data/Parser";
 
 export interface AnalyseProps {
     header: DemoHead;
@@ -37,10 +39,13 @@ export const Analyser = (props: AnalyseProps) => {
     const [clients, setClients] = createSignal<number>(0);
     const [helpOpen, setHelpOpen] = createSignal<boolean>(false);
     const [gotoOpen, setGotoOpen] = createSignal<boolean>(false);
+    const [searchOpen, setSearchOpen] = createSignal<boolean>(false);
+    const [search, setSearch] = createSignal<string>('');
     const [gotoInput, setGotoInput] = createSignal<number>(0);
     const closeDialogs = () => {
         setHelpOpen(false);
         setGotoOpen(false);
+        setSearchOpen(false);
     };
 
     createEffect(() => {
@@ -48,34 +53,45 @@ export const Analyser = (props: AnalyseProps) => {
 
         untrack(() => {
             if (e) {
-                if (e.key === '.') {
-                    seek(1);
-                    e.preventDefault();
-                }
-                if (e.key === ',') {
-                    seek(-1);
-                    e.preventDefault();
-                }
-                if (e.key === 'ArrowRight') {
-                    seek(15);
-                    e.preventDefault();
-                }
-                if (e.key === 'ArrowLeft') {
-                    seek(-15);
-                    e.preventDefault();
-                }
-                if (e.key === ' ') {
-                    togglePlay();
-                    e.preventDefault();
-                }
-                if (e.key === '?') {
-                    setHelpOpen(true);
-                    setGotoOpen(false);
-                    e.preventDefault();
+                const dialogOpen = searchOpen() | gotoOpen();
+                if (!dialogOpen) {
+                    if (e.key === '.') {
+                        seek(1);
+                        e.preventDefault();
+                    }
+                    if (e.key === ',') {
+                        seek(-1);
+                        e.preventDefault();
+                    }
+                    if (e.key === 'ArrowRight') {
+                        seek(15);
+                        e.preventDefault();
+                    }
+                    if (e.key === 'ArrowLeft') {
+                        seek(-15);
+                        e.preventDefault();
+                    }
+                    if (e.key === ' ') {
+                        togglePlay();
+                        e.preventDefault();
+                    }
+                    if (e.key === '?') {
+                        setHelpOpen(true);
+                        setGotoOpen(false);
+                        setSearchOpen(false);
+                        e.preventDefault();
+                    }
                 }
                 if (!inShared && e.getModifierState("Control") && e.key === 'g') {
                     setHelpOpen(false);
                     setGotoOpen(true);
+                    setSearchOpen(false);
+                    e.preventDefault();
+                }
+                if (!inShared && e.getModifierState("Control") && e.key === 'f') {
+                    setHelpOpen(false);
+                    setGotoOpen(false);
+                    setSearchOpen(true);
                     e.preventDefault();
                 }
                 if (e.key === 'Escape') {
@@ -213,6 +229,7 @@ export const Analyser = (props: AnalyseProps) => {
     const buildings = () => parser.getBuildingsAtTick(tick());
     const projectiles = () => parser.getProjectilesAtTick(tick());
     const kills = parser.getKills();
+    const events = parser.getEvents();
     const playButtonText = () => (playing()) ? '⏸' : '▶️';
     const inShared = session && !session.isOwner();
     const isShared = () => sessionName() !== '';
@@ -263,7 +280,7 @@ export const Analyser = (props: AnalyseProps) => {
                           })}
                           disabled={inShared}/>
             </div>
-            <Modal class="help" isOpen={helpOpen()} onCloseRequest={() => setHelpOpen(false)}
+            <Modal isOpen={helpOpen()} onCloseRequest={() => setHelpOpen(false)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <h4>Keyboard Shortcuts</h4>
                 <table class="shortcuts">
@@ -310,7 +327,7 @@ export const Analyser = (props: AnalyseProps) => {
                     </tbody>
                 </table>
             </Modal>
-            <Modal class="goto" isOpen={gotoOpen()} onCloseRequest={() => setGotoOpen(false)}
+            <Modal isOpen={gotoOpen()} onCloseRequest={() => setGotoOpen(false)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <h4>Goto Tick</h4>
                 <form use:formSubmit={gotoTickSubmitted} class="goto">
@@ -318,6 +335,16 @@ export const Analyser = (props: AnalyseProps) => {
                         onInput={(e) => setGotoInput(parseInt(e.target.value, 10))}
                         ref={autofocus} autofocus type="text" inputmode="numeric" min={0} max={lastTick - 1}/>
                 </form>
+            </Modal>
+            <Modal isOpen={searchOpen()} onCloseRequest={() => setSearchOpen(false)}
+                   closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
+                <EventSearch
+                    players={players()}
+                    search={search()}
+                    onSearch={setSearch}
+                    events={events}
+                    onSelect={(event: Event) => setTickNow(event.tick)}
+                ></EventSearch>
             </Modal>
         </div>
     );

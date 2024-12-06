@@ -54,6 +54,14 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
     let map = get_map(state);
     let data = get_data(state);
 
+    let events = kills.map((kill: Kill) => {
+        return {
+            tick: kill.tick,
+            type: "kill",
+            kill
+        } as Event
+    });
+
     return new ParsedDemo(
         playerCount,
         buildingCount,
@@ -75,6 +83,7 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
         data,
         kills,
         playerInfo,
+        events,
         tickCount,
     );
 }
@@ -206,8 +215,20 @@ export class ParsedDemo {
     public readonly tickCount: number;
     public readonly kills: Kill[];
     public readonly playerInfo: PlayerInfo[];
+    public readonly events: Event[];
 
-    constructor(playerCount: number, buildingCount: number, projectileCount: number, world: WorldBoundaries, header: Header, data: Uint8Array, kills: Kill[], playerInfo: PlayerInfo[], tickCount: number) {
+    constructor(
+        playerCount: number,
+        buildingCount: number,
+        projectileCount: number,
+        world: WorldBoundaries,
+        header: Header,
+        data: Uint8Array,
+        kills: Kill[],
+        playerInfo: PlayerInfo[],
+        events: Event[],
+        tickCount: number
+    ) {
         this.playerCount = playerCount;
         this.buildingCount = buildingCount;
         this.projectileCount = projectileCount;
@@ -216,6 +237,7 @@ export class ParsedDemo {
         this.data = data;
         this.kills = kills;
         this.playerInfo = playerInfo;
+        this.events = events;
         this.tickCount = tickCount;
     }
 
@@ -309,3 +331,11 @@ function unpackProjectile(bytes: Uint8Array, base: number, world: WorldBoundarie
         projectileType,
     }
 }
+
+export type KillEvent = {
+    type: "kill";
+    tick: number,
+    kill: Kill,
+}
+
+export type Event = KillEvent;

@@ -1,4 +1,13 @@
-import {BuildingState, Kill, ParsedDemo, PlayerState, ProjectileState, ProjectileType, WorldBoundaries} from "./Parser";
+import {
+    BuildingState,
+    Event,
+    Kill,
+    ParsedDemo,
+    PlayerState,
+    ProjectileState,
+    ProjectileType,
+    WorldBoundaries
+} from "./Parser";
 
 function getCacheBuster(): string {
     const url = document.querySelector('script[src*="viewer"]').attributes.src.value;
@@ -33,7 +42,18 @@ export class AsyncParser {
                     const cachedData: ParsedDemo = event.data.demo;
                     console.log(`packed data: ${(cachedData.data.length / (1024 * 1024)).toFixed(1)}MB`);
                     this.world = cachedData.world;
-                    this.demo = new ParsedDemo(cachedData.playerCount, cachedData.buildingCount, cachedData.projectileCount, cachedData.world, cachedData.header, cachedData.data, cachedData.kills, cachedData.playerInfo, cachedData.tickCount);
+                    this.demo = new ParsedDemo(
+                        cachedData.playerCount,
+                        cachedData.buildingCount,
+                        cachedData.projectileCount,
+                        cachedData.world,
+                        cachedData.header,
+                        cachedData.data,
+                        cachedData.kills,
+                        cachedData.playerInfo,
+                        cachedData.events,
+                        cachedData.tickCount
+                    );
                     resolve(this.demo);
                 }
             }
@@ -75,5 +95,9 @@ export class AsyncParser {
 
     getKills(): Kill[] {
         return this.demo.kills
+    }
+
+    getEvents(): Event[] {
+        return this.demo.events
     }
 }
