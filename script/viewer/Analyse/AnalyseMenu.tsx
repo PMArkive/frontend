@@ -1,12 +1,15 @@
+import {ModalState} from "./Analyser";
+import {Show} from "solid-js";
+
 export interface AnalyseMenuProps {
     sessionName: string;
     onShare: Function;
     canShare: boolean;
     isShared: boolean;
-    clients: number,
-    inShared: boolean,
-    open: boolean,
-    openHelp: Function;
+    clients: number;
+    inShared: boolean;
+    open: boolean;
+    openModal: (ModalState) => void;
 }
 
 export function AnalyseMenu(props: AnalyseMenuProps) {
@@ -23,7 +26,7 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
                 <summary title="Menu">☰</summary>
                 <ul class="menu">
                     <li>
-                        <button class="share-session" title="Start a shared session" disabled={props.isShared}
+                        <button className="share-session" title="Start a shared session" disabled={props.isShared}
                                 onClick={() => {
                                     props.onShare()
                                 }}>
@@ -41,8 +44,19 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
                         </button>
                     </li>
                     <li>
-                        <button class="help" title="Help" onClick={() => props.openHelp()}>
+                        <button className="help" title="Help" onClick={() => props.openModal(ModalState.Help)}>
                             Help
+                        </button>
+                    </li>
+                    <li>
+                        <button className="goto" title="Goto Tick" onClick={() => props.openModal(ModalState.Goto)}>
+                            Goto Tick
+                        </button>
+                    </li>
+                    <li>
+                        <button className="search" title="Search Events"
+                                onClick={() => props.openModal(ModalState.Search)}>
+                            Search Events
                         </button>
                     </li>
                 </ul>

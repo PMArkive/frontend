@@ -30,6 +30,14 @@
         background-image: url("inline://images//help.svg");
     }
 
+    & button.goto {
+        background-image: url("inline://images//goto.svg");
+    }
+
+    & button.search {
+        background-image: url("inline://images//search.svg");
+    }
+
     & input.share-text {
         color: var(--primary-color);
         background-color: var(--text-secondary);

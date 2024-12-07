@@ -18,7 +18,7 @@ import {DemoHead} from "../../header";
 import {EventSearch} from "./EventSearch";
 import {Event} from "./Data/Parser";
 
-enum ModalState {
+export enum ModalState {
     Closed,
     Help,
     Goto,
@@ -254,7 +254,7 @@ export const Analyser = (props: AnalyseProps) => {
                                  }, onUpdate);
                                  setSessionName(session.sessionName);
                              }}
-                             openHelp={() => setHelpOpen(true)}
+                             openModal={setModalState}
                              canShare={props.isStored && !inShared}
                              isShared={isShared()}
                              clients={clients()}
