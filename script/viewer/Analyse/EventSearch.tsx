@@ -1,4 +1,4 @@
-import {Event, Kill, PlayerState} from "./Data/Parser";
+import {Class, Event, Kill, PlayerState} from "./Data/Parser";
 import {createEffect, createSignal, For, Show, untrack} from "solid-js";
 import {getPlayer, KillIcon, PlayerName, PlayerNames} from "./Render/KillFeed";
 import {autofocus} from "@solid-primitives/autofocus";
@@ -110,17 +110,33 @@ function filterEvents(events: Event[], players: PlayerState[], query: string): E
     query = query.toLowerCase();
     let filteredEvents = [].concat(events);
     let queryParts = query.split(' ').filter(part => part.length > 0);
+
+    let remainingPlayers = players;
     for (const queryPart of queryParts) {
-        const playersForPart = findPlayers(players, queryPart);
+        // we only search by class for players we haven't already matched
+        // this allows "<name of scout1> scout" to find all cases of <scout1> and another scout
+        // instead of matching all other <scout1> events because they are also a scout
+        const playersForPart = findPlayersByName(players, queryPart) + findPlayersByClass(remainingPlayers, queryPart);
+        remainingPlayers = remainingPlayers.filter(player => !playersForPart.includes(player.info.userId));
         filteredEvents = filteredEvents.filter(event => eventMatches(event, playersForPart, queryPart));
     }
     return filteredEvents;
 }
 
-function findPlayers(players: PlayerState[], queryPart: string): number[] {
+function findPlayersByName(players: PlayerState[], queryPart: string): number[] {
     return players.flatMap(player => {
         if (player.info.name.toLowerCase().includes(queryPart)) {
             return [player.info.userId]
+        } else {
+            return [];
+        }
+    })
+}
+
+function findPlayersByClass(players: PlayerState[], queryPart: string): number[] {
+    return players.flatMap(player => {
+        if (reverseClassMap.hasOwnProperty(queryPart) && reverseClassMap[queryPart] == player.playerClass) {
+            return [player.info.userId];
         } else {
             return [];
         }
@@ -137,3 +153,18 @@ function eventMatches(event: Event, matchedPlayers: number[], queryPart: string)
         return false;
     }
 }
+
+const reverseClassMap = {
+    'scout': Class.Scout,
+    'sniper': Class.Sniper,
+    'soldier': Class.Solder,
+    'demo': Class.Demoman,
+    'demoman': Class.Demoman,
+    'medic': Class.Medic,
+    'heavy': Class.Heavy,
+    'heavyweapons': Class.Heavy,
+    'pyro': Class.Pyro,
+    'spy': Class.Spy,
+    'engineer': Class.Engineer,
+    'engi': Class.Engineer,
+};
