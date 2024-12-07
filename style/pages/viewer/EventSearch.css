@@ -32,10 +32,6 @@ table.event-list {
             color: #5b818f;
         }
 
-        td {
-            width: 45%;
-        }
-
         td.kill-icon {
             width: 60px;
 
@@ -49,8 +45,22 @@ table.event-list {
             text-align: center;
         }
 
+        td.kill-source, td.kill-target {
+            overflow: hidden;
+
+            span {
+                white-space: nowrap;
+            }
+
+            width: calc((700px - 60px - 70px) / 2);
+        }
+
         td.kill-source {
             text-align: right;
+        }
+
+        td.tick {
+            width: 70px;
         }
     }
 }

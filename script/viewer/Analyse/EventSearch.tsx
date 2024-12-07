@@ -100,6 +100,9 @@ function KillView(props: KillViewProps) {
         <td className="kill-target">
             <PlayerName player={victim}/>
         </td>
+        <td className="tick">
+            #{props.kill.tick}
+        </td>
     </>
 }
 
