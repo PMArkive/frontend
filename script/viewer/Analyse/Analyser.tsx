@@ -18,6 +18,13 @@ import {DemoHead} from "../../header";
 import {EventSearch} from "./EventSearch";
 import {Event} from "./Data/Parser";
 
+enum ModalState {
+    Closed,
+    Help,
+    Goto,
+    Search,
+}
+
 export interface AnalyseProps {
     header: DemoHead;
     isStored: boolean;
@@ -37,15 +44,11 @@ export const Analyser = (props: AnalyseProps) => {
     const [playing, setPlaying] = createSignal<boolean>(false);
     const [sessionName, setSessionName] = createSignal<string>("");
     const [clients, setClients] = createSignal<number>(0);
-    const [helpOpen, setHelpOpen] = createSignal<boolean>(false);
-    const [gotoOpen, setGotoOpen] = createSignal<boolean>(false);
-    const [searchOpen, setSearchOpen] = createSignal<boolean>(false);
+    const [modalState, setModalState] = createSignal<ModalState>(ModalState.Closed);
     const [search, setSearch] = createSignal<string>('');
     const [gotoInput, setGotoInput] = createSignal<number>(0);
     const closeDialogs = () => {
-        setHelpOpen(false);
-        setGotoOpen(false);
-        setSearchOpen(false);
+        setModalState(ModalState.Closed);
     };
 
     createEffect(() => {
@@ -53,8 +56,7 @@ export const Analyser = (props: AnalyseProps) => {
 
         untrack(() => {
             if (e) {
-                const dialogOpen = searchOpen() | gotoOpen();
-                if (!dialogOpen) {
+                if (modalState() === ModalState.Closed) {
                     if (e.key === '.') {
                         seek(1);
                         e.preventDefault();
@@ -76,22 +78,16 @@ export const Analyser = (props: AnalyseProps) => {
                         e.preventDefault();
                     }
                     if (e.key === '?') {
-                        setHelpOpen(true);
-                        setGotoOpen(false);
-                        setSearchOpen(false);
+                        setModalState(ModalState.Help);
                         e.preventDefault();
                     }
                 }
                 if (!inShared && e.getModifierState("Control") && e.key === 'g') {
-                    setHelpOpen(false);
-                    setGotoOpen(true);
-                    setSearchOpen(false);
+                    setModalState(ModalState.Goto);
                     e.preventDefault();
                 }
                 if (!inShared && e.getModifierState("Control") && e.key === 'f') {
-                    setHelpOpen(false);
-                    setGotoOpen(false);
-                    setSearchOpen(true);
+                    setModalState(ModalState.Search);
                     e.preventDefault();
                 }
                 if (e.key === 'Escape') {
@@ -280,7 +276,7 @@ export const Analyser = (props: AnalyseProps) => {
                           })}
                           disabled={inShared}/>
             </div>
-            <Modal isOpen={helpOpen()} onCloseRequest={() => setHelpOpen(false)}
+            <Modal isOpen={modalState() === ModalState.Help} onCloseRequest={() => setModalState(ModalState.Closed)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <h4>Keyboard Shortcuts</h4>
                 <table class="shortcuts">
@@ -327,7 +323,7 @@ export const Analyser = (props: AnalyseProps) => {
                     </tbody>
                 </table>
             </Modal>
-            <Modal isOpen={gotoOpen()} onCloseRequest={() => setGotoOpen(false)}
+            <Modal isOpen={modalState() === ModalState.Goto} onCloseRequest={() => setModalState(ModalState.Closed)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <h4>Goto Tick</h4>
                 <form use:formSubmit={gotoTickSubmitted} class="goto">
@@ -336,7 +332,7 @@ export const Analyser = (props: AnalyseProps) => {
                         ref={autofocus} autofocus type="text" inputmode="numeric" min={0} max={lastTick - 1}/>
                 </form>
             </Modal>
-            <Modal isOpen={searchOpen()} onCloseRequest={() => setSearchOpen(false)}
+            <Modal isOpen={modalState() === ModalState.Search} onCloseRequest={() => setModalState(ModalState.Closed)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
                 <EventSearch
                     players={players()}
