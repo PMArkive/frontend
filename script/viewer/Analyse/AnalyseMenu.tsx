@@ -13,7 +13,13 @@ export interface AnalyseMenuProps {
 }
 
 export function AnalyseMenu(props: AnalyseMenuProps) {
+    let details;
     const loc = () => window.location.toString().replace(/\#.*/, '') + '#' + props.sessionName;
+
+    const openModal = (modal: ModalState) => {
+        details.open = false;
+        props.openModal(modal);
+    }
 
     return (<div class="analyse-menu">
         <Show when={props.inShared}>
@@ -22,12 +28,13 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
             </div>
         </Show>
         <Show when={!props.inShared}>
-            <details>
+            <details ref={details}>
                 <summary title="Menu">☰</summary>
                 <ul class="menu">
                     <li>
                         <button className="share-session" title="Start a shared session" disabled={props.isShared}
                                 onClick={() => {
+                                    details.open = false;
                                     props.onShare()
                                 }}>
                             <Show when={!props.isShared}>
@@ -44,18 +51,18 @@ export function AnalyseMenu(props: AnalyseMenuProps) {
                         </button>
                     </li>
                     <li>
-                        <button className="help" title="Help" onClick={() => props.openModal(ModalState.Help)}>
+                        <button className="help" title="Help" onClick={() => openModal(ModalState.Help)}>
                             Help
                         </button>
                     </li>
                     <li>
-                        <button className="goto" title="Goto Tick" onClick={() => props.openModal(ModalState.Goto)}>
+                        <button className="goto" title="Goto Tick" onClick={() => openModal(ModalState.Goto)}>
                             Goto Tick
                         </button>
                     </li>
                     <li>
                         <button className="search" title="Search Events"
-                                onClick={() => props.openModal(ModalState.Search)}>
+                                onClick={() => openModal(ModalState.Search)}>
                             Search Events
                         </button>
                     </li>
