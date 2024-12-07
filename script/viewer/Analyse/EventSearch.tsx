@@ -49,7 +49,8 @@ export function EventSearch(props: EventSearchProps) {
                onInput={(e) => props.onSearch(e.target.value)}/>
         <table class="event-list">
             <For each={events()}>{(event, i) =>
-                <EventView event={event} highlighted={i() == selected()} players={props.players}/>
+                <EventView event={event} highlighted={i() == selected()} players={props.players}
+                           onClick={() => props.onSelect(event)}/>
             }</For>
         </table>
     </div>)
@@ -59,6 +60,7 @@ interface EventViewProps {
     event: Event;
     highlighted: boolean,
     players: PlayerState[];
+    onClick: () => void;
 }
 
 function EventView(props: EventViewProps) {
@@ -70,7 +72,7 @@ function EventView(props: EventViewProps) {
         }
     })
     return (
-        <tr ref={row} class={props.event.type + highlightClass()}>
+        <tr ref={row} class={props.event.type + highlightClass()} onClick={() => props.onClick()}>
             <Show when={props.event.type == "kill"}>
                 <KillView kill={props.event.kill} players={props.players}/>
             </Show>

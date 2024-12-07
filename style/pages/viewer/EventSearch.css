@@ -13,11 +13,12 @@ table.event-list {
     line-height: 34px;
     table-layout: fixed;
 
-    tr.highlighted {
+    tr.highlighted, tr:hover {
         background: #3a3a3a;
     }
 
     td {
+        cursor: pointer;
         vertical-align: top;
         padding: 0 3px;
     }
