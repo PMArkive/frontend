@@ -17,6 +17,7 @@ import {Session, StateUpdate} from "./Session";
 import {DemoHead} from "../../header";
 import {EventSearch} from "./EventSearch";
 import {Event} from "./Data/Parser";
+import {Help} from "./Help";
 
 export enum ModalState {
     Closed,
@@ -278,50 +279,7 @@ export const Analyser = (props: AnalyseProps) => {
             </div>
             <Modal isOpen={modalState() === ModalState.Help} onCloseRequest={() => setModalState(ModalState.Closed)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
-                <h4>Keyboard Shortcuts</h4>
-                <table class="shortcuts">
-                    <tbody>
-                    <Show when={!inShared}>
-                        <tr>
-                            <td><kbd>.</kbd></td>
-                            <td>Next tick</td>
-                        </tr>
-                        <tr>
-                            <td><kbd>,</kbd></td>
-                            <td>Previous tick</td>
-                        </tr>
-                        <tr>
-                            <td><kbd>⇒</kbd></td>
-                            <td>0.5s forward</td>
-                        </tr>
-                        <tr>
-                            <td><kbd>⇐</kbd></td>
-                            <td>0.5s backwards</td>
-                        </tr>
-                        <tr>
-                            <td><kbd>Ctrl</kbd> + <kbd>G</kbd></td>
-                            <td>Goto tick</td>
-                        </tr>
-                        <tr>
-                            <td><kbd>Spacebar</kbd></td>
-                            <td>Play/Pause</td>
-                        </tr>
-                    </Show>
-                    <Show when={inShared}>
-                        <tr>
-                            <td colspan={2}>Shortcuts no usable as spectator have been hidden</td>
-                        </tr>
-                    </Show>
-                    <tr>
-                        <td><kbd>?</kbd></td>
-                        <td>This help menu</td>
-                    </tr>
-                    <tr>
-                        <td><kbd>Esc</kbd></td>
-                        <td>Close dialogs</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <Help inShared={inShared}/>
             </Modal>
             <Modal isOpen={modalState() === ModalState.Goto} onCloseRequest={() => setModalState(ModalState.Closed)}
                    closeOnOutsideClick={true} overlayClass="modal-overlay" contentClass="modal-content">
