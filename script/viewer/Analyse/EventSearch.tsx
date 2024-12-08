@@ -1,6 +1,6 @@
-import {Class, Event, Kill, PlayerState} from "./Data/Parser";
+import {BuildingDestroyedEvent, Class, Event, Kill, PlayerState, UberEvent} from "./Data/Parser";
 import {createEffect, createSignal, For, Show, untrack} from "solid-js";
-import {getPlayer, KillIcon, PlayerName, PlayerNames} from "./Render/KillFeed";
+import {getPlayer, KillIcon, PlayerName, PlayerNames, teamMap} from "./Render/KillFeed";
 import {autofocus} from "@solid-primitives/autofocus";
 import {useKeyDownEvent} from "@solid-primitives/keyboard";
 
@@ -76,6 +76,12 @@ function EventView(props: EventViewProps) {
             <Show when={props.event.type == "kill"}>
                 <KillView kill={props.event.kill} players={props.players}/>
             </Show>
+            <Show when={props.event.type == "building_destroyed"}>
+                <BuildingDestroyedView event={props.event} players={props.players}/>
+            </Show>
+            <Show when={props.event.type == "uber"}>
+                <UberView event={props.event} players={props.players}/>
+            </Show>
         </tr>
     );
 }
@@ -102,6 +108,58 @@ function KillView(props: KillViewProps) {
         </td>
         <td className="tick">
             #{props.kill.tick}
+        </td>
+    </>
+}
+
+interface BuildingDestroyedViewProps {
+    event: BuildingDestroyedEvent;
+    f
+    players: PlayerState[];
+}
+
+function BuildingDestroyedView(props: BuildingDestroyedViewProps) {
+    const attacker = getPlayer(props.players, props.event.attacker_id);
+    const assister = getPlayer(props.players, props.event.assister_id);
+    let victim = getPlayer(props.players, props.event.victim_id);
+
+    return <>
+        <td class="kill-source">
+            <PlayerNames players={[attacker, assister]}/>
+        </td>
+        <td class="kill-icon">
+            <KillIcon kill={props.event}/>
+        </td>
+        <td className="kill-target">
+            <PlayerName player={victim}/><span class={teamMap[victim.team]}>({props.event.building_type})</span>
+        </td>
+        <td className="tick">
+            #{props.event.tick}
+        </td>
+    </>
+}
+
+interface UberViewProps {
+    event: UberEvent;
+    players: PlayerState[];
+}
+
+function UberView(props: UberViewProps) {
+    const medic = getPlayer(props.players, props.event.user_id);
+    const target = getPlayer(props.players, props.event.target_id);
+
+    return <>
+        <td class="kill-source">
+            <PlayerName player={medic}/>
+        </td>
+        <td class="kill-icon">
+            ubered
+        </td>
+        <td className="kill-target">
+            <PlayerName player={target}/>
+        </td>
+        <td className="tick">
+            #{props.event.tick}
         </td>
     </>
 }
@@ -152,6 +210,17 @@ function eventMatches(event: Event, matchedPlayers: number[], queryPart: string)
         return matchedPlayers.includes(kill.attacker) ||
             matchedPlayers.includes(kill.assister) ||
             matchedPlayers.includes(kill.victim);
+    } else if (event.type === "building_destroyed") {
+        return queryPart === "destroyed" ||
+            matchedPlayers.includes(event.attacker_id) ||
+            matchedPlayers.includes(event.assister_id) ||
+            matchedPlayers.includes(event.victim_id) ||
+            event.weapon.includes(queryPart) ||
+            event.building_type.includes(queryPart);
+    } else if (event.type === "uber") {
+        return queryPart === "uber" ||
+            matchedPlayers.includes(event.user_id) ||
+            matchedPlayers.includes(event.target_id);
     } else {
         return false;
     }

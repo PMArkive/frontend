@@ -1,6 +1,6 @@
 import {
     get_assister_ids,
-    get_attacker_ids, get_data,
+    get_attacker_ids, get_data, get_event_count, get_event,
     get_kill_ticks,
     get_map, get_player_entity_id,
     get_player_name, get_player_steam_id, get_player_user_id, get_victim_ids, get_weapon,
@@ -52,7 +52,6 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
     }
 
     let map = get_map(state);
-    let data = get_data(state);
 
     let events = kills.map((kill: Kill) => {
         return {
@@ -61,6 +60,17 @@ export async function parseDemo(bytes: Uint8Array, progressCallback: (progress: 
             kill
         } as Event
     });
+    let event_count = get_event_count(state);
+    for (let i = 0; i < event_count; i++) {
+        let event = get_event(state, i);
+        event = JSON.parse(event);
+        if (event) {
+            events.push(event);
+        }
+    }
+    events.sort((a, b) => a.tick - b.tick);
+
+    let data = get_data(state);
 
     return new ParsedDemo(
         playerCount,
@@ -338,4 +348,23 @@ export type KillEvent = {
     kill: Kill,
 }
 
-export type Event = KillEvent;
+export type UberEvent = {
+    type: "uber";
+    tick: number,
+    user_id: number,
+    target_id: number,
+}
+
+export type RawBuildingType = "dispenser" | "teleporter" | "sentrygun";
+
+export type BuildingDestroyedEvent = {
+    type: "building_destroyed";
+    tick: number,
+    attacker_id: number,
+    assister_id: number,
+    victim_id: number,
+    weapon: string,
+    building_type: RawBuildingType,
+}
+
+export type Event = KillEvent | UberEvent | BuildingDestroyedEvent;

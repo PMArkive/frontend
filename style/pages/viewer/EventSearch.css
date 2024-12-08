@@ -23,7 +23,7 @@ table.event-list {
         padding: 0 3px;
     }
 
-    .kill {
+    tr {
         & .red {
             color: #a75d50;
         }

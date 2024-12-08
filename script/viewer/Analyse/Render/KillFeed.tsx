@@ -19,7 +19,7 @@ export function KillFeed(props: KillFeedProps) {
     </ul>
 }
 
-const teamMap = {
+export const teamMap = {
     0: 'unknown',
     2: 'red',
     3: 'blue'
