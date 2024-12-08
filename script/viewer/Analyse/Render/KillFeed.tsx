@@ -1,20 +1,20 @@
-import {Kill, PlayerState} from "../Data/Parser";
+import {BuildingDestroyedEvent, Event, Kill, PlayerState} from "../Data/Parser";
 import {killAlias} from "./killAlias";
 import {For, Show} from "solid-js";
 
 export interface KillFeedProps {
-    kills: Kill[],
+    events: Event[],
     tick: number;
     players: PlayerState[];
 }
 
 export function KillFeed(props: KillFeedProps) {
-    const {kills} = props;
-    const relevantKills = () => kills.filter(kill => kill.tick <= props.tick && kill.tick >= (props.tick - 30 * 10));
+    const {events} = props;
+    const relevantEvents = () => events.filter(event => event.tick <= props.tick && event.tick >= (props.tick - 30 * 10));
 
     return <ul class="killfeed">
-        <For each={relevantKills()}>{(kill) =>
-            <KillFeedItem kill={kill} players={props.players}/>
+        <For each={relevantEvents()}>{(event) =>
+            <KillFeedItem event={event} players={props.players}/>
         }</For>
     </ul>
 }
@@ -26,11 +26,27 @@ export const teamMap = {
 };
 
 interface KillFeedItemProps {
-    kill: Kill;
+    event: Event;
     players: PlayerState[];
 }
 
 export function KillFeedItem(props: KillFeedItemProps) {
+    return <>
+        <Show when={props.event.type === "kill"}>
+            <KillFeedKillItem players={props.players} kill={props.event.kill}/>
+        </Show>
+        <Show when={props.event.type === "building_destroyed"}>
+            <KillFeedDestroyedItem players={props.players} event={props.event}/>
+        </Show>
+    </>
+}
+
+interface KillFeedKillItemProps {
+    kill: Kill;
+    players: PlayerState[];
+}
+
+export function KillFeedKillItem(props: KillFeedKillItemProps) {
     const attacker = getPlayer(props.players, props.kill.attacker);
     const assister = getPlayer(props.players, props.kill.assister);
     let victim = getPlayer(props.players, props.kill.victim);
@@ -42,8 +58,25 @@ export function KillFeedItem(props: KillFeedItemProps) {
     </li>
 }
 
+interface KillFeedDestroyedItemProps {
+    event: BuildingDestroyedEvent;
+    players: PlayerState[];
+}
+
+export function KillFeedDestroyedItem(props: KillFeedDestroyedItemProps) {
+    const attacker = getPlayer(props.players, props.event.attacker_id);
+    const assister = getPlayer(props.players, props.event.assister_id);
+    let victim = getPlayer(props.players, props.event.victim_id);
+
+    return <li class="kill">
+        <PlayerNames players={[attacker, assister]}/>
+        <KillIcon kill={props.event}/>
+        <PlayerName player={victim}/><span className={teamMap[victim.team]}>({props.event.building_type})</span>
+    </li>
+}
+
 interface KillIconProps {
-    kill: Kill;
+    kill: Kill | BuildingDestroyedEvent;
 }
 
 export function KillIcon(props: KillIconProps) {

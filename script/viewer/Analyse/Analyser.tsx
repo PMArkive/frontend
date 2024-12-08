@@ -225,7 +225,6 @@ export const Analyser = (props: AnalyseProps) => {
     const players = () => parser.getPlayersAtTick(tick());
     const buildings = () => parser.getBuildingsAtTick(tick());
     const projectiles = () => parser.getProjectilesAtTick(tick());
-    const kills = parser.getKills();
     const events = parser.getEvents();
     const playButtonText = () => (playing()) ? '⏸' : '▶️';
     const inShared = session && !session.isOwner();
@@ -262,7 +261,7 @@ export const Analyser = (props: AnalyseProps) => {
                              inShared={inShared}
                 />
                 <SpecHUD parser={parser} tick={tick()}
-                         players={players()} kills={kills}/>
+                         players={players()} events={events}/>
             </div>
             <div class="time-control"
                  title={timeTitle()}>
