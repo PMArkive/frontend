@@ -62,6 +62,18 @@ impl Page for AboutPage {
                 }
                 section {
                     .title {
+                        h3 { "Code" }
+                    }
+                    p {
+                        "All code making up demos.tf is open source and can be found ad "
+                        a href = "https://github.com/demostf" { "Github" }
+                        " or "
+                        a href = "https://git.demos.tf/demostf" { "git.demos.tf" }
+                        "."
+                    }
+                }
+                section {
+                    .title {
                         h3 { "API" }
                     }
                     p {
