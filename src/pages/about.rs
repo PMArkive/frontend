@@ -85,6 +85,12 @@ impl Page for AboutPage {
                         a href = "/api" { "API Documentation" }
                         " for details."
                     }
+
+                    p {
+                        "Additionally, a weekly export of the database can be downloaded is available "
+                        a href = "https://freezer.demos.tf/database/demostf.sql.gz" title = "database export" { "here" }
+                        "."
+                    }
                 }
                 section {
                     .title {
