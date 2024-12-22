@@ -8,6 +8,8 @@ export interface PlayerProp {
         height: number;
     };
     scale: number;
+    onHover: (userId: number) => void;
+    highlighted: boolean;
 }
 
 const healthMap = {
@@ -51,12 +53,15 @@ export function Player(props: PlayerProp) {
     const rotate = () => `rotate(${270 - props.player.angle})`;
 
     return <g
+        onmouseover={() => props.onHover(props.player.info.userId)}
+        onmouseout={() => props.onHover(0)}
         transform={transform()}>
         <polygon points="-6,14 0, 16 6,14 0,24" fill="white"
                  opacity={imageOpacity()}
                  transform={rotate()}/>
-        <circle r={16} stroke-width={1.5} stroke="white" fill={teamColor()}
-                opacity={alpha()}/>
+        <circle r={16} stroke-width={props.highlighted ? 5 : 1.5} stroke="white" fill={teamColor()}
+                opacity={alpha()}
+        />
         {getClassImage(props.player, imageOpacity())}
     </g>
 }

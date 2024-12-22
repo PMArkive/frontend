@@ -71,7 +71,7 @@ export function KillFeedDestroyedItem(props: KillFeedDestroyedItemProps) {
     return <li class="kill">
         <PlayerNames players={[attacker, assister]}/>
         <KillIcon kill={props.event}/>
-        <PlayerName player={victim}/><span className={teamMap[victim.team]}>({props.event.building_type})</span>
+        <PlayerName player={victim}/><span class={teamMap[victim.team]}>({props.event.building_type})</span>
     </li>
 }
 
@@ -98,7 +98,7 @@ interface PlayerNameProps {
 
 export function PlayerName(props: PlayerNameProps) {
     return <Show when={props.player}>
-        <span className={"player " + teamMap[props.player.team]}>
+        <span class={"player " + teamMap[props.player.team]}>
             {props.player.info.name}
         </span>
     </Show>
@@ -111,7 +111,7 @@ interface PlayerNamesProps {
 export function PlayerNames(props: PlayerNamesProps) {
     return <For each={props.players}>{(player, i) => <>
         <Show when={i() > 0 && player}>
-            <span className={teamMap[player.team]}>+</span>
+            <span class={teamMap[player.team]}>+</span>
         </Show>
         <PlayerName player={player}/>
     </>}</For>

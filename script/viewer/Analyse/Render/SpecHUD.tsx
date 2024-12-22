@@ -7,13 +7,15 @@ export interface SpecHUDProps {
     tick: number;
     parser: AsyncParser;
     players: PlayerState[];
-    events: Event[]
+    events: Event[];
+    onHover: (userId: number) => void;
+    highlighted: number | null;
 }
 
 export function SpecHUD(props: SpecHUDProps) {
     return (<div class="spechud">
         <KillFeed tick={props.tick} events={props.events} players={props.players}/>
-        <PlayersSpec players={props.players}/>
+        <PlayersSpec players={props.players} onHover={props.onHover} highlighted={props.highlighted}/>
     </div>)
 }
 

@@ -51,6 +51,7 @@ export const Analyser = (props: AnalyseProps) => {
     const closeDialogs = () => {
         setModalState(ModalState.Closed);
     };
+    const [highlighted, setHighlighted] = createSignal<number>(0);
 
     createEffect(() => {
         const e = event();
@@ -243,7 +244,10 @@ export const Analyser = (props: AnalyseProps) => {
                                projectiles={projectiles()}
                                header={props.header}
                                world={backgroundBoundaries}
-                               scale={scale()}/>
+                               scale={scale()}
+                               onHover={setHighlighted}
+                               highlighted={highlighted()}
+                    />
                 </MapContainer>
                 <AnalyseMenu sessionName={sessionName()}
                              onShare={() => {
@@ -261,7 +265,9 @@ export const Analyser = (props: AnalyseProps) => {
                              inShared={inShared}
                 />
                 <SpecHUD parser={parser} tick={tick()}
-                         players={players()} events={events}/>
+                         players={players()} events={events}
+                         highlighted={highlighted()}
+                         onHover={setHighlighted}/>
             </div>
             <div class="time-control"
                  title={timeTitle()}>

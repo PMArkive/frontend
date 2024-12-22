@@ -16,6 +16,8 @@ export interface MapRenderProps {
     },
     world: WorldBoundaries;
     scale: number;
+    onHover: (userId: number) => void;
+    highlighted: number;
 }
 
 const map_root = document.querySelector('[data-maps]').getAttribute('data-maps');
@@ -30,7 +32,10 @@ export function MapRender(props: MapRenderProps) {
              style={{"background-image": background}}>
             <For each={props.players}>{(player) =>
                 <Show when={player.health}>
-                    <PlayerDot player={player} mapBoundary={props.world} targetSize={props.size} scale={props.scale}/>
+                    <PlayerDot player={player} mapBoundary={props.world} targetSize={props.size} scale={props.scale}
+                               onHover={props.onHover}
+                               highlighted={props.highlighted === player.info.userId}
+                    />
                 </Show>
             }</For>
             <For each={props.buildings}>{(building) =>

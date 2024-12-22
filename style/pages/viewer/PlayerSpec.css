@@ -1,218 +1,241 @@
 .blueSpecHolder {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translate(0, -50%);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0, -50%);
 }
 
 .redSpecHolder {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translate(0, -50%);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
 }
 
 .playerspec {
-  background-color: black;
-  color: white;
-  height: 42px;
-  width: 200px;
-  position: relative;
-  font-family: sans-serif;
-  margin-bottom: 2px;
-  user-select: none;
-
-  &.uber {
-    height: 28px;
-  }
-
-  & .class-icon, .steam-avatar {
-    width: 42px;
+    background-color: black;
+    color: white;
     height: 42px;
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-position: top left;
-    background-size: 100% 100%;
+    width: 200px;
+    position: relative;
+    font-family: sans-serif;
+    margin-bottom: 2px;
+    user-select: none;
 
     &.uber {
-      height: 28px;
-      background-size: 28px 28px;
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
-    }
-  }
-
-  & .player-name {
-    display: inline-block;
-    position: relative;
-    padding: 0 5px;
-    white-space: nowrap;
-    width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  & .health-container {
-    display: inline-block;
-    position: absolute;
-    left: 42px;
-    top: 0;
-    height: 28px;
-    width: calc(100% - 42px);
-    line-height: 28px;
-    font-weight: bold;
-    & .health {
-      position: relative;
-      float: right;
-      padding: 0 5px;
+        height: 28px;
     }
 
-    & .healthbar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 28px;
-    }
-  }
+    & .class-icon, .steam-avatar {
+        width: 42px;
+        height: 42px;
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-position: top left;
+        background-size: 100% 100%;
 
-  &.red {
-    & .health-container {
-      background-color: #a75d50aa;
-    }
-
-    & .healthbar {
-      background-color: #a75d50;
-    }
-
-    & .class-icon.scout {
-      background-image: url('inline://images/class_portraits/Icon_scout.webp');
-    }
-    & .class-icon.soldier {
-      background-image: url('inline://images/class_portraits/Icon_soldier.webp');
-    }
-    & .class-icon.pyro {
-      background-image: url('inline://images/class_portraits/Icon_pyro.webp');
-    }
-    & .class-icon.demoman {
-      background-image: url('inline://images/class_portraits/Icon_demoman.webp');
-    }
-    & .class-icon.engineer {
-      background-image: url('inline://images/class_portraits/Icon_engineer.webp');
-    }
-    & .class-icon.heavy {
-      background-image: url('inline://images/class_portraits/Icon_heavy.webp');
-    }
-    & .class-icon.medic {
-      background-image: url('inline://images/class_portraits/Icon_medic.webp');
-    }
-    & .class-icon.sniper {
-      background-image: url('inline://images/class_portraits/Icon_sniper.webp');
-    }
-    & .class-icon.spy{
-      background-image: url('inline://images/class_portraits/Icon_spy.webp');
-    }
-    & .class-icon.uber {
-      background-image: url('inline://images/charge_red.svg');
-    }
-
-    & .class-icon, & .steam-avatar {
-      right: 0;
-      left: auto;
-    }
-
-    & .health-container {
-      right: 42px;
-      left: auto;
-    }
-
-    & .health {
-      float: left;
+        &.uber {
+            height: 28px;
+            background-size: 28px 28px;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
     }
 
     & .player-name {
-      float: right;
-      direction: ltr;
-      text-align: right;
-    }
-  }
-
-  &.blue {
-    & .health-container {
-      background-color: #5b818faa;
-    }
-
-    & .healthbar {
-      background-color: #5b818f;
-    }
-
-    & .class-icon.scout {
-      background-image: url('inline://images/class_portraits/Icon_scout_blue.webp');
-    }
-    & .class-icon.soldier {
-      background-image: url('inline://images/class_portraits/Icon_soldier_blue.webp');
-    }
-    & .class-icon.pyro {
-      background-image: url('inline://images/class_portraits/Icon_pyro_blue.webp');
-    }
-    & .class-icon.demoman {
-      background-image: url('inline://images/class_portraits/Icon_demoman_blue.webp');
-    }
-    & .class-icon.engineer {
-      background-image: url('inline://images/class_portraits/Icon_engineer_blue.webp');
-    }
-    & .class-icon.heavy {
-      background-image: url('inline://images/class_portraits/Icon_heavy_blue.webp');
-    }
-    & .class-icon.medic {
-      background-image: url('inline://images/class_portraits/Icon_medic_blue.webp');
-    }
-    & .class-icon.sniper {
-      background-image: url('inline://images/class_portraits/Icon_sniper_blue.webp');
-    }
-    & .class-icon.spy {
-      background-image: url('inline://images/class_portraits/Icon_spy_blue.webp');
-    }
-    & .class-icon.uber {
-      background-image: url('inline://images/charge_blue.svg');
-    }
-  }
-
-  &.overhealed {
-    & .health {
-      color: #79d297;
-    }
-
-    & .health:after {
-      position: absolute;
-      top: 21px;
-      right: 0;
-      padding: 0 5px;
-      font-size: 10px;
-      font-weight: bold;
-      content: 'OVERHEALED'
-    }
-
-    &.red .health:after {
-      position: absolute;
-      top: 21px;
-      left: 0;
-      right: auto;
-    }
-  }
-
-  &.dead {
-    & .healthbar, & .health {
-      display: none;
+        display: inline-block;
+        position: relative;
+        padding: 0 5px;
+        white-space: nowrap;
+        width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     & .health-container {
-      background-color: transparent;
+        display: inline-block;
+        position: absolute;
+        left: 42px;
+        top: 0;
+        height: 28px;
+        width: calc(100% - 42px);
+        line-height: 28px;
+        font-weight: bold;
+
+        & .health {
+            position: relative;
+            float: right;
+            padding: 0 5px;
+        }
+
+        & .healthbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 28px;
+        }
     }
 
-    & .class-icon {
-      opacity: 0.5;
+    &.red {
+        & .health-container {
+            background-color: #a75d50aa;
+        }
+
+        & .healthbar {
+            background-color: #a75d50;
+        }
+
+        & .class-icon.scout {
+            background-image: url('inline://images/class_portraits/Icon_scout.webp');
+        }
+
+        & .class-icon.soldier {
+            background-image: url('inline://images/class_portraits/Icon_soldier.webp');
+        }
+
+        & .class-icon.pyro {
+            background-image: url('inline://images/class_portraits/Icon_pyro.webp');
+        }
+
+        & .class-icon.demoman {
+            background-image: url('inline://images/class_portraits/Icon_demoman.webp');
+        }
+
+        & .class-icon.engineer {
+            background-image: url('inline://images/class_portraits/Icon_engineer.webp');
+        }
+
+        & .class-icon.heavy {
+            background-image: url('inline://images/class_portraits/Icon_heavy.webp');
+        }
+
+        & .class-icon.medic {
+            background-image: url('inline://images/class_portraits/Icon_medic.webp');
+        }
+
+        & .class-icon.sniper {
+            background-image: url('inline://images/class_portraits/Icon_sniper.webp');
+        }
+
+        & .class-icon.spy {
+            background-image: url('inline://images/class_portraits/Icon_spy.webp');
+        }
+
+        & .class-icon.uber {
+            background-image: url('inline://images/charge_red.svg');
+        }
+
+        & .class-icon, & .steam-avatar {
+            right: 0;
+            left: auto;
+        }
+
+        & .health-container {
+            right: 42px;
+            left: auto;
+        }
+
+        & .health {
+            float: left;
+        }
+
+        & .player-name {
+            float: right;
+            direction: ltr;
+            text-align: right;
+        }
     }
-  }
+
+    &.blue {
+        & .health-container {
+            background-color: #5b818faa;
+        }
+
+        & .healthbar {
+            background-color: #5b818f;
+        }
+
+        & .class-icon.scout {
+            background-image: url('inline://images/class_portraits/Icon_scout_blue.webp');
+        }
+
+        & .class-icon.soldier {
+            background-image: url('inline://images/class_portraits/Icon_soldier_blue.webp');
+        }
+
+        & .class-icon.pyro {
+            background-image: url('inline://images/class_portraits/Icon_pyro_blue.webp');
+        }
+
+        & .class-icon.demoman {
+            background-image: url('inline://images/class_portraits/Icon_demoman_blue.webp');
+        }
+
+        & .class-icon.engineer {
+            background-image: url('inline://images/class_portraits/Icon_engineer_blue.webp');
+        }
+
+        & .class-icon.heavy {
+            background-image: url('inline://images/class_portraits/Icon_heavy_blue.webp');
+        }
+
+        & .class-icon.medic {
+            background-image: url('inline://images/class_portraits/Icon_medic_blue.webp');
+        }
+
+        & .class-icon.sniper {
+            background-image: url('inline://images/class_portraits/Icon_sniper_blue.webp');
+        }
+
+        & .class-icon.spy {
+            background-image: url('inline://images/class_portraits/Icon_spy_blue.webp');
+        }
+
+        & .class-icon.uber {
+            background-image: url('inline://images/charge_blue.svg');
+        }
+    }
+
+    &.highlighted:not(.dead) {
+        outline: white 2px solid;
+    }
+
+    &.overhealed {
+        & .health {
+            color: #79d297;
+        }
+
+        & .health:after {
+            position: absolute;
+            top: 21px;
+            right: 0;
+            padding: 0 5px;
+            font-size: 10px;
+            font-weight: bold;
+            content: 'OVERHEALED'
+        }
+
+        &.red .health:after {
+            position: absolute;
+            top: 21px;
+            left: 0;
+            right: auto;
+        }
+    }
+
+    &.dead {
+        & .healthbar, & .health {
+            display: none;
+        }
+
+        & .health-container {
+            background-color: transparent;
+        }
+
+        & .class-icon {
+            opacity: 0.5;
+        }
+    }
 }
