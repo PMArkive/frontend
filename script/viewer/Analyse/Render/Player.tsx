@@ -59,7 +59,7 @@ export function Player(props: PlayerProp) {
         <polygon points="-6,14 0, 16 6,14 0,24" fill="white"
                  opacity={imageOpacity()}
                  transform={rotate()}/>
-        <circle r={16} stroke-width={props.highlighted ? 5 : 1.5} stroke="white" fill={teamColor()}
+        <circle r={16} stroke-width={props.highlighted ? 4 : 1.5} stroke="white" fill={teamColor()}
                 opacity={alpha()}
         />
         {getClassImage(props.player, imageOpacity())}
