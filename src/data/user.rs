@@ -1,7 +1,7 @@
 use crate::data::steam_id::SteamId;
 use crate::{Error, Result};
 use maud::Render;
-use rand::distributions::Alphanumeric;
+use rand::distr::Alphanumeric;
 use rand::Rng;
 use reqwest::get;
 use serde::{Deserialize, Serialize};
@@ -79,7 +79,7 @@ impl User {
             })
         } else {
             let profile = Self::fetch(&steam_id).await?;
-            let token: String = rand::thread_rng()
+            let token: String = rand::rng()
                 .sample_iter(&Alphanumeric)
                 .take(64)
                 .map(char::from)

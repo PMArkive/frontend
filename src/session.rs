@@ -4,11 +4,11 @@ use crate::{App, Result};
 use async_session::SessionStore as _;
 use axum::extract::{FromRef, FromRequestParts};
 use axum::http::request::Parts;
-use axum::{async_trait, RequestPartsExt};
-use std::convert::Infallible;
-use std::sync::Arc;
+use axum::RequestPartsExt;
 use axum_extra::headers::Cookie;
 use axum_extra::TypedHeader;
+use std::convert::Infallible;
+use std::sync::Arc;
 use tracing::debug;
 
 pub const COOKIE_NAME: &str = "tf_session";
@@ -34,7 +34,6 @@ impl SessionData {
     }
 }
 
-#[async_trait]
 impl<S> FromRequestParts<S> for SessionData
 where
     Arc<App>: FromRef<S>,

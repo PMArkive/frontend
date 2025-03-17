@@ -46,8 +46,9 @@ use include_dir::{include_dir, Dir};
 use maud::{Markup, Render};
 use opentelemetry::trace::TracerProvider;
 use opentelemetry::KeyValue;
-use opentelemetry_otlp::WithExportConfig;
-use opentelemetry_sdk::{runtime, trace, Resource};
+use opentelemetry_otlp::{SpanExporter, WithExportConfig, WithTonicConfig};
+use opentelemetry_sdk::trace::SdkTracerProvider;
+use opentelemetry_sdk::Resource;
 use secretfile::load;
 use sqlx::PgPool;
 use std::convert::Infallible;
@@ -104,8 +105,8 @@ fn setup() -> Result<Config, SetupError> {
     {
         let mut tls_config = ClientTlsConfig::new().with_webpki_roots();
 
-        let mut otlp_exporter = opentelemetry_otlp::new_exporter()
-            .tonic()
+        let mut otlp_exporter = SpanExporter::builder()
+            .with_tonic()
             .with_endpoint(&tracing_cfg.endpoint);
 
         if let Some(tracing_ident) = tracing_cfg.tls.as_ref().map(|tracing_tls_cfg| {
@@ -117,13 +118,14 @@ fn setup() -> Result<Config, SetupError> {
         }
         otlp_exporter = otlp_exporter.with_tls_config(tls_config);
 
-        let tracer = opentelemetry_otlp::new_pipeline()
-            .tracing()
-            .with_exporter(otlp_exporter)
-            .with_trace_config(trace::Config::default().with_resource(Resource::new(vec![
-                KeyValue::new("service.name", "demos.tf"),
-            ])))
-            .install_batch(runtime::Tokio)?
+        let tracer = SdkTracerProvider::builder()
+            .with_resource(
+                Resource::builder()
+                    .with_attribute(KeyValue::new("service.name", "demos.tf"))
+                    .build(),
+            )
+            .with_batch_exporter(otlp_exporter.build()?)
+            .build()
             .tracer("demos.tf");
         Some(tracing_opentelemetry::layer().with_tracer(tracer))
     } else {
@@ -164,8 +166,8 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(index))
-        .route("/uploads/:uploader", get(uploads))
-        .route("/profiles/:uploader", get(profiles))
+        .route("/uploads/{uploader}", get(uploads))
+        .route("/profiles/{uploader}", get(profiles))
         .route(GlobalStyle::route(), get(serve_asset::<GlobalStyle>))
         .route(
             ClassIconsStyle::route(),
@@ -198,9 +200,9 @@ async fn main() -> Result<()> {
         .route("/upload", get(upload))
         .route("/viewer", get(viewer))
         .route("/edit", get(edit))
-        .route("/viewer/:id", get(viewer))
-        .route("/:id", get(demo))
-        .route("/images/kill_icons/:icon", get(kill_icons))
+        .route("/viewer/{id}", get(viewer))
+        .route("/{id}", get(demo))
+        .route("/images/kill_icons/{icon}", get(kill_icons))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request
@@ -298,12 +300,12 @@ async fn main() -> Result<()> {
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn index(
     State(app): State<Arc<App>>,
     session: SessionData,
-    filter: Option<Query<Filter>>,
+    Query(filter): Query<Filter>,
 ) -> Result<Markup> {
-    let filter = filter.map(|filter| filter.0).unwrap_or_default();
     let demos = ListDemo::list(&app.connection, filter).await?;
     Ok(render(
         Index {
@@ -316,6 +318,7 @@ async fn index(
 }
 
 #[instrument(skip(_app))]
+#[axum::debug_handler]
 async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     Ok(render(
         AboutPage {
@@ -326,6 +329,7 @@ async fn about(State(_app): State<Arc<App>>, session: SessionData) -> Result<Mar
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn api(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     Ok(render(
         ApiPage {
@@ -337,6 +341,7 @@ async fn api(State(app): State<Arc<App>>, session: SessionData) -> Result<Markup
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn demo(
     State(app): State<Arc<App>>,
     Path(id): Path<String>,
@@ -349,6 +354,7 @@ async fn demo(
     Ok(render(DemoPage { demo }, session))
 }
 
+#[axum::debug_handler]
 async fn login_callback(
     State(app): State<Arc<App>>,
     RawQuery(query): RawQuery,
@@ -387,6 +393,7 @@ async fn login_callback(
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn login(State(app): State<Arc<App>>) -> impl IntoResponse {
     (
         StatusCode::FOUND,
@@ -398,6 +405,7 @@ async fn login(State(app): State<Arc<App>>) -> impl IntoResponse {
 }
 
 #[instrument(skip(app, cookie))]
+#[axum::debug_handler]
 async fn logout(
     State(app): State<Arc<App>>,
     cookie: Option<TypedHeader<Cookie>>,
@@ -424,6 +432,7 @@ async fn logout(
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoResponse {
     if let Some(token) = session.token() {
         render(
@@ -444,20 +453,20 @@ async fn upload(State(app): State<Arc<App>>, session: SessionData) -> impl IntoR
 }
 
 #[instrument(skip(app))]
-async fn demo_list(State(app): State<Arc<App>>, filter: Option<Query<Filter>>) -> Result<Markup> {
-    let filter = filter.map(|filter| filter.0).unwrap_or_default();
+#[axum::debug_handler]
+async fn demo_list(State(app): State<Arc<App>>, Query(filter): Query<Filter>) -> Result<Markup> {
     let demos = ListDemo::list(&app.connection, filter).await?;
     Ok(DemoList { demos: &demos }.render())
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn uploads(
     State(app): State<Arc<App>>,
     session: SessionData,
-    filter: Option<Query<Filter>>,
+    Query(mut filter): Query<Filter>,
     Path(uploader): Path<SteamId>,
 ) -> Result<Markup> {
-    let mut filter = filter.map(|filter| filter.0).unwrap_or_default();
     filter.uploader = Some(uploader.clone());
 
     let demos = ListDemo::list(&app.connection, filter).await?;
@@ -476,13 +485,13 @@ async fn uploads(
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn profiles(
     State(app): State<Arc<App>>,
     session: SessionData,
-    filter: Option<Query<Filter>>,
+    Query(mut filter): Query<Filter>,
     Path(profile): Path<SteamId>,
 ) -> Result<Markup> {
-    let mut filter = filter.map(|filter| filter.0).unwrap_or_default();
     filter.players.push(profile.clone());
 
     let demos = ListDemo::list(&app.connection, filter).await?;
@@ -501,6 +510,7 @@ async fn profiles(
 }
 
 #[instrument(skip(app))]
+#[axum::debug_handler]
 async fn viewer(
     State(app): State<Arc<App>>,
     id: Option<Path<String>>,
@@ -526,14 +536,17 @@ async fn viewer(
     ))
 }
 
-async fn edit(session: SessionData) -> Result<Markup> {
+#[axum::debug_handler]
+async fn edit(State(_app): State<Arc<App>>, session: SessionData) -> Result<Markup> {
     Ok(render(EditorPage, session))
 }
 
+#[axum::debug_handler]
 async fn handler_404() -> impl IntoResponse {
     Error::NotFound
 }
 
+#[axum::debug_handler]
 pub async fn kill_icons(path: Path<String>) -> impl IntoResponse {
     let path = path.as_str();
     match KILL_ICONS.get_file(path) {
