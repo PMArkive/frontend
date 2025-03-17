@@ -14,36 +14,42 @@
       flake = false;
     };
   };
-  outputs = { mill-scale, npmlock2nix, ... }: mill-scale ./. {
-    packageOpts = { demostf-frontend-node-modules, ... }: {
-      preBuild = ''
-        ln -s ${demostf-frontend-node-modules}/node_modules .
-      '';
+  outputs = {
+    mill-scale,
+    npmlock2nix,
+    ...
+  }:
+    mill-scale ./. {
+      packageOpts = {demostf-frontend-node-modules, ...}: {
+        preBuild = ''
+          ln -s ${demostf-frontend-node-modules}/node_modules .
+        '';
+      };
+      extraPaths = [
+        ./.sqlx
+        ./images
+        ./script
+        ./style
+      ];
+      withOverlays = [
+        (final: prev: {
+          npmlock2nix = final.callPackage npmlock2nix {};
+        })
+        (final: prev: {
+          nodejs-16_x = final.nodejs;
+          demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+        })
+        (import ./nix/overlay.nix)
+      ];
+      toolchain = pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+      tools = pkgs:
+        with pkgs; [
+          bacon
+          cargo-edit
+          nodejs
+          nodePackages.svgo
+          typescript
+          sqlx-cli
+        ];
     };
-    extraPaths = [
-      ./.sqlx
-      ./images
-      ./script
-      ./style
-    ];
-    withOverlays = [
-      (final: prev: {
-        npmlock2nix = final.callPackage npmlock2nix { };
-      })
-      (final: prev: {
-        nodejs-16_x = final.nodejs;
-        demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
-      })
-      (import ./nix/overlay.nix)
-    ];
-    toolchain = pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
-    tools = pkgs: with pkgs; [
-      bacon
-      cargo-edit
-      nodejs
-      nodePackages.svgo
-      typescript
-      sqlx-cli
-    ];
-  };
 }

@@ -1,6 +1,6 @@
-{ dockerTools
-, demostf-frontend
-,
+{
+  dockerTools,
+  demostf-frontend,
 }:
 dockerTools.buildLayeredImage {
   name = "demostf/frontend";
@@ -11,9 +11,9 @@ dockerTools.buildLayeredImage {
     dockerTools.caCertificates
   ];
   config = {
-    Cmd = [ "demostf-frontend" ];
+    Cmd = ["demostf-frontend"];
     ExposedPorts = {
-      "80/tcp" = { };
+      "80/tcp" = {};
     };
     Env = [
       "LISTEN_ADDRESS=0.0.0.0"
