@@ -9,14 +9,9 @@
       url = "github:icewind1991/mill-scale";
       inputs.flakelight.follows = "flakelight";
     };
-    npmlock2nix = {
-      url = "github:nix-community/npmlock2nix";
-      flake = false;
-    };
   };
   outputs = {
     mill-scale,
-    npmlock2nix,
     ...
   }:
     mill-scale ./. {
@@ -32,9 +27,6 @@
         ./style
       ];
       withOverlays = [
-        (final: prev: {
-          npmlock2nix = final.callPackage npmlock2nix {};
-        })
         (final: prev: {
           nodejs-16_x = final.nodejs;
           demostf-frontend-toolchain = final.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
