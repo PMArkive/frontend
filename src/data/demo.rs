@@ -175,8 +175,10 @@ impl Demo {
         if let Some(private_until) = self.private_until {
             let now = OffsetDateTime::now_utc();
             let days = (private_until - now).whole_days();
-            if days <= 1 {
+            if days < 1 {
                 "by tomorrow".into()
+            } else if days < 2 {
+                "in 1 day".into()
             } else {
                 format!("in {days} days").into()
             }
