@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT\n                demos.id, demos.name, url, map, red, blu, uploader, duration, demos.created_at,\n                \"scoreRed\" as score_red, \"scoreBlue\" as score_blue, server, nick,\n                \"playerCount\" as player_count,\n                users_named.name as uploader_name_preferred,\n                users.steamid as \"uploader_steam_id?: SteamId\",\n                users.name as \"uploader_name?\"\n            FROM demos\n            LEFT JOIN users_named ON uploader = users_named.id\n            LEFT JOIN users ON uploader = users.id\n            WHERE deleted_at IS NULL AND demos.id = $1",
+  "query": "SELECT\n                demos.id, demos.name, url, map, red, blu, uploader, duration, demos.created_at,\n                \"scoreRed\" as score_red, \"scoreBlue\" as score_blue, server, nick,\n                \"playerCount\" as player_count,\n                users_named.name as uploader_name_preferred,\n                users.steamid as \"uploader_steam_id?: SteamId\",\n                users.name as \"uploader_name?\",\n                demos.private_until\n            FROM demos\n            LEFT JOIN users_named ON uploader = users_named.id\n            LEFT JOIN users ON uploader = users.id\n            WHERE deleted_at IS NULL AND demos.id = $1",
   "describe": {
     "columns": [
       {
@@ -87,6 +87,11 @@
         "ordinal": 16,
         "name": "uploader_name?",
         "type_info": "Varchar"
+      },
+      {
+        "ordinal": 17,
+        "name": "private_until",
+        "type_info": "Timestamptz"
       }
     ],
     "parameters": {
@@ -109,8 +114,9 @@
       false,
       true,
       false,
-      false
+      false,
+      true
     ]
   },
-  "hash": "68e8265e13596ad6de3e3d346b6d2fb62a68eda3e98f690e7e8d954627d8025c"
+  "hash": "7ea7c5f61e8c77898d8b816fce80f066026822e03d6f74bd4ae19d7c9d914426"
 }

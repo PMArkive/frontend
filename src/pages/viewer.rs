@@ -53,8 +53,12 @@ impl Page for ViewerPage<'_> {
         html! {
             .viewer-page data-maps = (maps) data-sync = (sync) {
                 @if let Some(demo) = self.demo.as_ref() {
-                    input type = "hidden" name = "url" value = (demo.url) {}
-                    progress.download min = "0" max = "100" value = "0" {}
+                    @if demo.is_private() {
+                        h3.warning { "This demo is private, it will be available for download " (demo.private_until_text()) }
+                    } @else {
+                        input type = "hidden" name = "url" value = (demo.url) {}
+                        progress.download min = "0" max = "100" value = "0" {}
+                    }
                 } @else {
                     .dropzone role = "button" {
                         noscript {

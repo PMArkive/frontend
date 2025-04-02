@@ -40,6 +40,7 @@ pub struct Demo {
     pub player_count: i32,
     pub players: Vec<Player>,
     pub chat: Vec<Chat>,
+    pub private_until: Option<OffsetDateTime>,
 }
 
 impl Debug for Demo {
@@ -74,6 +75,7 @@ impl Demo {
             pub server: String,
             pub nick: String,
             pub player_count: i32,
+            pub private_until: Option<OffsetDateTime>,
         }
 
         let Some(raw) = query_as!(
@@ -84,7 +86,8 @@ impl Demo {
                 "playerCount" as player_count,
                 users_named.name as uploader_name_preferred,
                 users.steamid as "uploader_steam_id?: SteamId",
-                users.name as "uploader_name?"
+                users.name as "uploader_name?",
+                demos.private_until
             FROM demos
             LEFT JOIN users_named ON uploader = users_named.id
             LEFT JOIN users ON uploader = users.id
@@ -120,6 +123,7 @@ impl Demo {
             player_count: raw.player_count,
             players,
             chat,
+            private_until: raw.private_until,
         }))
     }
 
@@ -148,6 +152,37 @@ impl Demo {
 
     pub fn viewer_url(&self) -> ViewerUrl {
         ViewerUrl(self.id)
+    }
+
+    pub fn is_private(&self) -> bool {
+        if let Some(private_until) = self.private_until {
+            let now = OffsetDateTime::now_utc();
+            now < private_until
+        } else {
+            false
+        }
+    }
+
+    pub fn url(&self) -> &str {
+        if self.is_private() {
+            ""
+        } else {
+            self.url.as_str()
+        }
+    }
+
+    pub fn private_until_text(&self) -> Cow<'static, str> {
+        if let Some(private_until) = self.private_until {
+            let now = OffsetDateTime::now_utc();
+            let days = (private_until - now).whole_days();
+            if days <= 1 {
+                "by tomorrow".into()
+            } else {
+                format!("in {days} days").into()
+            }
+        } else {
+            "".into()
+        }
     }
 }
 

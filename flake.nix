@@ -10,10 +10,7 @@
       inputs.flakelight.follows = "flakelight";
     };
   };
-  outputs = {
-    mill-scale,
-    ...
-  }:
+  outputs = {mill-scale, ...}:
     mill-scale ./. {
       packageOpts = {demostf-frontend-node-modules, ...}: {
         preBuild = ''

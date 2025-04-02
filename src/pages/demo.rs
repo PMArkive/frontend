@@ -23,7 +23,9 @@ impl Page for DemoPage {
     fn render(&self) -> Markup {
         let style_url = ClassIconsStyle::url();
         html! {
-            @if self.demo.url.is_empty() {
+            @if self.demo.is_private() {
+                h3.warning { "This demo is private, it will be available for download " (self.demo.private_until_text()) }
+            } @else if self.demo.url.is_empty() {
                 h3.warning { "This demo has been deleted and is no longer available for download." }
             }
             h2 { (self.demo.server) " - " (self.demo.red) " vs " (self.demo.blu) }
@@ -104,8 +106,8 @@ impl Page for DemoPage {
                 span.time { (self.demo.duration()) }
             }
             p.demo-download {
-                @if !self.demo.url.is_empty() {
-                    a.button.button-primary href = (self.demo.url) download = (self.demo.name) rel = "nofollow" { "Download" }
+                @if !self.demo.url().is_empty() {
+                    a.button.button-primary href = (self.demo.url()) download = (self.demo.name) rel = "nofollow" { "Download" }
                     a.button href = (self.demo.viewer_url()) rel = "nofollow" { "View" }
                 }
                 @if !self.demo.chat.is_empty() {
