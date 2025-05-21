@@ -1,3 +1,5 @@
+# Moved to https://codeberg.org/demostf/frontend
+
 # demos.tf
 
 [![CI](https://github.com/demostf/demos.tf/actions/workflows/build.yml/badge.svg)](https://github.com/demostf/demos.tf/actions/workflows/build.yml)
